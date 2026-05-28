@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>林 — 个人主页</title>
+<style>
+  /* ===== 变量 ===== */
+  :root {
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #555;
+    --accent: #2563eb;
+    --accent-light: #dbeafe;
+    --border: #e5e7eb;
+    --shadow: 0 4px 20px rgba(0,0,0,0.06);
+    --radius: 12px;
+    --tag-bg: #f0f4ff;
+    --tag-text: #2563eb;
+  }
+  .dark {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --accent: #60a5fa;
+    --accent-light: #1e3a5f;
+    --border: #334155;
+    --shadow: 0 4px 20px rgba(0,0,0,0.3);
+    --tag-bg: #1e3a5f;
+    --tag-text: #93c5fd;
+  }
+
+  /* ===== 基础 ===== */
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    transition: background .3s, color .3s;
+  }
+  a { color: var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+
+  .container { max-width: 800px; margin:0 auto; padding:0 20px; }
+
+  /* ===== 主题切换 ===== */
+  .theme-toggle {
+    position: fixed; top:20px; right:20px; z-index:100;
+    width:40px; height:40px; border-radius:50%;
+    border:1px solid var(--border); background:var(--card);
+    color:var(--text); cursor:pointer; font-size:18px;
+    display:flex; align-items:center; justify-content:center;
+    transition: all .2s; box-shadow: var(--shadow);
+  }
+  .theme-toggle:hover { transform:scale(1.1); }
+
+  /* ===== Header ===== */
+  header {
+    padding:80px 0 40px; text-align:center;
+  }
+  .avatar {
+    width:100px; height:100px; border-radius:50%;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 20px; font-size:36px; color:#fff; font-weight:700;
+  }
+  header h1 { font-size:32px; margin-bottom:8px; }
+  header .subtitle { color:var(--text-secondary); font-size:16px; margin-bottom:6px; }
+  header .subtitle2 { color:var(--text-secondary); font-size:14px; }
+
+  /* ===== Section ===== */
+  section { margin-bottom:48px; }
+  section h2 {
+    font-size:20px; margin-bottom:20px; padding-bottom:8px;
+    border-bottom:2px solid var(--accent); display:inline-block;
+  }
+
+  /* ===== 技能标签 ===== */
+  .skills { display:flex; flex-wrap:wrap; gap:10px; }
+  .skill-tag {
+    padding:6px 16px; border-radius:20px; font-size:14px;
+    background:var(--tag-bg); color:var(--tag-text);
+    transition:transform .2s; cursor:default;
+  }
+  .skill-tag:hover { transform:translateY(-2px); }
+
+  /* ===== 项目卡片 ===== */
+  .project-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius); padding:20px 24px;
+    margin-bottom:16px; box-shadow:var(--shadow);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .project-card:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(0,0,0,0.1); }
+  .project-card h3 { font-size:17px; margin-bottom:6px; }
+  .project-card .meta { color:var(--text-secondary); font-size:13px; margin-bottom:8px; }
+  .project-card p { font-size:14px; color:var(--text-secondary); margin-bottom:10px; }
+  .project-card .tags { display:flex; flex-wrap:wrap; gap:6px; }
+  .project-card .tags span {
+    font-size:12px; padding:2px 10px; border-radius:12px;
+    background:var(--accent-light); color:var(--accent);
+  }
+
+  /* ===== 时间线 ===== */
+  .timeline { position:relative; padding-left:24px; }
+  .timeline::before {
+    content:''; position:absolute; left:0; top:4px; bottom:4px;
+    width:2px; background:var(--border);
+  }
+  .timeline-item { position:relative; margin-bottom:24px; }
+  .timeline-item::before {
+    content:''; position:absolute; left:-28px; top:6px;
+    width:10px; height:10px; border-radius:50%;
+    background:var(--accent); border:2px solid var(--bg);
+  }
+  .timeline-item .date { font-size:13px; color:var(--text-secondary); margin-bottom:2px; }
+  .timeline-item h4 { font-size:16px; }
+  .timeline-item .desc { font-size:14px; color:var(--text-secondary); }
+
+  /* ===== 联系方式 ===== */
+  .contact { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; }
+  .contact a {
+    display:flex; align-items:center; gap:6px;
+    padding:8px 18px; border-radius:8px;
+    border:1px solid var(--border); background:var(--card);
+    font-size:14px; color:var(--text); transition:all .2s;
+  }
+  .contact a:hover {
+    border-color:var(--accent); color:var(--accent); text-decoration:none;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align:center; padding:30px 0 40px;
+    font-size:13px; color:var(--text-secondary);
+  }
+
+  /* ===== 响应式 ===== */
+  @media (max-width:600px) {
+    header { padding:60px 0 30px; }
+    header h1 { font-size:26px; }
+    .project-card { padding:16px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+
+<header>
+  <div class="avatar">林</div>
+  <h1>林小虾</h1>
+  <p class="subtitle">机械设计工程师 · AI 工具探索者</p>
+  <p class="subtitle2">专注 EMB 制动系统 · 花键传动 · 结构化知识管理</p>
+</header>
+
+<div class="container">
+
+  <!-- 个人简介 -->
+  <section>
+    <h2>👤 关于我</h2>
+    <p style="font-size:15px;color:var(--text-secondary);max-width:660px;">
+      机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。
+      同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。
+      相信结构化的信息和高效的协作比单纯的勤奋更有价值。
+    </p>
+  </section>
+
+  <!-- 技能 -->
+  <section>
+    <h2>🛠️ 技能</h2>
+    <div class="skills">
+      <span class="skill-tag">机械结构设计</span>
+      <span class="skill-tag">EMB 制动系统</span>
+      <span class="skill-tag">花键传动设计</span>
+      <span class="skill-tag">专利检索与分析</span>
+      <span class="skill-tag">图纸标准化</span>
+      <span class="skill-tag">Python</span>
+      <span class="skill-tag">AI 工具集成</span>
+      <span class="skill-tag">Obsidian 知识管理</span>
+      <span class="skill-tag">3D 建模</span>
+    </div>
+  </section>
+
+  <!-- 项目展示 -->
+  <section>
+    <h2>📦 项目</h2>
+
+    <div class="project-card">
+      <h3>电子机械制动卡钳 · 万向铰接传动结构</h3>
+      <div class="meta">2026 · 发明专利申请中</div>
+      <p>
+        核心创新：两级花键径向重叠布置 + 单球面副自调心偏转 + 双波簧预紧。
+        相比于现有方案，消除了花键轴向布置的杠杆放大效应，避免卡滞，同时降低加工成本。
+      </p>
+      <div class="tags">
+        <span>EMB</span><span>花键传动</span><span>球面副</span><span>波簧</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <h3>本地 VLM 图像识别服务</h3>
+      <div class="meta">2026 · 自部署</div>
+      <p>
+        基于 Qwen2-VL-2B + 4-bit 量化，在 RTX 3050（4.3GB VRAM）上本地运行。
+        HTTP 服务形式，POST 图片 base64 返回识别结果，用于教材页面识别等多场景。
+      </p>
+      <div class="tags">
+        <span>Python</span><span>transformers</span><span>VLM</span><span>量化部署</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <h3>结构化知识库体系搭建</h3>
+      <div class="meta">2026 · 持续迭代</div>
+      <p>
+        基于 Obsidian Vault 构建三层知识索引体系（inbox → wiki → projects），
+        引入语义搜索引擎实现本地 RAG。建立了一套跨会话的工作流规则和持久任务系统。
+      </p>
+      <div class="tags">
+        <span>Obsidian</span><span>知识管理</span><span>语义搜索</span><span>自动化</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 经历 -->
+  <section>
+    <h2>📋 经历</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="date">2026</div>
+        <h4>EMB 制动卡钳专利 · 发明人</h4>
+        <p class="desc">完成技术交底书撰写与答辩，核心创新点覆盖花键径向布置、球面副自调心、波簧预紧结构</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">2025 - 2026</div>
+        <h4>机械设计 · 接插件 / 传感器 / 工装</h4>
+        <p class="desc">参与莫仕接插件、传感器选型、图纸标准化规范制定、试装工装设计</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">2025</div>
+        <h4>本地 AI 工具链搭建</h4>
+        <p class="desc">从零搭建搜索引擎、VLM 服务、自动化工作流，形成稳定的个人 AI 工作站</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系方式 -->
+  <section>
+    <h2>📬 联系</h2>
+    <div class="contact">
+      <a href="mailto:14759465982@163.com">✉️ 邮箱</a>
+      <a href="#">💬 微信</a>
+      <a href="#">🐙 GitHub</a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  &copy; 2026 林小虾 · 用 🦐 发电
+</footer>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') {
+    html.classList.add('dark');
+    toggle.textContent = '☀️';
+  }
+  toggle.addEventListener('click', () => {
+    html.classList.toggle('dark');
+    const isDark = html.classList.contains('dark');
+    toggle.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+</script>
+
+</body>
+</html>
