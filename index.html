@@ -134,7 +134,8 @@
 
   /* ===== Sections ===== */
   /* ===== Scroll Reveal ===== */
-  .reveal { opacity:0; transform:translateY(24px); transition:opacity .55s ease, transform .55s ease; }
+  .reveal { transition:opacity .55s ease, transform .55s ease; }
+  .reveal.hidden { opacity:0; transform:translateY(24px); }
   .reveal.visible { opacity:1; transform:translateY(0); }
   .reveal-delay-1 { transition-delay:.08s; }
   .reveal-delay-2 { transition-delay:.16s; }
@@ -1191,8 +1192,16 @@ async function ghUpload(token, path, dataUrl, message, headers) {
 // ====================================================================
 function initReveal() {
   document.querySelectorAll('.reveal:not(.observed)').forEach(el => {
-    el.classList.add('observed');
-    if (revealObserver) revealObserver.observe(el);
+    el.classList.add('observed', 'hidden');
+    if (revealObserver) {
+      revealObserver.observe(el);
+      // If already intersecting, fire immediately
+      if (revealObserver.thresholds && el.getBoundingClientRect().top < window.innerHeight) {
+        el.classList.remove('hidden');
+        el.classList.add('visible');
+        revealObserver.unobserve(el);
+      }
+    }
   });
 }
 
@@ -1201,6 +1210,7 @@ let revealObserver = null;
   revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
+        entry.target.classList.remove('hidden');
         entry.target.classList.add('visible');
         revealObserver.unobserve(entry.target);
       }
