@@ -711,7 +711,25 @@ function loadContent() {
   if (saved) {
     try { return JSON.parse(saved); } catch {}
   }
-  // First time: save defaults
+  return null; // Need to fetch or use default
+}
+
+async function loadContentAsync() {
+  // 1. Try localStorage first
+  const saved = localStorage.getItem(KEYS.content);
+  if (saved) {
+    try { return JSON.parse(saved); } catch {}
+  }
+  // 2. Try server (published content)
+  try {
+    const res = await fetch('assets/content.json?t=' + Date.now());
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem(KEYS.content, JSON.stringify(data));
+      return data;
+    }
+  } catch {}
+  // 3. Fallback to defaults
   localStorage.setItem(KEYS.content, JSON.stringify(DEFAULT_CONTENT));
   return DEFAULT_CONTENT;
 }
@@ -779,7 +797,13 @@ function escHtml(s) {
 let editorData = null;
 
 function openEditor() {
-  editorData = JSON.parse(JSON.stringify(loadContent()));
+  const saved = localStorage.getItem(KEYS.content);
+  if (saved) {
+    try { editorData = JSON.parse(saved); }
+    catch { editorData = JSON.parse(JSON.stringify(DEFAULT_CONTENT)); }
+  } else {
+    editorData = JSON.parse(JSON.stringify(DEFAULT_CONTENT));
+  }
   populateEditor();
   document.getElementById('editorOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
@@ -1234,12 +1258,13 @@ let revealObserver = null;
 // ====================================================================
 //  初始化
 // ====================================================================
-const pageData = loadContent();
-renderContent(pageData);
-initAvatar();
-initResume();
-updatePublishBtn();
-updateTokenStatus();
+loadContentAsync().then(pageData => {
+  renderContent(pageData);
+  initAvatar();
+  initResume();
+  updatePublishBtn();
+  updateTokenStatus();
+});
 </script>
 
 </body>
