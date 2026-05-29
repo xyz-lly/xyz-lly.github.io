@@ -3,11 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>林小虾 — 个人主页</title>
+<title>林小虾 — 机械工程师 · AI 工具探索者</title>
+<meta name="description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。业余捣鼓 AI 工具的工程技术者。">
+<meta property="og:title" content="林小虾 — 个人主页">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://xyz-lly.github.io">
+<meta property="og:description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。">
+<meta name="theme-color" content="#2563eb">
 <style>
   /* ===== Variables ===== */
   :root {
     --bg: #f8f9fa;
+    --bg-alt: #f1f3f6;
     --card: #ffffff;
     --text: #1a1a2e;
     --text-secondary: #64748b;
@@ -26,9 +33,12 @@
     --avatar-bg-1: #2563eb;
     --avatar-bg-2: #7c3aed;
     --modal-bg: rgba(0,0,0,0.4);
+    --nav-bg: rgba(248,249,250,0.8);
+    --nav-border: rgba(229,231,235,0.5);
   }
   .dark {
     --bg: #0b1120;
+    --bg-alt: #0f172a;
     --card: #1a2332;
     --text: #e2e8f0;
     --text-secondary: #94a3b8;
@@ -45,50 +55,117 @@
     --avatar-bg-1: #3b82f6;
     --avatar-bg-2: #8b5cf6;
     --modal-bg: rgba(0,0,0,0.6);
+    --nav-bg: rgba(11,17,32,0.85);
+    --nav-border: rgba(30,41,59,0.5);
   }
 
   /* ===== Reset ===== */
   * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.7;
     transition: background .3s, color .3s;
+    padding-top: 64px;
   }
   a { color: var(--accent); text-decoration:none; transition: color .15s; }
   a:hover { color: var(--accent-hover); text-decoration:underline; }
+  img { max-width:100%; display:block; }
 
   .container { max-width: 760px; margin:0 auto; padding:0 24px; }
 
-  /* ===== Theme Toggle ===== */
-  .theme-toggle {
-    position: fixed; top:20px; right:20px; z-index:100;
-    width:40px; height:40px; border-radius:50%;
-    border:1px solid var(--border); background:var(--card);
-    color:var(--text); cursor:pointer; font-size:18px;
-    display:flex; align-items:center; justify-content:center;
-    transition: all .2s; box-shadow: var(--shadow);
-    backdrop-filter: blur(8px);
+  /* ===== Navigation ===== */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index: 100;
+    height: 64px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--nav-border);
+    transition: background .3s, border-color .3s;
   }
-  .theme-toggle:hover { transform:scale(1.1); box-shadow: var(--shadow-lg); }
+  nav .nav-inner {
+    max-width: 960px; margin: 0 auto; padding: 0 24px;
+    height: 100%;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  nav .nav-brand {
+    font-size: 17px; font-weight: 700;
+    color: var(--text); display: flex; align-items: center; gap: 8px;
+  }
+  nav .nav-brand span { font-size: 18px; }
+  nav .nav-links { display: flex; align-items: center; gap: 4px; }
+  nav .nav-links a {
+    padding: 6px 14px; border-radius: 6px;
+    font-size: 14px; color: var(--text-secondary);
+    transition: all .15s; text-decoration: none;
+    position: relative;
+  }
+  nav .nav-links a:hover {
+    color: var(--text);
+    background: var(--accent-light);
+  }
+  nav .nav-links a.active {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  nav .nav-toggle {
+    width: 40px; height: 40px; border-radius: 8px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--text); cursor: pointer; font-size: 20px;
+    display: none; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  nav .nav-toggle:hover { background: var(--accent-light); }
 
-  /* ===== Header / Avatar ===== */
-  header {
-    padding: 80px 0 48px;
+  /* Mobile nav */
+  @media (max-width: 720px) {
+    nav .nav-links {
+      position: fixed; top: 64px; left:0; right:0;
+      background: var(--nav-bg); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column; padding: 8px 16px; gap: 2px;
+      display: none;
+    }
+    nav .nav-links.open { display: flex; }
+    nav .nav-links a { width: 100%; padding: 10px 14px; }
+    nav .nav-toggle { display: flex; }
+  }
+
+  /* ===== Section Shared ===== */
+  section {
+    padding: 80px 0;
+  }
+  section:nth-child(even) {
+    background: var(--bg-alt);
+  }
+  section h2 {
+    font-size: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-inner { max-width: 760px; margin:0 auto; padding:0 24px; }
+
+  /* ===== Hero ===== */
+  #hero {
+    padding: 100px 0 80px;
     text-align: center;
   }
-  .avatar-wrapper {
+  #hero .avatar-wrapper {
     position: relative;
     width: 110px; height: 110px;
-    margin: 0 auto 24px;
+    margin: 0 auto 28px;
     cursor: pointer;
     border-radius: 50%;
   }
-  .avatar-wrapper:hover .avatar-hover {
-    opacity: 1;
-  }
-  .avatar-hover {
+  #hero .avatar-wrapper:hover .avatar-hover { opacity: 1; }
+  #hero .avatar-hover {
     position: absolute; inset: 0; z-index: 10;
     border-radius: 50%;
     background: rgba(0,0,0,0.45);
@@ -98,7 +175,7 @@
     pointer-events: none;
     backdrop-filter: blur(2px);
   }
-  .avatar-ring {
+  #hero .avatar-ring {
     position: absolute;
     inset: -4px;
     border-radius: 50%;
@@ -108,7 +185,7 @@
     -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .avatar {
+  #hero .avatar {
     width: 100%; height: 100%;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--avatar-bg-1), var(--avatar-bg-2));
@@ -119,31 +196,82 @@
     user-select: none;
     overflow: hidden;
   }
-  .avatar-img {
+  #hero .avatar-img {
     width: 100%; height: 100%;
     object-fit: cover;
     position: relative; z-index: 1;
   }
-  header h1 { font-size: 30px; margin-bottom: 8px; letter-spacing: 0.5px; }
-  header .subtitle {
-    color: var(--text-secondary); font-size: 16px; margin-bottom: 4px;
+  #hero h1 {
+    font-size: 32px; margin-bottom: 12px; letter-spacing: 0.5px;
   }
-  header .subtitle2 {
-    color: var(--text-muted); font-size: 14px;
+  #hero .hero-tagline {
+    font-size: 16px; color: var(--accent);
+    margin-bottom: 16px; font-weight: 500;
+  }
+  #hero .hero-desc {
+    font-size: 16px; color: var(--text-secondary);
+    max-width: 540px; margin: 0 auto 32px; line-height: 1.8;
+  }
+  #hero .hero-actions {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+  #hero .scroll-hint {
+    margin-top: 60px;
+    font-size: 13px; color: var(--text-muted);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  #hero .scroll-hint .arrow {
+    animation: bob 2s ease-in-out infinite;
+    font-size: 18px;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
   }
 
-  /* ===== Section ===== */
-  section {
-    margin-bottom: 48px;
-  }
-  section h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--border);
-    display: flex;
+  .btn {
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s;
+    border: none;
+    text-decoration: none;
+    font-family: inherit;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 4px 16px var(--accent-glow);
+  }
+  .btn-primary.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .btn-sm {
+    padding: 6px 14px;
+    font-size: 13px;
   }
 
   /* ===== About ===== */
@@ -199,7 +327,7 @@
     content:''; position:absolute; left: -31px; top: 7px;
     width: 12px; height: 12px; border-radius:50%;
     background: var(--accent);
-    border: 3px solid var(--bg);
+    border: 3px solid var(--bg-alt);
     box-shadow: 0 0 0 1px var(--border);
   }
   .timeline-item .date { font-size: 13px; color: var(--text-muted); margin-bottom: 2px; }
@@ -225,49 +353,6 @@
     font-size: 13px; color: var(--text-muted);
   }
   .resume-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 10px 22px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all .2s;
-    border: none;
-    text-decoration: none;
-    font-family: inherit;
-  }
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-  }
-  .btn-primary:hover {
-    background: var(--accent-hover);
-    color: #fff;
-    text-decoration: none;
-    box-shadow: 0 4px 16px var(--accent-glow);
-  }
-  .btn-primary.disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-  .btn-outline {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-outline:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    text-decoration: none;
-  }
-  .btn-sm {
-    padding: 6px 14px;
-    font-size: 13px;
-  }
   .resume-preview-wrap {
     margin-top: 16px;
     display: none;
@@ -277,6 +362,9 @@
     width: 100%; height: 600px;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
+  }
+  .update-hint {
+    margin-top: 10px; font-size: 12px; color: var(--text-muted); text-align: center;
   }
 
   /* ===== Contact ===== */
@@ -381,56 +469,102 @@
 
   /* ===== Footer ===== */
   footer {
-    text-align:center; padding: 32px 0 80px;
+    text-align: center;
+    padding: 48px 24px 80px;
     font-size: 13px; color: var(--text-muted);
   }
 
+  /* ===== Back to top ===== */
+  .back-top {
+    position: fixed; right: 24px; bottom: 88px; z-index: 80;
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--text-secondary); cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s; box-shadow: var(--shadow);
+    opacity: 0; pointer-events: none;
+  }
+  .back-top.visible { opacity: 1; pointer-events: auto; }
+  .back-top:hover { transform: scale(1.1); box-shadow: var(--shadow-lg); }
+
   /* ===== Responsive ===== */
   @media (max-width: 600px) {
-    header { padding: 60px 0 32px; }
-    header h1 { font-size: 24px; }
-    .avatar-wrapper { width: 90px; height: 90px; }
-    .avatar { font-size: 30px; }
+    #hero { padding: 60px 0 48px; }
+    #hero .avatar-wrapper { width: 90px; height: 90px; }
+    #hero .avatar { font-size: 30px; }
+    #hero h1 { font-size: 24px; }
+    section { padding: 48px 0; }
     .project-card { padding: 16px 18px; }
     .resume-box { padding: 20px; flex-direction: column; text-align: center; }
     .resume-actions { width: 100%; justify-content: center; }
-    .container { padding: 0 16px; }
-    .theme-toggle { top: 12px; right: 12px; }
+    .section-inner { padding: 0 16px; }
     .resume-preview-wrap embed { height: 400px; }
     .admin-bar { bottom: 16px; padding: 8px 14px; gap: 4px; }
     .admin-btn { padding: 5px 10px; font-size: 12px; }
+    .back-top { right: 16px; bottom: 76px; width: 36px; height: 36px; font-size: 16px; }
   }
 </style>
 </head>
 <body>
 
-<button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
-
-<header>
-  <div class="avatar-wrapper" id="avatarWrapper" title="点击更换头像">
-    <div class="avatar-ring"></div>
-    <div class="avatar" id="avatarDisplay"><span id="avatarText">林</span></div>
-    <div class="avatar-hover">📷</div>
+<!-- ===== Navigation ===== -->
+<nav id="navbar" role="navigation">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-brand">🦐 林小虾</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#about" data-section>关于</a>
+      <a href="#skills" data-section>技能</a>
+      <a href="#projects" data-section>项目</a>
+      <a href="#resume" data-section>简历</a>
+      <a href="#experience" data-section>经历</a>
+      <a href="#contact" data-section>联系</a>
+      <a href="#" id="navThemeToggle" style="font-size:16px;padding:6px 10px;" aria-label="切换主题">🌙</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button>
   </div>
-  <h1>林小虾</h1>
-  <p class="subtitle">机械设计工程师 · AI 工具探索者</p>
-  <p class="subtitle2">EMB 制动系统 · 花键传动 · 结构化知识管理</p>
-</header>
+</nav>
 
-<div class="container">
+<!-- ===== Hero ===== -->
+<section id="hero">
+  <div class="section-inner">
+    <div class="avatar-wrapper" id="avatarWrapper" title="点击更换头像">
+      <div class="avatar-ring"></div>
+      <div class="avatar" id="avatarDisplay"><span id="avatarText">林</span></div>
+      <div class="avatar-hover">📷</div>
+    </div>
 
-  <!-- 关于我 -->
-  <section>
+    <p class="hero-tagline">机械工程师 · 业余 AI 捣鼓者</p>
+    <h1>林小虾</h1>
+    <p class="hero-desc">
+      设计过 EMB 卡钳，搭过 VLM 服务，写过专利交底书。
+      相信好工具能让工程师少加班，好知识能让人少走弯路。
+    </p>
+    <div class="hero-actions">
+      <a href="#resume" class="btn btn-primary" id="heroResumeBtn">📄 下载简历</a>
+      <a href="#contact" class="btn btn-outline">📬 联系我</a>
+    </div>
+    <div class="scroll-hint">
+      <span class="arrow">↓</span>
+      <span>向下滚动</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 关于我 ===== -->
+<section id="about">
+  <div class="section-inner">
     <h2>👤 关于我</h2>
     <p class="about-text">
       机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。
       同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。
       相信结构化的信息和高效的协作比单纯的勤奋更有价值。
     </p>
-  </section>
+  </div>
+</section>
 
-  <!-- 技能 -->
-  <section>
+<!-- ===== 技能 ===== -->
+<section id="skills">
+  <div class="section-inner">
     <h2>🛠️ 技能</h2>
     <div class="skills">
       <span class="skill-tag">机械结构设计</span>
@@ -443,10 +577,12 @@
       <span class="skill-tag">Obsidian 知识管理</span>
       <span class="skill-tag">3D 建模</span>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 项目 -->
-  <section>
+<!-- ===== 项目 ===== -->
+<section id="projects">
+  <div class="section-inner">
     <h2>📦 项目</h2>
 
     <div class="project-card">
@@ -484,10 +620,12 @@
         <span>Obsidian</span><span>知识管理</span><span>语义搜索</span><span>自动化</span>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 简历 -->
-  <section>
+<!-- ===== 简历 ===== -->
+<section id="resume">
+  <div class="section-inner">
     <h2>📄 简历</h2>
     <div class="resume-box">
       <div class="resume-info">
@@ -508,13 +646,15 @@
       </div>
     </div>
     <div class="resume-preview-wrap" id="resumePreview"></div>
-    <div class="update-hint" style="margin-top:10px;font-size:12px;color:var(--text-muted);text-align:center;">
+    <div class="update-hint">
       点击「替换」上传新简历 · 本地立即生效 · 底部「发布到线上」可同步到仓库
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 经历 -->
-  <section>
+<!-- ===== 经历 ===== -->
+<section id="experience">
+  <div class="section-inner">
     <h2>📋 经历</h2>
     <div class="timeline">
       <div class="timeline-item">
@@ -533,23 +673,27 @@
         <p class="desc">从零搭建搜索引擎、VLM 服务、自动化工作流，形成稳定的个人 AI 工作站</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 联系方式 -->
-  <section>
+<!-- ===== 联系 ===== -->
+<section id="contact">
+  <div class="section-inner">
     <h2>📬 联系</h2>
     <div class="contact">
       <a href="mailto:14759465982@163.com">✉️ 邮箱</a>
       <a href="#">💬 微信</a>
       <a href="https://github.com/xyz-lly" target="_blank" rel="noopener">🐙 GitHub</a>
     </div>
-  </section>
-
-</div>
+  </div>
+</section>
 
 <footer>
   🦐 林小虾 · &copy; 2026
 </footer>
+
+<!-- ===== Back to Top ===== -->
+<button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
 
 <!-- ===== Admin Bar ===== -->
 <div class="admin-bar" id="adminBar">
@@ -629,14 +773,15 @@ const KEYS = {
 //  主题
 // ====================================================================
 (function initTheme() {
-  const toggle = document.getElementById('themeToggle');
+  const toggle = document.getElementById('navThemeToggle');
   const html = document.documentElement;
   const saved = localStorage.getItem(KEYS.theme);
   if (saved === 'dark') {
     html.classList.add('dark');
     toggle.textContent = '☀️';
   }
-  toggle.addEventListener('click', () => {
+  toggle.addEventListener('click', (e) => {
+    e.preventDefault();
     html.classList.toggle('dark');
     const isDark = html.classList.contains('dark');
     toggle.textContent = isDark ? '☀️' : '🌙';
@@ -667,24 +812,78 @@ function closeModal(id) {
 }
 
 // ====================================================================
+//  导航
+// ====================================================================
+(function initNav() {
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+
+  // Mobile hamburger
+  toggle.addEventListener('click', () => {
+    links.classList.toggle('open');
+  });
+  document.querySelectorAll('[data-section]').forEach(a => {
+    a.addEventListener('click', () => links.classList.remove('open'));
+  });
+
+  // Active section highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('[data-section]');
+
+  function updateActive() {
+    let current = '';
+    const scrollY = window.scrollY + 100;
+    sections.forEach(s => {
+      if (s.offsetTop <= scrollY && s.offsetTop + s.offsetHeight > scrollY) {
+        current = s.id;
+      }
+    });
+    navAnchors.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+})();
+
+// ====================================================================
+//  Back to Top
+// ====================================================================
+(function initBackTop() {
+  const btn = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 300);
+  }, { passive: true });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+})();
+
+// ====================================================================
+//  Hero resume button
+// ====================================================================
+document.getElementById('heroResumeBtn').addEventListener('click', (e) => {
+  // Let the anchor scroll work, but if resume is already loaded, download directly
+  const dataUrl = localStorage.getItem(KEYS.resume);
+  if (dataUrl) {
+    e.preventDefault();
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = '林小虾_简历.pdf';
+    a.click();
+  }
+  // else: anchor scroll to #resume section
+});
+
+// ====================================================================
 //  头像管理
 // ====================================================================
-function getAvatarData() {
-  return localStorage.getItem(KEYS.avatar);
-}
-
 function renderAvatar(src) {
   const display = document.getElementById('avatarDisplay');
   display.innerHTML = `<img src="${src}" class="avatar-img" alt="头像">`;
 }
 
-function resetAvatarToText() {
-  const display = document.getElementById('avatarDisplay');
-  display.innerHTML = '<span id="avatarText">林</span>';
-}
-
 function initAvatar() {
-  const saved = getAvatarData();
+  const saved = localStorage.getItem(KEYS.avatar);
   if (saved) renderAvatar(saved);
 }
 
@@ -697,7 +896,6 @@ function handleAvatarUpload(file) {
     showToast('图片太大，请压缩到 5MB 以内');
     return;
   }
-
   const reader = new FileReader();
   reader.onload = (e) => {
     const img = new Image();
@@ -711,7 +909,6 @@ function handleAvatarUpload(file) {
       canvas.height = Math.round(h);
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
       const dataUrl = canvas.toDataURL('image/webp', 0.85);
       localStorage.setItem(KEYS.avatar, dataUrl);
       renderAvatar(dataUrl);
@@ -723,7 +920,6 @@ function handleAvatarUpload(file) {
   reader.readAsDataURL(file);
 }
 
-// 点击头像上传
 document.getElementById('avatarWrapper').addEventListener('click', () => {
   document.getElementById('avatarInput').click();
 });
@@ -737,45 +933,30 @@ document.getElementById('avatarInput').addEventListener('change', (e) => {
 // ====================================================================
 //  简历管理
 // ====================================================================
-function getResumeData() {
-  return localStorage.getItem(KEYS.resume);
-}
-
 function updateResumeUI(dataUrl) {
   const btn = document.getElementById('resumeDownloadBtn');
   btn.href = dataUrl;
   btn.classList.remove('disabled');
   btn.title = '下载简历';
-
-  // Update status
   const sizeStr = formatDataUrlSize(dataUrl);
   document.getElementById('resumeStatus').textContent = `已加载 · ${sizeStr}`;
-
-  // Update preview embed
   const wrap = document.getElementById('resumePreview');
   wrap.innerHTML = `<embed src="${dataUrl}" type="application/pdf">`;
 }
 
-function resetResumeToRemote() {
-  const btn = document.getElementById('resumeDownloadBtn');
-  btn.href = 'assets/resume.pdf';
-  btn.classList.add('disabled');
-  document.getElementById('resumeStatus').textContent = '待上传';
-  document.getElementById('resumePreview').innerHTML = '';
-}
-
 function formatDataUrlSize(dataUrl) {
-  const raw = atob(dataUrl.split(',')[1]);
-  const kb = (raw.length / 1024).toFixed(1);
-  return kb > 1024 ? (kb / 1024).toFixed(1) + ' MB' : kb + ' KB';
+  try {
+    const raw = atob(dataUrl.split(',')[1]);
+    const kb = (raw.length / 1024).toFixed(1);
+    return kb > 1024 ? (kb / 1024).toFixed(1) + ' MB' : kb + ' KB';
+  } catch { return ''; }
 }
 
 function initResume() {
-  const saved = getResumeData();
+  const saved = localStorage.getItem(KEYS.resume);
   if (saved) {
     updateResumeUI(saved);
   } else {
-    // Check if remote resume exists
     fetch('assets/resume.pdf', { method: 'HEAD' })
       .then(res => {
         if (res.ok) {
@@ -798,7 +979,6 @@ function handleResumeUpload(file) {
     showToast('简历文件太大，请压缩到 10MB 以内');
     return;
   }
-
   const reader = new FileReader();
   reader.onload = (e) => {
     const dataUrl = e.target.result;
@@ -810,7 +990,6 @@ function handleResumeUpload(file) {
   reader.readAsDataURL(file);
 }
 
-// 简历上传
 document.getElementById('resumeInput').addEventListener('change', (e) => {
   if (e.target.files[0]) {
     handleResumeUpload(e.target.files[0]);
@@ -818,7 +997,6 @@ document.getElementById('resumeInput').addEventListener('change', (e) => {
   }
 });
 
-// 预览切换
 let previewVisible = false;
 function toggleResumePreview() {
   previewVisible = !previewVisible;
@@ -828,31 +1006,26 @@ function toggleResumePreview() {
 }
 
 // ====================================================================
-//  脏标记系统（跟踪是否有未发布的本地变更）
+//  脏标记
 // ====================================================================
 function getDirty() {
-  try {
-    return JSON.parse(localStorage.getItem(KEYS.dirty)) || [];
-  } catch { return []; }
+  try { return JSON.parse(localStorage.getItem(KEYS.dirty)) || []; }
+  catch { return []; }
 }
-
 function setDirty(list) {
   if (list.length === 0) localStorage.removeItem(KEYS.dirty);
   else localStorage.setItem(KEYS.dirty, JSON.stringify(list));
 }
-
 function markDirty(type) {
   const dirty = getDirty();
   if (!dirty.includes(type)) dirty.push(type);
   setDirty(dirty);
   updatePublishBtn();
 }
-
 function clearDirty() {
   setDirty([]);
   updatePublishBtn();
 }
-
 function updatePublishBtn() {
   const btn = document.getElementById('publishBtn');
   const dirty = getDirty();
@@ -865,21 +1038,18 @@ function updatePublishBtn() {
 }
 
 // ====================================================================
-//  GitHub Token 管理
+//  GitHub Token
 // ====================================================================
 function hasToken() {
   return !!localStorage.getItem(KEYS.token);
 }
-
 function showTokenConfig() {
   if (hasToken()) {
     document.getElementById('tokenModalBody').innerHTML = `
       <div class="modal-success">
         <div class="icon">✅</div>
         <p><b>GitHub Token 已配置</b></p>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">
-          如需更换，重新输入保存即可
-        </p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">如需更换，重新输入保存即可</p>
         <input type="password" id="tokenInput" placeholder="新 Token（留空不修改）" value="" style="margin-bottom:8px">
         <div class="modal-actions">
           <button class="btn btn-outline" onclick="closeModal('tokenModal')">关闭</button>
@@ -905,7 +1075,6 @@ function showTokenConfig() {
   }
   showModal('tokenModal');
 }
-
 function saveToken() {
   const token = document.getElementById('tokenInput').value.trim();
   if (!token) { showToast('请输入 Token'); return; }
@@ -914,7 +1083,6 @@ function saveToken() {
   updateTokenStatus();
   showToast('Token 已保存 ✓');
 }
-
 function updateToken() {
   const token = document.getElementById('tokenInput').value.trim();
   if (token) localStorage.setItem(KEYS.token, token);
@@ -922,7 +1090,6 @@ function updateToken() {
   updateTokenStatus();
   showToast('Token 已更新 ✓');
 }
-
 function updateTokenStatus() {
   const btn = document.getElementById('tokenStatusBtn');
   btn.textContent = hasToken() ? '✅ Token' : '🔑 Token';
@@ -933,21 +1100,16 @@ function updateTokenStatus() {
 // ====================================================================
 async function publishToGitHub() {
   const token = localStorage.getItem(KEYS.token);
-  if (!token) {
-    showTokenConfig();
-    return;
-  }
+  if (!token) { showTokenConfig(); return; }
 
-  const avatarData = getAvatarData();
-  const resumeData = getResumeData();
-  const dirty = getDirty();
+  const avatarData = localStorage.getItem(KEYS.avatar);
+  const resumeData = localStorage.getItem(KEYS.resume);
 
   if (!avatarData && !resumeData) {
     showToast('没有需要发布的内容');
     return;
   }
 
-  // Show progress modal
   showModal('publishModal');
   document.getElementById('publishLoading').querySelector('.icon').textContent = '⏳';
   document.getElementById('publishStatus').textContent = '准备中…';
@@ -960,52 +1122,36 @@ async function publishToGitHub() {
 
   let success = 0, fail = 0;
 
-  // 上传头像
   if (avatarData) {
     try {
       document.getElementById('publishStatus').textContent = '上传头像…';
       await uploadToGitHub(token, 'assets/avatar.jpg', avatarData, '更新头像', headers);
       success++;
-    } catch (e) {
-      fail++;
-      console.error('头像上传失败:', e);
-    }
+    } catch (e) { fail++; console.error('头像上传失败:', e); }
   }
-
-  // 上传简历
   if (resumeData) {
     try {
       document.getElementById('publishStatus').textContent = '上传简历…';
       await uploadToGitHub(token, 'assets/resume.pdf', resumeData, '更新简历', headers);
       success++;
-    } catch (e) {
-      fail++;
-      console.error('简历上传失败:', e);
-    }
+    } catch (e) { fail++; console.error('简历上传失败:', e); }
   }
 
-  // 完成
   if (success > 0) {
     document.getElementById('publishLoading').querySelector('.icon').textContent = '✅';
     document.getElementById('publishStatus').textContent =
       `${success} 项已提交到 GitHub，等待 Pages 部署（约 1-2 分钟）…`;
     clearDirty();
   }
-  if (fail > 0) {
-    showToast(`❌ ${fail} 项上传失败，查看控制台了解详情`);
-  }
+  if (fail > 0) showToast(`❌ ${fail} 项上传失败，查看控制台了解详情`);
 
-  // 2 秒后自动关闭 modal
   setTimeout(() => closeModal('publishModal'), success > 0 ? 4000 : 2000);
 }
 
 async function uploadToGitHub(token, path, dataUrl, message, headers) {
-  // Extract base64 from data URL
   const commaIdx = dataUrl.indexOf(',');
-  const mime = dataUrl.substring(5, commaIdx).split(';')[0];
   const base64 = dataUrl.substring(commaIdx + 1);
 
-  // Get existing file SHA (if any)
   let sha = null;
   try {
     const res = await fetch(`${API_BASE}/contents/${path}?ref=${GITHUB_BRANCH}`, { headers });
@@ -1013,7 +1159,7 @@ async function uploadToGitHub(token, path, dataUrl, message, headers) {
       const data = await res.json();
       sha = data.sha;
     }
-  } catch (e) { /* file doesn't exist yet */ }
+  } catch (e) {}
 
   const body = {
     message: `${message} [via homepage admin]`,
@@ -1035,7 +1181,7 @@ async function uploadToGitHub(token, path, dataUrl, message, headers) {
 }
 
 // ====================================================================
-//  页面加载时关闭 modal（点击遮罩）
+//  Modal 遮罩关闭
 // ====================================================================
 document.querySelectorAll('.modal-overlay').forEach(el => {
   el.addEventListener('click', (e) => {
