@@ -133,6 +133,20 @@
   }
 
   /* ===== Sections ===== */
+  /* ===== Scroll Reveal ===== */
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity .55s ease, transform .55s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  .reveal-delay-1 { transition-delay:.08s; }
+  .reveal-delay-2 { transition-delay:.16s; }
+  .reveal-delay-3 { transition-delay:.24s; }
+
+  /* ===== Progress Bar ===== */
+  .progress-bar {
+    position:fixed; top:0; left:0; z-index:101;
+    height:2px; background:linear-gradient(90deg,var(--avatar-bg-1),var(--avatar-bg-2));
+    width:0; transition:width .1s linear;
+  }
+
   section { padding:80px 0; scroll-margin-top:16px; }
   section:nth-child(even) { background:var(--bg-alt); }
   section h2 {
@@ -422,6 +436,8 @@
 </head>
 <body>
 
+<div class="progress-bar" id="progressBar"></div>
+
 <!-- ===== Navigation ===== -->
 <nav id="navbar" role="navigation">
   <div class="nav-inner">
@@ -460,7 +476,7 @@
 </section>
 
 <!-- ===== 关于 ===== -->
-<section id="about">
+<section id="about" class="reveal">
   <div class="section-inner">
     <h2>👤 关于我</h2>
     <p class="about-text" id="aboutText">机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。</p>
@@ -468,7 +484,7 @@
 </section>
 
 <!-- ===== 技能 ===== -->
-<section id="skills">
+<section id="skills" class="reveal">
   <div class="section-inner">
     <h2>🛠️ 技能</h2>
     <div class="skills" id="skillsContainer"></div>
@@ -476,7 +492,7 @@
 </section>
 
 <!-- ===== 项目 ===== -->
-<section id="projects">
+<section id="projects" class="reveal">
   <div class="section-inner">
     <h2>📦 项目</h2>
     <div id="projectsContainer"></div>
@@ -484,7 +500,7 @@
 </section>
 
 <!-- ===== 简历 ===== -->
-<section id="resume">
+<section id="resume" class="reveal">
   <div class="section-inner">
     <h2>📄 简历</h2>
     <div class="resume-box">
@@ -505,7 +521,7 @@
 </section>
 
 <!-- ===== 经历 ===== -->
-<section id="experience">
+<section id="experience" class="reveal">
   <div class="section-inner">
     <h2>📋 经历</h2>
     <div class="timeline" id="timelineContainer"></div>
@@ -513,7 +529,7 @@
 </section>
 
 <!-- ===== 联系 ===== -->
-<section id="contact">
+<section id="contact" class="reveal">
   <div class="section-inner">
     <h2>📬 联系</h2>
     <div class="contact" id="contactContainer"></div>
@@ -712,7 +728,7 @@ function renderContent(data) {
   ).join('');
   // Projects
   document.getElementById('projectsContainer').innerHTML = data.projects.map((p, i) => `
-    <div class="project-card">
+    <div class="project-card reveal reveal-delay-${Math.min(i,3)}">
       <h3>${escHtml(p.title)}</h3>
       <div class="meta">${escHtml(p.date)}</div>
       <p>${escHtml(p.desc)}</p>
@@ -720,8 +736,8 @@ function renderContent(data) {
     </div>
   `).join('');
   // Experiences
-  document.getElementById('timelineContainer').innerHTML = data.experiences.map(e => `
-    <div class="timeline-item">
+  document.getElementById('timelineContainer').innerHTML = data.experiences.map((e, i) => `
+    <div class="timeline-item reveal reveal-delay-${Math.min(i,3)}">
       <div class="date">${escHtml(e.date)}</div>
       <h4>${escHtml(e.title)}</h4>
       <p class="desc">${escHtml(e.desc)}</p>
@@ -1167,6 +1183,29 @@ async function ghUpload(token, path, dataUrl, message, headers) {
   const r = await fetch(`${API_BASE}/contents/${path}`, { method:'PUT', headers, body:JSON.stringify(body) });
   if (!r.ok) throw new Error((await r.json().catch(()=>({}))).message || `HTTP ${r.status}`);
 }
+
+// ====================================================================
+//  滚动动画 + 进度条
+// ====================================================================
+(function initScrollEffects() {
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Progress bar
+  const bar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0';
+  }, { passive: true });
+})();
 
 // ====================================================================
 //  初始化
