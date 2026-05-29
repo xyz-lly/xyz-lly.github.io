@@ -345,7 +345,11 @@
     display:inline-flex; align-items:center; gap:4px;
     padding:4px 10px; border-radius:14px; font-size:13px;
     background:var(--tag-bg); color:var(--tag-text);
+    cursor:grab; user-select:none; transition:transform .15s, opacity .15s;
   }
+  .editor-tag:active { cursor:grabbing; }
+  .editor-tag.dragging { opacity:.4; transform:scale(.9); }
+  .editor-tag.drag-over { box-shadow:0 0 0 2px var(--accent); background:var(--accent-light); transform:translateY(-2px); }
   .editor-tag button {
     background:none; border:none; cursor:pointer;
     color:var(--tag-text); font-size:14px; padding:0; line-height:1;
@@ -773,11 +777,49 @@ function populateEditor() {
   renderEditorContacts();
 }
 
+let dragSkillIdx = null;
+
 function renderEditorSkills() {
   const el = document.getElementById('e_skillsList');
   el.innerHTML = editorData.skills.map((s, i) =>
-    `<div class="editor-tag">${escHtml(s)} <button onclick="removeEditorSkill(${i})">✕</button></div>`
+    `<div class="editor-tag" draggable="true" data-idx="${i}"
+        ondragstart="onSkillDragStart(event, ${i})"
+        ondragover="onSkillDragOver(event, ${i})"
+        ondragend="onSkillDragEnd(event)"
+        ondrop="onSkillDrop(event, ${i})">
+      ⠿ ${escHtml(s)} <button onclick="removeEditorSkill(${i})" title="删除">✕</button>
+    </div>`
   ).join('');
+}
+
+function onSkillDragStart(e, idx) {
+  dragSkillIdx = idx;
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function onSkillDragOver(e, idx) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.editor-tag').forEach(el => el.classList.remove('drag-over'));
+  if (dragSkillIdx !== idx) e.currentTarget.classList.add('drag-over');
+}
+
+function onSkillDragEnd(e) {
+  e.target.classList.remove('dragging');
+  document.querySelectorAll('.editor-tag').forEach(el => el.classList.remove('drag-over'));
+  dragSkillIdx = null;
+}
+
+function onSkillDrop(e, idx) {
+  e.preventDefault();
+  e.target.classList.remove('drag-over');
+  if (dragSkillIdx === null || dragSkillIdx === idx) return;
+  const arr = editorData.skills;
+  const [moved] = arr.splice(dragSkillIdx, 1);
+  arr.splice(idx, 0, moved);
+  dragSkillIdx = null;
+  renderEditorSkills();
 }
 
 function addEditorSkill() {
