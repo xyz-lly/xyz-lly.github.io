@@ -25,6 +25,7 @@
     --tag-text: #2563eb;
     --avatar-bg-1: #2563eb;
     --avatar-bg-2: #7c3aed;
+    --modal-bg: rgba(0,0,0,0.4);
   }
   .dark {
     --bg: #0b1120;
@@ -43,6 +44,7 @@
     --tag-text: #93c5fd;
     --avatar-bg-1: #3b82f6;
     --avatar-bg-2: #8b5cf6;
+    --modal-bg: rgba(0,0,0,0.6);
   }
 
   /* ===== Reset ===== */
@@ -80,6 +82,21 @@
     position: relative;
     width: 110px; height: 110px;
     margin: 0 auto 24px;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  .avatar-wrapper:hover .avatar-hover {
+    opacity: 1;
+  }
+  .avatar-hover {
+    position: absolute; inset: 0; z-index: 10;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 26px; font-weight: 600;
+    opacity: 0; transition: opacity .25s;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
   }
   .avatar-ring {
     position: absolute;
@@ -100,6 +117,12 @@
     position: relative; z-index: 1;
     box-shadow: 0 0 0 3px var(--bg);
     user-select: none;
+    overflow: hidden;
+  }
+  .avatar-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    position: relative; z-index: 1;
   }
   header h1 { font-size: 30px; margin-bottom: 8px; letter-spacing: 0.5px; }
   header .subtitle {
@@ -121,12 +144,6 @@
     display: flex;
     align-items: center;
     gap: 8px;
-  }
-  section h2::after {
-    content: '';
-    flex: 1;
-    height: 2px;
-    background: var(--border);
   }
 
   /* ===== About ===== */
@@ -189,7 +206,7 @@
   .timeline-item h4 { font-size: 16px; margin-bottom: 2px; }
   .timeline-item .desc { font-size: 14px; color: var(--text-secondary); }
 
-  /* ===== Resume Section ===== */
+  /* ===== Resume ===== */
   .resume-box {
     background: var(--card);
     border: 1px solid var(--border);
@@ -204,12 +221,15 @@
   .resume-info { flex: 1; min-width: 200px; }
   .resume-info h3 { font-size: 17px; margin-bottom: 4px; }
   .resume-info p { font-size: 14px; color: var(--text-secondary); }
-  .resume-actions { display: flex; gap: 12px; align-items: center; }
+  .resume-info .status {
+    font-size: 13px; color: var(--text-muted);
+  }
+  .resume-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 24px;
+    gap: 7px;
+    padding: 10px 22px;
     border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 500;
@@ -217,6 +237,7 @@
     transition: all .2s;
     border: none;
     text-decoration: none;
+    font-family: inherit;
   }
   .btn-primary {
     background: var(--accent);
@@ -229,7 +250,7 @@
     box-shadow: 0 4px 16px var(--accent-glow);
   }
   .btn-primary.disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
     pointer-events: none;
   }
@@ -242,6 +263,20 @@
     border-color: var(--accent);
     color: var(--accent);
     text-decoration: none;
+  }
+  .btn-sm {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+  .resume-preview-wrap {
+    margin-top: 16px;
+    display: none;
+  }
+  .resume-preview-wrap.show { display: block; }
+  .resume-preview-wrap embed {
+    width: 100%; height: 600px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
   }
 
   /* ===== Contact ===== */
@@ -259,41 +294,96 @@
     text-decoration: none;
   }
 
-  /* ===== Update Hint (small admin note) ===== */
-  .update-hint {
-    margin-top: 12px;
-    font-size: 12px;
-    color: var(--text-muted);
-    text-align: center;
-  }
-  .update-hint code {
-    font-family: "SF Mono", "Fira Code", monospace;
+  /* ===== Admin Bar ===== */
+  .admin-bar {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 90;
+    display: flex; gap: 8px; align-items: center;
     background: var(--card);
-    padding: 2px 6px;
-    border-radius: 4px;
     border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 18px;
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(12px);
+  }
+  .admin-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 6px 14px; border-radius: 6px;
+    font-size: 13px; font-weight: 500; cursor: pointer; border: none;
+    background: transparent; color: var(--text-secondary);
+    font-family: inherit;
+    transition: all .15s;
+  }
+  .admin-btn:hover { background: var(--accent-light); color: var(--accent); }
+  .admin-btn.publish {
+    background: var(--accent); color: #fff;
+  }
+  .admin-btn.publish:hover { background: var(--accent-hover); color: #fff; }
+  .admin-divider {
+    width: 1px; height: 20px;
+    background: var(--border);
   }
 
-  /* ===== Footer ===== */
-  footer {
-    text-align:center; padding: 32px 0 48px;
-    font-size: 13px; color: var(--text-muted);
+  /* ===== Modal ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 200;
+    background: var(--modal-bg);
+    align-items: center; justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
   }
-  footer span { color: var(--accent); }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    max-width: 480px; width: 100%;
+    box-shadow: var(--shadow-lg);
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal h3 { font-size: 18px; margin-bottom: 4px; }
+  .modal p { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; }
+  .modal ol {
+    font-size: 14px; color: var(--text-secondary);
+    padding-left: 20px; margin-bottom: 16px; line-height: 2;
+  }
+  .modal input {
+    width: 100%; padding: 10px 14px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--bg);
+    color: var(--text); font-size: 14px; font-family: monospace;
+    margin-bottom: 16px; outline: none;
+  }
+  .modal input:focus { border-color: var(--accent); }
+  .modal-actions {
+    display: flex; gap: 10px; justify-content: flex-end;
+  }
+  .modal-success {
+    text-align: center; padding: 20px 0;
+  }
+  .modal-success .icon { font-size: 48px; margin-bottom: 12px; }
+  .modal-success p { margin-bottom: 4px; }
 
   /* ===== Toast ===== */
   .toast {
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
     background: var(--card); color: var(--text);
     padding: 12px 24px; border-radius: var(--radius-sm);
     border: 1px solid var(--border);
     box-shadow: var(--shadow-lg);
     font-size: 14px;
-    opacity: 0; transition: opacity .3s, transform .3s;
+    opacity: 0; transition: opacity .3s;
     pointer-events: none;
-    z-index: 200;
+    z-index: 150;
   }
   .toast.show { opacity: 1; }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align:center; padding: 32px 0 80px;
+    font-size: 13px; color: var(--text-muted);
+  }
 
   /* ===== Responsive ===== */
   @media (max-width: 600px) {
@@ -306,6 +396,9 @@
     .resume-actions { width: 100%; justify-content: center; }
     .container { padding: 0 16px; }
     .theme-toggle { top: 12px; right: 12px; }
+    .resume-preview-wrap embed { height: 400px; }
+    .admin-bar { bottom: 16px; padding: 8px 14px; gap: 4px; }
+    .admin-btn { padding: 5px 10px; font-size: 12px; }
   }
 </style>
 </head>
@@ -314,9 +407,10 @@
 <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
 
 <header>
-  <div class="avatar-wrapper">
+  <div class="avatar-wrapper" id="avatarWrapper" title="点击更换头像">
     <div class="avatar-ring"></div>
-    <div class="avatar">林</div>
+    <div class="avatar" id="avatarDisplay"><span id="avatarText">林</span></div>
+    <div class="avatar-hover">📷</div>
   </div>
   <h1>林小虾</h1>
   <p class="subtitle">机械设计工程师 · AI 工具探索者</p>
@@ -372,7 +466,7 @@
       <div class="meta">2026 · 自部署</div>
       <p>
         基于 Qwen2-VL-2B + 4-bit 量化，在 RTX 3050（4.3GB VRAM）上本地运行。
-        HTTP 服务形式，POST 图片 base64 返回识别结果，用于教材页面识别等多场景。
+        HTTP 服务形式，POST 图片 base64 返回识别结果。
       </p>
       <div class="tags">
         <span>Python</span><span>transformers</span><span>VLM</span><span>量化部署</span>
@@ -397,25 +491,25 @@
     <h2>📄 简历</h2>
     <div class="resume-box">
       <div class="resume-info">
-        <h3>下载我的简历</h3>
+        <h3>我的简历</h3>
         <p>PDF 格式 · 持续更新</p>
+        <div class="status" id="resumeStatus">本地存储中</div>
       </div>
       <div class="resume-actions">
-        <a id="resumeDownloadBtn" class="btn btn-primary disabled" href="assets/resume.pdf" download>
+        <a id="resumeDownloadBtn" class="btn btn-primary disabled" download>
           ⬇️ 下载简历
         </a>
-        <button class="btn btn-outline" onclick="document.getElementById('resumePreview').classList.toggle('show')">
+        <button class="btn btn-outline btn-sm" id="previewToggleBtn" onclick="toggleResumePreview()">
           👁️ 预览
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('resumeInput').click()">
+          📤 替换
         </button>
       </div>
     </div>
-    <!-- 简历上传引导（仅管理员可见，在页面底部提示） -->
-    <div class="update-hint">
-      💡 更新简历：将 PDF 放入 <code>assets/resume.pdf</code> 即可
-    </div>
-    <!-- 嵌入预览区 -->
-    <div id="resumePreview" style="display:none; margin-top:16px;">
-      <embed src="assets/resume.pdf" type="application/pdf" width="100%" height="600px" style="border:1px solid var(--border); border-radius:var(--radius-sm);">
+    <div class="resume-preview-wrap" id="resumePreview"></div>
+    <div class="update-hint" style="margin-top:10px;font-size:12px;color:var(--text-muted);text-align:center;">
+      点击「替换」上传新简历 · 本地立即生效 · 底部「发布到线上」可同步到仓库
     </div>
   </section>
 
@@ -454,17 +548,90 @@
 </div>
 
 <footer>
-  用 <span>🦐</span> 发电 · &copy; 2026 林小虾
+  🦐 林小虾 · &copy; 2026
 </footer>
 
-<!-- Toast -->
+<!-- ===== Admin Bar ===== -->
+<div class="admin-bar" id="adminBar">
+  <button class="admin-btn" onclick="document.getElementById('avatarInput').click()" title="更换头像">
+    🖼️ 头像
+  </button>
+  <button class="admin-btn" onclick="document.getElementById('resumeInput').click()" title="上传简历">
+    📄 简历
+  </button>
+  <div class="admin-divider"></div>
+  <button class="admin-btn" onclick="showTokenConfig()" title="配置 GitHub" id="tokenStatusBtn">
+    🔑 Token
+  </button>
+  <button class="admin-btn publish" id="publishBtn" onclick="publishToGitHub()" style="display:none">
+    ☁️ 发布到线上
+  </button>
+</div>
+
+<!-- ===== Token Config Modal ===== -->
+<div class="modal-overlay" id="tokenModal">
+  <div class="modal">
+    <div id="tokenModalBody">
+      <h3>🔑 配置 GitHub Token</h3>
+      <p>让「发布到线上」功能可以将头像和简历提交到仓库</p>
+      <ol>
+        <li>打开 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a></li>
+        <li>点击 <b>Generate new token (classic)</b>，勾选 <code>repo</code> 权限</li>
+        <li>复制生成的 token，粘贴到下方</li>
+      </ol>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal('tokenModal')">取消</button>
+        <button class="btn btn-primary" onclick="saveToken()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Publish Progress Modal ===== -->
+<div class="modal-overlay" id="publishModal">
+  <div class="modal">
+    <div id="publishModalBody">
+      <div class="modal-success" id="publishLoading">
+        <div class="icon">⏳</div>
+        <p><b>正在发布…</b></p>
+        <p style="font-size:13px;color:var(--text-muted)" id="publishStatus">准备中</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Hidden File Inputs ===== -->
+<input type="file" id="avatarInput" accept="image/*" style="display:none">
+<input type="file" id="resumeInput" accept=".pdf,application/pdf" style="display:none">
+
+<!-- ===== Toast ===== -->
 <div class="toast" id="toast"></div>
 
 <script>
-  // ===== 主题切换 =====
+// ====================================================================
+//  常量
+// ====================================================================
+const GITHUB_OWNER = 'xyz-lly';
+const GITHUB_REPO = 'xyz-lly.github.io';
+const GITHUB_BRANCH = 'main';
+const API_BASE = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
+
+const KEYS = {
+  avatar: 'hp_avatar',
+  resume: 'hp_resume',
+  token: 'hp_github_token',
+  dirty: 'hp_dirty',
+  theme: 'theme',
+};
+
+// ====================================================================
+//  主题
+// ====================================================================
+(function initTheme() {
   const toggle = document.getElementById('themeToggle');
   const html = document.documentElement;
-  const saved = localStorage.getItem('theme');
+  const saved = localStorage.getItem(KEYS.theme);
   if (saved === 'dark') {
     html.classList.add('dark');
     toggle.textContent = '☀️';
@@ -473,29 +640,416 @@
     html.classList.toggle('dark');
     const isDark = html.classList.contains('dark');
     toggle.textContent = isDark ? '☀️' : '🌙';
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    localStorage.setItem(KEYS.theme, isDark ? 'dark' : 'light');
   });
+})();
 
-  // ===== 简历文件检测 =====
-  (function checkResume() {
-    const btn = document.getElementById('resumeDownloadBtn');
+// ====================================================================
+//  Toast
+// ====================================================================
+let toastTimer = null;
+function showToast(msg, duration) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), duration || 2500);
+}
+
+// ====================================================================
+//  Modal
+// ====================================================================
+function showModal(id) {
+  document.getElementById(id).classList.add('show');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// ====================================================================
+//  头像管理
+// ====================================================================
+function getAvatarData() {
+  return localStorage.getItem(KEYS.avatar);
+}
+
+function renderAvatar(src) {
+  const display = document.getElementById('avatarDisplay');
+  display.innerHTML = `<img src="${src}" class="avatar-img" alt="头像">`;
+}
+
+function resetAvatarToText() {
+  const display = document.getElementById('avatarDisplay');
+  display.innerHTML = '<span id="avatarText">林</span>';
+}
+
+function initAvatar() {
+  const saved = getAvatarData();
+  if (saved) renderAvatar(saved);
+}
+
+function handleAvatarUpload(file) {
+  if (!file || !file.type.startsWith('image/')) {
+    showToast('请选择图片文件');
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('图片太大，请压缩到 5MB 以内');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxSize = 300;
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > maxSize) { h = h * maxSize / w; w = maxSize; } }
+      else { if (h > maxSize) { w = w * maxSize / h; h = maxSize; } }
+      canvas.width = Math.round(w);
+      canvas.height = Math.round(h);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      const dataUrl = canvas.toDataURL('image/webp', 0.85);
+      localStorage.setItem(KEYS.avatar, dataUrl);
+      renderAvatar(dataUrl);
+      markDirty('avatar');
+      showToast('头像已更新 ✓');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// 点击头像上传
+document.getElementById('avatarWrapper').addEventListener('click', () => {
+  document.getElementById('avatarInput').click();
+});
+document.getElementById('avatarInput').addEventListener('change', (e) => {
+  if (e.target.files[0]) {
+    handleAvatarUpload(e.target.files[0]);
+    e.target.value = '';
+  }
+});
+
+// ====================================================================
+//  简历管理
+// ====================================================================
+function getResumeData() {
+  return localStorage.getItem(KEYS.resume);
+}
+
+function updateResumeUI(dataUrl) {
+  const btn = document.getElementById('resumeDownloadBtn');
+  btn.href = dataUrl;
+  btn.classList.remove('disabled');
+  btn.title = '下载简历';
+
+  // Update status
+  const sizeStr = formatDataUrlSize(dataUrl);
+  document.getElementById('resumeStatus').textContent = `已加载 · ${sizeStr}`;
+
+  // Update preview embed
+  const wrap = document.getElementById('resumePreview');
+  wrap.innerHTML = `<embed src="${dataUrl}" type="application/pdf">`;
+}
+
+function resetResumeToRemote() {
+  const btn = document.getElementById('resumeDownloadBtn');
+  btn.href = 'assets/resume.pdf';
+  btn.classList.add('disabled');
+  document.getElementById('resumeStatus').textContent = '待上传';
+  document.getElementById('resumePreview').innerHTML = '';
+}
+
+function formatDataUrlSize(dataUrl) {
+  const raw = atob(dataUrl.split(',')[1]);
+  const kb = (raw.length / 1024).toFixed(1);
+  return kb > 1024 ? (kb / 1024).toFixed(1) + ' MB' : kb + ' KB';
+}
+
+function initResume() {
+  const saved = getResumeData();
+  if (saved) {
+    updateResumeUI(saved);
+  } else {
+    // Check if remote resume exists
     fetch('assets/resume.pdf', { method: 'HEAD' })
       .then(res => {
         if (res.ok) {
-          btn.classList.remove('disabled');
-          btn.title = '点击下载简历';
+          document.getElementById('resumeDownloadBtn').href = 'assets/resume.pdf';
+          document.getElementById('resumeDownloadBtn').classList.remove('disabled');
+          document.getElementById('resumeStatus').textContent = '仓库中 · 可下载';
         }
       })
       .catch(() => {});
-  })();
-
-  // ===== Toast =====
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
   }
+}
+
+function handleResumeUpload(file) {
+  if (!file) return;
+  if (file.type !== 'application/pdf') {
+    showToast('请选择 PDF 文件');
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    showToast('简历文件太大，请压缩到 10MB 以内');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    localStorage.setItem(KEYS.resume, dataUrl);
+    updateResumeUI(dataUrl);
+    markDirty('resume');
+    showToast('简历已更新 ✓');
+  };
+  reader.readAsDataURL(file);
+}
+
+// 简历上传
+document.getElementById('resumeInput').addEventListener('change', (e) => {
+  if (e.target.files[0]) {
+    handleResumeUpload(e.target.files[0]);
+    e.target.value = '';
+  }
+});
+
+// 预览切换
+let previewVisible = false;
+function toggleResumePreview() {
+  previewVisible = !previewVisible;
+  const wrap = document.getElementById('resumePreview');
+  wrap.classList.toggle('show', previewVisible);
+  document.getElementById('previewToggleBtn').textContent = previewVisible ? '🙈 收起' : '👁️ 预览';
+}
+
+// ====================================================================
+//  脏标记系统（跟踪是否有未发布的本地变更）
+// ====================================================================
+function getDirty() {
+  try {
+    return JSON.parse(localStorage.getItem(KEYS.dirty)) || [];
+  } catch { return []; }
+}
+
+function setDirty(list) {
+  if (list.length === 0) localStorage.removeItem(KEYS.dirty);
+  else localStorage.setItem(KEYS.dirty, JSON.stringify(list));
+}
+
+function markDirty(type) {
+  const dirty = getDirty();
+  if (!dirty.includes(type)) dirty.push(type);
+  setDirty(dirty);
+  updatePublishBtn();
+}
+
+function clearDirty() {
+  setDirty([]);
+  updatePublishBtn();
+}
+
+function updatePublishBtn() {
+  const btn = document.getElementById('publishBtn');
+  const dirty = getDirty();
+  if (dirty.length > 0) {
+    btn.style.display = 'inline-flex';
+    btn.textContent = `☁️ 发布到线上 (${dirty.join('+')})`;
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+// ====================================================================
+//  GitHub Token 管理
+// ====================================================================
+function hasToken() {
+  return !!localStorage.getItem(KEYS.token);
+}
+
+function showTokenConfig() {
+  if (hasToken()) {
+    document.getElementById('tokenModalBody').innerHTML = `
+      <div class="modal-success">
+        <div class="icon">✅</div>
+        <p><b>GitHub Token 已配置</b></p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">
+          如需更换，重新输入保存即可
+        </p>
+        <input type="password" id="tokenInput" placeholder="新 Token（留空不修改）" value="" style="margin-bottom:8px">
+        <div class="modal-actions">
+          <button class="btn btn-outline" onclick="closeModal('tokenModal')">关闭</button>
+          <button class="btn btn-primary" onclick="updateToken()">更新</button>
+        </div>
+      </div>
+    `;
+  } else {
+    document.getElementById('tokenModalBody').innerHTML = `
+      <h3>🔑 配置 GitHub Token</h3>
+      <p>让「发布到线上」功能可以将头像和简历提交到仓库</p>
+      <ol>
+        <li>打开 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a></li>
+        <li>点击 <b>Generate new token (classic)</b>，勾选 <code>repo</code> 权限</li>
+        <li>复制生成的 token，粘贴到下方</li>
+      </ol>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal('tokenModal')">取消</button>
+        <button class="btn btn-primary" onclick="saveToken()">保存</button>
+      </div>
+    `;
+  }
+  showModal('tokenModal');
+}
+
+function saveToken() {
+  const token = document.getElementById('tokenInput').value.trim();
+  if (!token) { showToast('请输入 Token'); return; }
+  localStorage.setItem(KEYS.token, token);
+  closeModal('tokenModal');
+  updateTokenStatus();
+  showToast('Token 已保存 ✓');
+}
+
+function updateToken() {
+  const token = document.getElementById('tokenInput').value.trim();
+  if (token) localStorage.setItem(KEYS.token, token);
+  closeModal('tokenModal');
+  updateTokenStatus();
+  showToast('Token 已更新 ✓');
+}
+
+function updateTokenStatus() {
+  const btn = document.getElementById('tokenStatusBtn');
+  btn.textContent = hasToken() ? '✅ Token' : '🔑 Token';
+}
+
+// ====================================================================
+//  发布到 GitHub
+// ====================================================================
+async function publishToGitHub() {
+  const token = localStorage.getItem(KEYS.token);
+  if (!token) {
+    showTokenConfig();
+    return;
+  }
+
+  const avatarData = getAvatarData();
+  const resumeData = getResumeData();
+  const dirty = getDirty();
+
+  if (!avatarData && !resumeData) {
+    showToast('没有需要发布的内容');
+    return;
+  }
+
+  // Show progress modal
+  showModal('publishModal');
+  document.getElementById('publishLoading').querySelector('.icon').textContent = '⏳';
+  document.getElementById('publishStatus').textContent = '准备中…';
+
+  const headers = {
+    Authorization: `token ${token}`,
+    Accept: 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json',
+  };
+
+  let success = 0, fail = 0;
+
+  // 上传头像
+  if (avatarData) {
+    try {
+      document.getElementById('publishStatus').textContent = '上传头像…';
+      await uploadToGitHub(token, 'assets/avatar.jpg', avatarData, '更新头像', headers);
+      success++;
+    } catch (e) {
+      fail++;
+      console.error('头像上传失败:', e);
+    }
+  }
+
+  // 上传简历
+  if (resumeData) {
+    try {
+      document.getElementById('publishStatus').textContent = '上传简历…';
+      await uploadToGitHub(token, 'assets/resume.pdf', resumeData, '更新简历', headers);
+      success++;
+    } catch (e) {
+      fail++;
+      console.error('简历上传失败:', e);
+    }
+  }
+
+  // 完成
+  if (success > 0) {
+    document.getElementById('publishLoading').querySelector('.icon').textContent = '✅';
+    document.getElementById('publishStatus').textContent =
+      `${success} 项已提交到 GitHub，等待 Pages 部署（约 1-2 分钟）…`;
+    clearDirty();
+  }
+  if (fail > 0) {
+    showToast(`❌ ${fail} 项上传失败，查看控制台了解详情`);
+  }
+
+  // 2 秒后自动关闭 modal
+  setTimeout(() => closeModal('publishModal'), success > 0 ? 4000 : 2000);
+}
+
+async function uploadToGitHub(token, path, dataUrl, message, headers) {
+  // Extract base64 from data URL
+  const commaIdx = dataUrl.indexOf(',');
+  const mime = dataUrl.substring(5, commaIdx).split(';')[0];
+  const base64 = dataUrl.substring(commaIdx + 1);
+
+  // Get existing file SHA (if any)
+  let sha = null;
+  try {
+    const res = await fetch(`${API_BASE}/contents/${path}?ref=${GITHUB_BRANCH}`, { headers });
+    if (res.ok) {
+      const data = await res.json();
+      sha = data.sha;
+    }
+  } catch (e) { /* file doesn't exist yet */ }
+
+  const body = {
+    message: `${message} [via homepage admin]`,
+    content: base64,
+    branch: GITHUB_BRANCH,
+  };
+  if (sha) body.sha = sha;
+
+  const res = await fetch(`${API_BASE}/contents/${path}`, {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `HTTP ${res.status}`);
+  }
+}
+
+// ====================================================================
+//  页面加载时关闭 modal（点击遮罩）
+// ====================================================================
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', (e) => {
+    if (e.target === el) el.classList.remove('show');
+  });
+});
+
+// ====================================================================
+//  初始化
+// ====================================================================
+initAvatar();
+initResume();
+updatePublishBtn();
+updateTokenStatus();
 </script>
 
 </body>
