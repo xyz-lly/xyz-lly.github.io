@@ -142,6 +142,7 @@
   /* ===== Section Shared ===== */
   section {
     padding: 80px 0;
+    scroll-margin-top: 80px;
   }
   section:nth-child(even) {
     background: var(--bg-alt);
@@ -524,6 +525,7 @@
       <a href="#experience" data-section>经历</a>
       <a href="#contact" data-section>联系</a>
       <a href="#" id="navThemeToggle" style="font-size:16px;padding:6px 10px;" aria-label="切换主题">🌙</a>
+      <a href="#" id="navShareBtn" style="font-size:16px;padding:6px 10px;" aria-label="分享页面" title="分享">📤</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button>
   </div>
@@ -851,6 +853,35 @@ function closeModal(id) {
   window.addEventListener('scroll', updateActive, { passive: true });
   updateActive();
 })();
+
+// ====================================================================
+//  分享
+// ====================================================================
+document.getElementById('navShareBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  const url = window.location.href;
+  const title = '林小虾 — 个人主页';
+  if (navigator.share) {
+    navigator.share({ title, url }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      showToast('链接已复制到剪贴板');
+    }).catch(() => {
+      fallbackCopy(url);
+    });
+  } else {
+    fallbackCopy(url);
+  }
+});
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showToast('链接已复制'); }
+  catch { showToast('请手动复制链接'); }
+  document.body.removeChild(ta);
+}
 
 // ====================================================================
 //  Back to Top
