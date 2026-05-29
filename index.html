@@ -142,7 +142,7 @@
   /* ===== Section Shared ===== */
   section {
     padding: 80px 0;
-    scroll-margin-top: 64px;
+    scroll-margin-top: 16px;
   }
   section:nth-child(even) {
     background: var(--bg-alt);
@@ -739,6 +739,19 @@
   </div>
 </div>
 
+<!-- ===== Share Modal ===== -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal" style="text-align:center;">
+    <h3>📤 分享主页</h3>
+    <p style="margin-bottom:20px;">扫二维码在微信/QQ中打开</p>
+    <img id="shareQR" src="" alt="二维码" style="width:200px;height:200px;margin:0 auto 20px;border-radius:8px;">
+    <div style="margin-bottom:12px;">
+      <button class="btn btn-primary" onclick="copyPageLink()" style="width:100%;justify-content:center;">📋 复制链接</button>
+    </div>
+    <button class="btn btn-outline" onclick="closeModal('shareModal')" style="width:100%;justify-content:center;">关闭</button>
+  </div>
+</div>
+
 <!-- ===== Publish Progress Modal ===== -->
 <div class="modal-overlay" id="publishModal">
   <div class="modal">
@@ -860,33 +873,42 @@ function closeModal(id) {
 document.getElementById('navShareBtn').addEventListener('click', async (e) => {
   e.preventDefault();
   const url = window.location.href;
-  const shareData = { title: '林小虾 — 个人主页', url };
 
-  // On mobile: use system native share (pops up WeChat/QQ share sheet with card)
+  // Try native share first (pops system share sheet with WeChat/QQ)
   if (navigator.share) {
     try {
-      await navigator.share(shareData);
+      await navigator.share({ title: '林小虾 — 个人主页', url });
       return;
     } catch (err) {
-      // User cancelled or API failed — fall through
       if (err.name !== 'AbortError') {
-        copyToClipboard(url);
+        // API failed, show QR modal
+        showShareModal(url);
       }
       return;
     }
   }
 
-  // Desktop fallback: copy link + show QR for WeChat
-  copyToClipboard(url);
+  // Fallback: show QR code modal
+  showShareModal(url);
 });
 
-function copyToClipboard(text) {
+function showShareModal(url) {
+  const qr = document.getElementById('shareQR');
+  qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(url);
+  qr.onerror = () => { qr.style.display = 'none'; };
+  showModal('shareModal');
+}
+
+function copyPageLink() {
+  const url = window.location.href;
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => {
-      showToast('✅ 链接已复制，去微信/QQ粘贴分享吧', 3000);
-    }).catch(() => fallbackCopy(text));
+    navigator.clipboard.writeText(url).then(() => {
+      showToast('✅ 链接已复制，去微信/QQ粘贴分享', 3000);
+      closeModal('shareModal');
+    }).catch(() => fallbackCopy(url));
   } else {
-    fallbackCopy(text);
+    fallbackCopy(url);
+    closeModal('shareModal');
   }
 }
 
