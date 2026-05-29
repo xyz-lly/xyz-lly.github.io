@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>林小虾 — 机械工程师 · AI 工具探索者</title>
-<meta name="description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。业余捣鼓 AI 工具的工程技术者。">
+<title>林小虾 — 个人主页</title>
+<meta name="description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。">
 <meta property="og:title" content="林小虾 — 个人主页">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://xyz-lly.github.io">
@@ -40,6 +40,8 @@
     --modal-bg: rgba(0,0,0,0.4);
     --nav-bg: rgba(248,249,250,0.8);
     --nav-border: rgba(229,231,235,0.5);
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
   }
   .dark {
     --bg: #0b1120;
@@ -51,7 +53,7 @@
     --accent: #60a5fa;
     --accent-hover: #93c5fd;
     --accent-light: #1e3a5f;
-    --accent-glow: rgba(96, 165, 250, 0.12);
+    --accent-glow: rgba(96,165,250,0.12);
     --border: #1e293b;
     --shadow: 0 4px 24px rgba(0,0,0,0.25);
     --shadow-lg: 0 8px 40px rgba(0,0,0,0.35);
@@ -62,9 +64,10 @@
     --modal-bg: rgba(0,0,0,0.6);
     --nav-bg: rgba(11,17,32,0.85);
     --nav-border: rgba(30,41,59,0.5);
+    --danger: #f87171;
+    --danger-light: #3b1a1a;
   }
 
-  /* ===== Reset ===== */
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior: smooth; }
   body {
@@ -106,408 +109,310 @@
     padding: 6px 14px; border-radius: 6px;
     font-size: 14px; color: var(--text-secondary);
     transition: all .15s; text-decoration: none;
-    position: relative;
   }
-  nav .nav-links a:hover {
-    color: var(--text);
-    background: var(--accent-light);
-  }
-  nav .nav-links a.active {
-    color: var(--accent);
-    font-weight: 500;
-  }
+  nav .nav-links a:hover { color:var(--text); background:var(--accent-light); }
+  nav .nav-links a.active { color:var(--accent); font-weight:500; }
   nav .nav-toggle {
-    width: 40px; height: 40px; border-radius: 8px;
-    border: 1px solid var(--border); background: transparent;
-    color: var(--text); cursor: pointer; font-size: 20px;
-    display: none; align-items: center; justify-content: center;
-    transition: all .15s;
+    width:40px; height:40px; border-radius:8px;
+    border:1px solid var(--border); background:transparent;
+    color:var(--text); cursor:pointer; font-size:20px;
+    display:none; align-items:center; justify-content:center;
   }
-  nav .nav-toggle:hover { background: var(--accent-light); }
-
-  /* Mobile nav */
-  @media (max-width: 720px) {
+  nav .nav-toggle:hover { background:var(--accent-light); }
+  @media (max-width:720px) {
     nav .nav-links {
-      position: fixed; top: 64px; left:0; right:0;
-      background: var(--nav-bg); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      flex-direction: column; padding: 8px 16px; gap: 2px;
-      display: none;
+      position:fixed; top:64px; left:0; right:0;
+      background:var(--nav-bg); backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border);
+      flex-direction:column; padding:8px 16px; gap:2px;
+      display:none;
     }
-    nav .nav-links.open { display: flex; }
-    nav .nav-links a { width: 100%; padding: 10px 14px; }
-    nav .nav-toggle { display: flex; }
+    nav .nav-links.open { display:flex; }
+    nav .nav-links a { width:100%; padding:10px 14px; }
+    nav .nav-toggle { display:flex; }
   }
 
-  /* ===== Section Shared ===== */
-  section {
-    padding: 80px 0;
-    scroll-margin-top: 16px;
-  }
-  section:nth-child(even) {
-    background: var(--bg-alt);
-  }
+  /* ===== Sections ===== */
+  section { padding:80px 0; scroll-margin-top:16px; }
+  section:nth-child(even) { background:var(--bg-alt); }
   section h2 {
-    font-size: 20px;
-    margin-bottom: 24px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size:20px; margin-bottom:24px; padding-bottom:10px;
+    border-bottom:2px solid var(--border);
+    display:flex; align-items:center; gap:8px;
   }
-  .section-inner { max-width: 760px; margin:0 auto; padding:0 24px; }
+  .section-inner { max-width:760px; margin:0 auto; padding:0 24px; }
 
   /* ===== Hero ===== */
-  #hero {
-    padding: 100px 0 80px;
-    text-align: center;
-  }
+  #hero { padding:100px 0 80px; text-align:center; }
   #hero .avatar-wrapper {
-    position: relative;
-    width: 110px; height: 110px;
-    margin: 0 auto 28px;
-    cursor: pointer;
-    border-radius: 50%;
+    position:relative; width:110px; height:110px;
+    margin:0 auto 28px; cursor:pointer; border-radius:50%;
   }
-  #hero .avatar-wrapper:hover .avatar-hover { opacity: 1; }
+  #hero .avatar-wrapper:hover .avatar-hover { opacity:1; }
   #hero .avatar-hover {
-    position: absolute; inset: 0; z-index: 10;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.45);
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-size: 26px; font-weight: 600;
-    opacity: 0; transition: opacity .25s;
-    pointer-events: none;
-    backdrop-filter: blur(2px);
+    position:absolute; inset:0; z-index:10; border-radius:50%;
+    background:rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:26px; font-weight:600;
+    opacity:0; transition:opacity .25s; pointer-events:none; backdrop-filter:blur(2px);
   }
   #hero .avatar-ring {
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--avatar-bg-1), var(--avatar-bg-2), var(--avatar-bg-1));
-    animation: spin 6s linear infinite;
-    mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
-    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+    position:absolute; inset:-4px; border-radius:50%;
+    background:linear-gradient(135deg,var(--avatar-bg-1),var(--avatar-bg-2),var(--avatar-bg-1));
+    animation:spin 6s linear infinite;
+    mask:radial-gradient(farthest-side,transparent calc(100%-3px),#000 calc(100%-2px));
+    -webkit-mask:radial-gradient(farthest-side,transparent calc(100%-3px),#000 calc(100%-2px));
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes spin { to { transform:rotate(360deg); } }
   #hero .avatar {
-    width: 100%; height: 100%;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--avatar-bg-1), var(--avatar-bg-2));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 38px; color: #fff; font-weight: 700;
-    position: relative; z-index: 1;
-    box-shadow: 0 0 0 3px var(--bg);
-    user-select: none;
-    overflow: hidden;
+    width:100%; height:100%; border-radius:50%;
+    background:linear-gradient(135deg,var(--avatar-bg-1),var(--avatar-bg-2));
+    display:flex; align-items:center; justify-content:center;
+    font-size:38px; color:#fff; font-weight:700;
+    position:relative; z-index:1; box-shadow:0 0 0 3px var(--bg);
+    user-select:none; overflow:hidden;
   }
-  #hero .avatar-img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    position: relative; z-index: 1;
-  }
-  #hero h1 {
-    font-size: 32px; margin-bottom: 12px; letter-spacing: 0.5px;
-  }
-  #hero .hero-tagline {
-    font-size: 16px; color: var(--accent);
-    margin-bottom: 16px; font-weight: 500;
-  }
+  #hero .avatar-img { width:100%; height:100%; object-fit:cover; position:relative; z-index:1; }
+  #hero h1 { font-size:32px; margin-bottom:12px; letter-spacing:.5px; }
+  #hero .hero-tagline { font-size:16px; color:var(--accent); margin-bottom:16px; font-weight:500; }
   #hero .hero-desc {
-    font-size: 16px; color: var(--text-secondary);
-    max-width: 540px; margin: 0 auto 32px; line-height: 1.8;
+    font-size:16px; color:var(--text-secondary);
+    max-width:540px; margin:0 auto 32px; line-height:1.8;
   }
-  #hero .hero-actions {
-    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-  }
-  #hero .scroll-hint {
-    margin-top: 60px;
-    font-size: 13px; color: var(--text-muted);
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-  }
-  #hero .scroll-hint .arrow {
-    animation: bob 2s ease-in-out infinite;
-    font-size: 18px;
-  }
-  @keyframes bob {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(6px); }
-  }
+  #hero .hero-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  #hero .scroll-hint { margin-top:60px; font-size:13px; color:var(--text-muted); display:flex; flex-direction:column; align-items:center; gap:6px; }
+  #hero .scroll-hint .arrow { animation:bob 2s ease-in-out infinite; font-size:18px; }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
 
   .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 10px 22px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all .2s;
-    border: none;
-    text-decoration: none;
-    font-family: inherit;
+    display:inline-flex; align-items:center; gap:7px;
+    padding:10px 22px; border-radius:var(--radius-sm);
+    font-size:14px; font-weight:500; cursor:pointer;
+    transition:all .2s; border:none; text-decoration:none; font-family:inherit;
   }
-  .btn:active { transform: scale(0.97); }
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-  }
-  .btn-primary:hover {
-    background: var(--accent-hover);
-    color: #fff;
-    text-decoration: none;
-    box-shadow: 0 4px 16px var(--accent-glow);
-  }
-  .btn-primary.disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-  .btn-outline {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-outline:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    text-decoration: none;
-  }
-  .btn-sm {
-    padding: 6px 14px;
-    font-size: 13px;
-  }
+  .btn:active { transform:scale(.97); }
+  .btn-primary { background:var(--accent); color:#fff; }
+  .btn-primary:hover { background:var(--accent-hover); color:#fff; text-decoration:none; box-shadow:0 4px 16px var(--accent-glow); }
+  .btn-primary.disabled { opacity:.4; cursor:not-allowed; pointer-events:none; }
+  .btn-outline { background:transparent; color:var(--text); border:1px solid var(--border); }
+  .btn-outline:hover { border-color:var(--accent); color:var(--accent); text-decoration:none; }
+  .btn-sm { padding:6px 14px; font-size:13px; }
+  .btn-danger { background:var(--danger); color:#fff; }
+  .btn-danger:hover { background:#dc2626; color:#fff; text-decoration:none; }
 
-  /* ===== About ===== */
-  .about-text {
-    font-size: 15px;
-    color: var(--text-secondary);
-    max-width: 640px;
-    line-height: 1.8;
-  }
-
-  /* ===== Skills ===== */
+  .about-text { font-size:15px; color:var(--text-secondary); max-width:640px; line-height:1.8; }
   .skills { display:flex; flex-wrap:wrap; gap:10px; }
   .skill-tag {
-    padding: 6px 18px; border-radius: 20px; font-size: 14px;
-    background: var(--tag-bg); color: var(--tag-text);
-    transition: transform .2s, box-shadow .2s; cursor:default;
+    padding:6px 18px; border-radius:20px; font-size:14px;
+    background:var(--tag-bg); color:var(--tag-text);
+    transition:transform .2s,box-shadow .2s; cursor:default;
   }
-  .skill-tag:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--accent-glow); }
+  .skill-tag:hover { transform:translateY(-2px); box-shadow:0 4px 12px var(--accent-glow); }
 
-  /* ===== Project Cards ===== */
   .project-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 22px 26px;
-    margin-bottom: 16px; box-shadow: var(--shadow);
-    transition: transform .2s, box-shadow .2s;
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius); padding:22px 26px;
+    margin-bottom:16px; box-shadow:var(--shadow);
+    transition:transform .2s,box-shadow .2s;
   }
-  .project-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-  }
-  .project-card h3 { font-size: 17px; margin-bottom: 6px; }
-  .project-card .meta {
-    color: var(--text-muted); font-size: 13px; margin-bottom: 8px;
-  }
-  .project-card p {
-    font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;
-    line-height: 1.7;
-  }
+  .project-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .project-card h3 { font-size:17px; margin-bottom:6px; }
+  .project-card .meta { color:var(--text-muted); font-size:13px; margin-bottom:8px; }
+  .project-card p { font-size:14px; color:var(--text-secondary); margin-bottom:12px; line-height:1.7; }
   .project-card .tags { display:flex; flex-wrap:wrap; gap:6px; }
-  .project-card .tags span {
-    font-size: 12px; padding: 2px 10px; border-radius: 12px;
-    background: var(--accent-light); color: var(--accent);
-  }
+  .project-card .tags span { font-size:12px; padding:2px 10px; border-radius:12px; background:var(--accent-light); color:var(--accent); }
 
-  /* ===== Timeline ===== */
-  .timeline { position:relative; padding-left: 26px; }
-  .timeline::before {
-    content:''; position:absolute; left: 0; top: 6px; bottom: 6px;
-    width: 2px; background: var(--border);
-  }
-  .timeline-item { position:relative; margin-bottom: 28px; }
+  .timeline { position:relative; padding-left:26px; }
+  .timeline::before { content:''; position:absolute; left:0; top:6px; bottom:6px; width:2px; background:var(--border); }
+  .timeline-item { position:relative; margin-bottom:28px; }
   .timeline-item::before {
-    content:''; position:absolute; left: -31px; top: 7px;
-    width: 12px; height: 12px; border-radius:50%;
-    background: var(--accent);
-    border: 3px solid var(--bg-alt);
-    box-shadow: 0 0 0 1px var(--border);
+    content:''; position:absolute; left:-31px; top:7px;
+    width:12px; height:12px; border-radius:50%;
+    background:var(--accent); border:3px solid var(--bg-alt); box-shadow:0 0 0 1px var(--border);
   }
-  .timeline-item .date { font-size: 13px; color: var(--text-muted); margin-bottom: 2px; }
-  .timeline-item h4 { font-size: 16px; margin-bottom: 2px; }
-  .timeline-item .desc { font-size: 14px; color: var(--text-secondary); }
+  .timeline-item .date { font-size:13px; color:var(--text-muted); margin-bottom:2px; }
+  .timeline-item h4 { font-size:16px; margin-bottom:2px; }
+  .timeline-item .desc { font-size:14px; color:var(--text-secondary); }
 
-  /* ===== Resume ===== */
   .resume-box {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px 32px;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    gap: 28px;
-    flex-wrap: wrap;
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius); padding:28px 32px;
+    box-shadow:var(--shadow); display:flex; align-items:center; gap:28px; flex-wrap:wrap;
   }
-  .resume-info { flex: 1; min-width: 200px; }
-  .resume-info h3 { font-size: 17px; margin-bottom: 4px; }
-  .resume-info p { font-size: 14px; color: var(--text-secondary); }
-  .resume-info .status {
-    font-size: 13px; color: var(--text-muted);
-  }
-  .resume-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .resume-preview-wrap {
-    margin-top: 16px;
-    display: none;
-  }
-  .resume-preview-wrap.show { display: block; }
-  .resume-preview-wrap embed {
-    width: 100%; height: 600px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-  }
-  .update-hint {
-    margin-top: 10px; font-size: 12px; color: var(--text-muted); text-align: center;
-  }
+  .resume-info { flex:1; min-width:200px; }
+  .resume-info h3 { font-size:17px; margin-bottom:4px; }
+  .resume-info p { font-size:14px; color:var(--text-secondary); }
+  .resume-info .status { font-size:13px; color:var(--text-muted); }
+  .resume-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .resume-preview-wrap { margin-top:16px; display:none; }
+  .resume-preview-wrap.show { display:block; }
+  .resume-preview-wrap embed { width:100%; height:600px; border:1px solid var(--border); border-radius:var(--radius-sm); }
+  .update-hint { margin-top:10px; font-size:12px; color:var(--text-muted); text-align:center; }
 
-  /* ===== Contact ===== */
-  .contact { display:flex; flex-wrap:wrap; gap: 12px; }
+  .contact { display:flex; flex-wrap:wrap; gap:12px; }
   .contact a {
     display:flex; align-items:center; gap:6px;
-    padding: 10px 20px; border-radius: var(--radius-sm);
-    border: 1px solid var(--border); background: var(--card);
-    font-size: 14px; color: var(--text);
-    transition: all .2s; box-shadow: var(--shadow);
+    padding:10px 20px; border-radius:var(--radius-sm);
+    border:1px solid var(--border); background:var(--card);
+    font-size:14px; color:var(--text); transition:all .2s; box-shadow:var(--shadow);
   }
-  .contact a:hover {
-    border-color: var(--accent); color: var(--accent);
-    box-shadow: 0 4px 16px var(--accent-glow);
-    text-decoration: none;
-  }
+  .contact a:hover { border-color:var(--accent); color:var(--accent); box-shadow:0 4px 16px var(--accent-glow); text-decoration:none; }
 
-  /* ===== Admin Bar ===== */
   .admin-bar {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    z-index: 90;
-    display: flex; gap: 8px; align-items: center;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 18px;
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(12px);
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:90;
+    display:flex; gap:8px; align-items:center;
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    padding:10px 18px; box-shadow:var(--shadow-lg); backdrop-filter:blur(12px);
   }
   .admin-btn {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 6px 14px; border-radius: 6px;
-    font-size: 13px; font-weight: 500; cursor: pointer; border: none;
-    background: transparent; color: var(--text-secondary);
-    font-family: inherit;
-    transition: all .15s;
+    display:inline-flex; align-items:center; gap:5px;
+    padding:6px 14px; border-radius:6px; font-size:13px; font-weight:500;
+    cursor:pointer; border:none; background:transparent; color:var(--text-secondary);
+    font-family:inherit; transition:all .15s;
   }
-  .admin-btn:hover { background: var(--accent-light); color: var(--accent); }
-  .admin-btn.publish {
-    background: var(--accent); color: #fff;
-  }
-  .admin-btn.publish:hover { background: var(--accent-hover); color: #fff; }
-  .admin-divider {
-    width: 1px; height: 20px;
-    background: var(--border);
-  }
+  .admin-btn:hover { background:var(--accent-light); color:var(--accent); }
+  .admin-btn.publish { background:var(--accent); color:#fff; }
+  .admin-btn.publish:hover { background:var(--accent-hover); color:#fff; }
+  .admin-divider { width:1px; height:20px; background:var(--border); }
 
   /* ===== Modal ===== */
   .modal-overlay {
-    display: none;
-    position: fixed; inset: 0; z-index: 200;
-    background: var(--modal-bg);
-    align-items: center; justify-content: center;
-    padding: 20px;
-    backdrop-filter: blur(4px);
+    display:none; position:fixed; inset:0; z-index:200;
+    background:var(--modal-bg); align-items:center; justify-content:center;
+    padding:20px; backdrop-filter:blur(4px);
   }
-  .modal-overlay.show { display: flex; }
+  .modal-overlay.show { display:flex; }
   .modal {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 32px;
-    max-width: 480px; width: 100%;
-    box-shadow: var(--shadow-lg);
-    max-height: 90vh; overflow-y: auto;
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:32px; max-width:480px; width:100%;
+    box-shadow:var(--shadow-lg); max-height:90vh; overflow-y:auto;
   }
-  .modal h3 { font-size: 18px; margin-bottom: 4px; }
-  .modal p { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; }
-  .modal ol {
-    font-size: 14px; color: var(--text-secondary);
-    padding-left: 20px; margin-bottom: 16px; line-height: 2;
+  .modal h3 { font-size:18px; margin-bottom:4px; }
+  .modal p { font-size:14px; color:var(--text-secondary); margin-bottom:16px; }
+  .modal ol { font-size:14px; color:var(--text-secondary); padding-left:20px; margin-bottom:16px; line-height:2; }
+  .modal input, .modal textarea, .modal select {
+    width:100%; padding:10px 14px; border-radius:var(--radius-sm);
+    border:1px solid var(--border); background:var(--bg);
+    color:var(--text); font-size:14px; font-family:inherit; outline:none; margin-bottom:16px;
   }
-  .modal input {
-    width: 100%; padding: 10px 14px; border-radius: var(--radius-sm);
-    border: 1px solid var(--border); background: var(--bg);
-    color: var(--text); font-size: 14px; font-family: monospace;
-    margin-bottom: 16px; outline: none;
+  .modal input:focus, .modal textarea:focus { border-color:var(--accent); }
+  .modal textarea { resize:vertical; min-height:60px; }
+  .modal-actions { display:flex; gap:10px; justify-content:flex-end; }
+  .modal-success { text-align:center; padding:20px 0; }
+  .modal-success .icon { font-size:48px; margin-bottom:12px; }
+
+  /* ===== Editor Modal ===== */
+  .editor-overlay {
+    display:none; position:fixed; inset:0; z-index:180;
+    background:var(--modal-bg); padding:0;
   }
-  .modal input:focus { border-color: var(--accent); }
-  .modal-actions {
-    display: flex; gap: 10px; justify-content: flex-end;
+  .editor-overlay.show { display:block; }
+  .editor {
+    position:absolute; top:0; right:0; bottom:0; width:100%; max-width:680px;
+    background:var(--bg); display:flex; flex-direction:column;
+    box-shadow:-4px 0 40px rgba(0,0,0,0.15);
   }
-  .modal-success {
-    text-align: center; padding: 20px 0;
+  .editor-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px; border-bottom:1px solid var(--border);
+    background:var(--card); flex-shrink:0;
   }
-  .modal-success .icon { font-size: 48px; margin-bottom: 12px; }
-  .modal-success p { margin-bottom: 4px; }
+  .editor-header h3 { font-size:17px; font-weight:600; }
+  .editor-header .editor-actions { display:flex; gap:8px; }
+  .editor-body {
+    flex:1; overflow-y:auto; padding:24px;
+  }
+  .editor-section {
+    margin-bottom:28px;
+  }
+  .editor-section h4 {
+    font-size:15px; margin-bottom:14px; padding-bottom:8px;
+    border-bottom:1px solid var(--border); font-weight:600;
+  }
+  .editor-field { margin-bottom:14px; }
+  .editor-field label {
+    display:block; font-size:13px; font-weight:500;
+    color:var(--text-secondary); margin-bottom:4px;
+  }
+  .editor-field input, .editor-field textarea {
+    width:100%; padding:9px 12px; border-radius:6px;
+    border:1px solid var(--border); background:var(--card);
+    color:var(--text); font-size:14px; font-family:inherit; outline:none;
+  }
+  .editor-field input:focus, .editor-field textarea:focus { border-color:var(--accent); }
+  .editor-field textarea { resize:vertical; min-height:56px; }
+  .editor-tag-list { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+  .editor-tag {
+    display:inline-flex; align-items:center; gap:4px;
+    padding:4px 10px; border-radius:14px; font-size:13px;
+    background:var(--tag-bg); color:var(--tag-text);
+  }
+  .editor-tag button {
+    background:none; border:none; cursor:pointer;
+    color:var(--tag-text); font-size:14px; padding:0; line-height:1;
+  }
+  .editor-array-item {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius-sm); padding:16px; margin-bottom:12px;
+    position:relative;
+  }
+  .editor-array-item-header {
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+  }
+  .editor-array-item-header .item-label { font-size:13px; font-weight:500; color:var(--text-secondary); }
+  .editor-array-item-header .item-remove {
+    background:none; border:none; cursor:pointer; color:var(--danger); font-size:16px; padding:2px 6px; border-radius:4px;
+  }
+  .editor-array-item-header .item-remove:hover { background:var(--danger-light); }
+  .editor-add-btn {
+    display:inline-flex; align-items:center; gap:4px;
+    padding:6px 14px; border-radius:6px; font-size:13px; font-weight:500;
+    cursor:pointer; border:1px dashed var(--border); background:transparent;
+    color:var(--accent); font-family:inherit; transition:all .15s;
+  }
+  .editor-add-btn:hover { background:var(--accent-light); }
+  .editor-footer {
+    padding:16px 24px; border-top:1px solid var(--border);
+    background:var(--card); display:flex; gap:10px; justify-content:flex-end; flex-shrink:0;
+  }
 
   /* ===== Toast ===== */
   .toast {
-    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
-    background: var(--card); color: var(--text);
-    padding: 12px 24px; border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-lg);
-    font-size: 14px;
-    opacity: 0; transition: opacity .3s;
-    pointer-events: none;
-    z-index: 150;
+    position:fixed; bottom:80px; left:50%; transform:translateX(-50%); z-index:150;
+    background:var(--card); color:var(--text); padding:12px 24px; border-radius:var(--radius-sm);
+    border:1px solid var(--border); box-shadow:var(--shadow-lg); font-size:14px;
+    opacity:0; transition:opacity .3s; pointer-events:none;
   }
-  .toast.show { opacity: 1; }
+  .toast.show { opacity:1; }
 
-  /* ===== Footer ===== */
-  footer {
-    text-align: center;
-    padding: 48px 24px 80px;
-    font-size: 13px; color: var(--text-muted);
-  }
+  footer { text-align:center; padding:48px 24px 80px; font-size:13px; color:var(--text-muted); }
 
-  /* ===== Back to top ===== */
   .back-top {
-    position: fixed; right: 24px; bottom: 88px; z-index: 80;
-    width: 40px; height: 40px; border-radius: 50%;
-    border: 1px solid var(--border); background: var(--card);
-    color: var(--text-secondary); cursor: pointer; font-size: 18px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s; box-shadow: var(--shadow);
-    opacity: 0; pointer-events: none;
+    position:fixed; right:24px; bottom:88px; z-index:80;
+    width:40px; height:40px; border-radius:50%;
+    border:1px solid var(--border); background:var(--card);
+    color:var(--text-secondary); cursor:pointer; font-size:18px;
+    display:flex; align-items:center; justify-content:center;
+    transition:all .2s; box-shadow:var(--shadow);
+    opacity:0; pointer-events:none;
   }
-  .back-top.visible { opacity: 1; pointer-events: auto; }
-  .back-top:hover { transform: scale(1.1); box-shadow: var(--shadow-lg); }
+  .back-top.visible { opacity:1; pointer-events:auto; }
+  .back-top:hover { transform:scale(1.1); box-shadow:var(--shadow-lg); }
 
-  /* ===== Responsive ===== */
-  @media (max-width: 600px) {
-    #hero { padding: 60px 0 48px; }
-    #hero .avatar-wrapper { width: 90px; height: 90px; }
-    #hero .avatar { font-size: 30px; }
-    #hero h1 { font-size: 24px; }
-    section { padding: 48px 0; }
-    .project-card { padding: 16px 18px; }
-    .resume-box { padding: 20px; flex-direction: column; text-align: center; }
-    .resume-actions { width: 100%; justify-content: center; }
-    .section-inner { padding: 0 16px; }
-    .resume-preview-wrap embed { height: 400px; }
-    .admin-bar { bottom: 16px; padding: 8px 14px; gap: 4px; }
-    .admin-btn { padding: 5px 10px; font-size: 12px; }
-    .back-top { right: 16px; bottom: 76px; width: 36px; height: 36px; font-size: 16px; }
+  @media (max-width:600px) {
+    #hero { padding:60px 0 48px; }
+    #hero .avatar-wrapper { width:90px; height:90px; }
+    #hero .avatar { font-size:30px; }
+    #hero h1 { font-size:24px; }
+    section { padding:48px 0; }
+    .project-card { padding:16px 18px; }
+    .resume-box { padding:20px; flex-direction:column; text-align:center; }
+    .resume-actions { width:100%; justify-content:center; }
+    .section-inner { padding:0 16px; }
+    .resume-preview-wrap embed { height:400px; }
+    .admin-bar { bottom:16px; padding:8px 14px; gap:4px; }
+    .admin-btn { padding:5px 10px; font-size:12px; }
+    .back-top { right:16px; bottom:76px; width:36px; height:36px; font-size:16px; }
+    .editor { max-width:100%; }
   }
 </style>
 </head>
@@ -516,7 +421,7 @@
 <!-- ===== Navigation ===== -->
 <nav id="navbar" role="navigation">
   <div class="nav-inner">
-    <a href="#hero" class="nav-brand">🦐 林小虾</a>
+    <a href="#hero" class="nav-brand">🦐 <span id="navName">林小虾</span></a>
     <div class="nav-links" id="navLinks">
       <a href="#about" data-section>关于</a>
       <a href="#skills" data-section>技能</a>
@@ -539,33 +444,22 @@
       <div class="avatar" id="avatarDisplay"><span id="avatarText">林</span></div>
       <div class="avatar-hover">📷</div>
     </div>
-
-    <p class="hero-tagline">机械工程师 · 业余 AI 捣鼓者</p>
-    <h1>林小虾</h1>
-    <p class="hero-desc">
-      设计过 EMB 卡钳，搭过 VLM 服务，写过专利交底书。
-      相信好工具能让工程师少加班，好知识能让人少走弯路。
-    </p>
+    <p class="hero-tagline" id="heroTagline">机械工程师 · 业余 AI 捣鼓者</p>
+    <h1 id="heroName">林小虾</h1>
+    <p class="hero-desc" id="heroDesc">设计过 EMB 卡钳，搭过 VLM 服务，写过专利交底书。相信好工具能让工程师少加班，好知识能让人少走弯路。</p>
     <div class="hero-actions">
       <a href="#resume" class="btn btn-primary" id="heroResumeBtn">📄 下载简历</a>
       <a href="#contact" class="btn btn-outline">📬 联系我</a>
     </div>
-    <div class="scroll-hint">
-      <span class="arrow">↓</span>
-      <span>向下滚动</span>
-    </div>
+    <div class="scroll-hint"><span class="arrow">↓</span><span>向下滚动</span></div>
   </div>
 </section>
 
-<!-- ===== 关于我 ===== -->
+<!-- ===== 关于 ===== -->
 <section id="about">
   <div class="section-inner">
     <h2>👤 关于我</h2>
-    <p class="about-text">
-      机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。
-      同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。
-      相信结构化的信息和高效的协作比单纯的勤奋更有价值。
-    </p>
+    <p class="about-text" id="aboutText">机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。</p>
   </div>
 </section>
 
@@ -573,17 +467,7 @@
 <section id="skills">
   <div class="section-inner">
     <h2>🛠️ 技能</h2>
-    <div class="skills">
-      <span class="skill-tag">机械结构设计</span>
-      <span class="skill-tag">EMB 制动系统</span>
-      <span class="skill-tag">花键传动设计</span>
-      <span class="skill-tag">专利检索与分析</span>
-      <span class="skill-tag">图纸标准化</span>
-      <span class="skill-tag">Python</span>
-      <span class="skill-tag">AI 工具集成</span>
-      <span class="skill-tag">Obsidian 知识管理</span>
-      <span class="skill-tag">3D 建模</span>
-    </div>
+    <div class="skills" id="skillsContainer"></div>
   </div>
 </section>
 
@@ -591,42 +475,7 @@
 <section id="projects">
   <div class="section-inner">
     <h2>📦 项目</h2>
-
-    <div class="project-card">
-      <h3>电子机械制动卡钳 · 万向铰接传动结构</h3>
-      <div class="meta">2026 · 发明专利申请中</div>
-      <p>
-        核心创新：两级花键径向重叠布置 + 单球面副自调心偏转 + 双波簧预紧。
-        相比于现有方案，消除了花键轴向布置的杠杆放大效应，避免卡滞，同时降低加工成本。
-      </p>
-      <div class="tags">
-        <span>EMB</span><span>花键传动</span><span>球面副</span><span>波簧</span>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <h3>本地 VLM 图像识别服务</h3>
-      <div class="meta">2026 · 自部署</div>
-      <p>
-        基于 Qwen2-VL-2B + 4-bit 量化，在 RTX 3050（4.3GB VRAM）上本地运行。
-        HTTP 服务形式，POST 图片 base64 返回识别结果。
-      </p>
-      <div class="tags">
-        <span>Python</span><span>transformers</span><span>VLM</span><span>量化部署</span>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <h3>结构化知识库体系搭建</h3>
-      <div class="meta">2026 · 持续迭代</div>
-      <p>
-        基于 Obsidian Vault 构建三层知识索引体系（inbox → wiki → projects），
-        引入语义搜索引擎实现本地 RAG。建立了一套跨会话的工作流规则和持久任务系统。
-      </p>
-      <div class="tags">
-        <span>Obsidian</span><span>知识管理</span><span>语义搜索</span><span>自动化</span>
-      </div>
-    </div>
+    <div id="projectsContainer"></div>
   </div>
 </section>
 
@@ -641,21 +490,13 @@
         <div class="status" id="resumeStatus">本地存储中</div>
       </div>
       <div class="resume-actions">
-        <a id="resumeDownloadBtn" class="btn btn-primary disabled" download>
-          ⬇️ 下载简历
-        </a>
-        <button class="btn btn-outline btn-sm" id="previewToggleBtn" onclick="toggleResumePreview()">
-          👁️ 预览
-        </button>
-        <button class="btn btn-outline btn-sm" onclick="document.getElementById('resumeInput').click()">
-          📤 替换
-        </button>
+        <a id="resumeDownloadBtn" class="btn btn-primary disabled" download>⬇️ 下载简历</a>
+        <button class="btn btn-outline btn-sm" id="previewToggleBtn" onclick="toggleResumePreview()">👁️ 预览</button>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('resumeInput').click()">📤 替换</button>
       </div>
     </div>
     <div class="resume-preview-wrap" id="resumePreview"></div>
-    <div class="update-hint">
-      点击「替换」上传新简历 · 本地立即生效 · 底部「发布到线上」可同步到仓库
-    </div>
+    <div class="update-hint">点击「替换」上传新简历 · 本地立即生效 · 底部「发布到线上」可同步到仓库</div>
   </div>
 </section>
 
@@ -663,23 +504,7 @@
 <section id="experience">
   <div class="section-inner">
     <h2>📋 经历</h2>
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="date">2026</div>
-        <h4>EMB 制动卡钳专利 · 发明人</h4>
-        <p class="desc">完成技术交底书撰写与答辩，核心创新点覆盖花键径向布置、球面副自调心、波簧预紧结构</p>
-      </div>
-      <div class="timeline-item">
-        <div class="date">2025 - 2026</div>
-        <h4>机械设计 · 接插件 / 传感器 / 工装</h4>
-        <p class="desc">参与莫仕接插件、传感器选型、图纸标准化规范制定、试装工装设计</p>
-      </div>
-      <div class="timeline-item">
-        <div class="date">2025</div>
-        <h4>本地 AI 工具链搭建</h4>
-        <p class="desc">从零搭建搜索引擎、VLM 服务、自动化工作流，形成稳定的个人 AI 工作站</p>
-      </div>
-    </div>
+    <div class="timeline" id="timelineContainer"></div>
   </div>
 </section>
 
@@ -687,56 +512,22 @@
 <section id="contact">
   <div class="section-inner">
     <h2>📬 联系</h2>
-    <div class="contact">
-      <a href="mailto:14759465982@163.com">✉️ 邮箱</a>
-      <a href="#">💬 微信</a>
-      <a href="https://github.com/xyz-lly" target="_blank" rel="noopener">🐙 GitHub</a>
-    </div>
+    <div class="contact" id="contactContainer"></div>
   </div>
 </section>
 
-<footer>
-  🦐 林小虾 · &copy; 2026
-</footer>
+<footer>🦐 林小虾 · &copy; 2026</footer>
 
-<!-- ===== Back to Top ===== -->
 <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
 
 <!-- ===== Admin Bar ===== -->
 <div class="admin-bar" id="adminBar">
-  <button class="admin-btn" onclick="document.getElementById('avatarInput').click()" title="更换头像">
-    🖼️ 头像
-  </button>
-  <button class="admin-btn" onclick="document.getElementById('resumeInput').click()" title="上传简历">
-    📄 简历
-  </button>
+  <button class="admin-btn" onclick="document.getElementById('avatarInput').click()">🖼️ 头像</button>
+  <button class="admin-btn" onclick="document.getElementById('resumeInput').click()">📄 简历</button>
+  <button class="admin-btn" onclick="openEditor()">✏️ 内容</button>
   <div class="admin-divider"></div>
-  <button class="admin-btn" onclick="showTokenConfig()" title="配置 GitHub" id="tokenStatusBtn">
-    🔑 Token
-  </button>
-  <button class="admin-btn publish" id="publishBtn" onclick="publishToGitHub()" style="display:none">
-    ☁️ 发布到线上
-  </button>
-</div>
-
-<!-- ===== Token Config Modal ===== -->
-<div class="modal-overlay" id="tokenModal">
-  <div class="modal">
-    <div id="tokenModalBody">
-      <h3>🔑 配置 GitHub Token</h3>
-      <p>让「发布到线上」功能可以将头像和简历提交到仓库</p>
-      <ol>
-        <li>打开 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a></li>
-        <li>点击 <b>Generate new token (classic)</b>，勾选 <code>repo</code> 权限</li>
-        <li>复制生成的 token，粘贴到下方</li>
-      </ol>
-      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
-      <div class="modal-actions">
-        <button class="btn btn-outline" onclick="closeModal('tokenModal')">取消</button>
-        <button class="btn btn-primary" onclick="saveToken()">保存</button>
-      </div>
-    </div>
-  </div>
+  <button class="admin-btn" onclick="showTokenConfig()" id="tokenStatusBtn">🔑 Token</button>
+  <button class="admin-btn publish" id="publishBtn" onclick="publishToGitHub()" style="display:none">☁️ 发布到线上</button>
 </div>
 
 <!-- ===== Share Modal ===== -->
@@ -752,7 +543,89 @@
   </div>
 </div>
 
-<!-- ===== Publish Progress Modal ===== -->
+<!-- ===== Editor Modal ===== -->
+<div class="editor-overlay" id="editorOverlay">
+  <div class="editor">
+    <div class="editor-header">
+      <h3>✏️ 编辑内容</h3>
+      <div class="editor-actions">
+        <button class="btn btn-outline btn-sm" onclick="closeEditor()">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="saveEditor()">💾 保存</button>
+      </div>
+    </div>
+    <div class="editor-body" id="editorBody">
+      <!-- Info -->
+      <div class="editor-section">
+        <h4>👤 个人信息</h4>
+        <div class="editor-field">
+          <label>姓名</label>
+          <input id="e_name" type="text" placeholder="你的名字">
+        </div>
+        <div class="editor-field">
+          <label>头衔</label>
+          <input id="e_tagline" type="text" placeholder="头衔标签">
+        </div>
+        <div class="editor-field">
+          <label>简介</label>
+          <textarea id="e_heroDesc" rows="2" placeholder="一句话介绍"></textarea>
+        </div>
+        <div class="editor-field">
+          <label>关于我</label>
+          <textarea id="e_about" rows="3" placeholder="关于我"></textarea>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="editor-section">
+        <h4>🛠️ 技能</h4>
+        <div id="e_skillsList"></div>
+        <button class="editor-add-btn" onclick="addEditorSkill()">+ 添加技能</button>
+      </div>
+
+      <!-- Projects -->
+      <div class="editor-section">
+        <h4>📦 项目</h4>
+        <div id="e_projectsList"></div>
+        <button class="editor-add-btn" onclick="addEditorProject()">+ 添加项目</button>
+      </div>
+
+      <!-- Experiences -->
+      <div class="editor-section">
+        <h4>📋 经历</h4>
+        <div id="e_experiencesList"></div>
+        <button class="editor-add-btn" onclick="addEditorExperience()">+ 添加经历</button>
+      </div>
+
+      <!-- Contacts -->
+      <div class="editor-section">
+        <h4>📬 联系方式</h4>
+        <div id="e_contactsList"></div>
+        <button class="editor-add-btn" onclick="addEditorContact()">+ 添加联系</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Token Modal ===== -->
+<div class="modal-overlay" id="tokenModal">
+  <div class="modal">
+    <div id="tokenModalBody">
+      <h3>🔑 配置 GitHub Token</h3>
+      <p>让「发布到线上」功能可以将内容提交到仓库</p>
+      <ol>
+        <li>打开 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a></li>
+        <li>点击 <b>Generate new token (classic)</b>，勾选 <code>repo</code> 权限</li>
+        <li>复制粘贴到下方</li>
+      </ol>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal('tokenModal')">取消</button>
+        <button class="btn btn-primary" onclick="saveToken()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="publishModal">
   <div class="modal">
     <div id="publishModalBody">
@@ -765,29 +638,255 @@
   </div>
 </div>
 
-<!-- ===== Hidden File Inputs ===== -->
 <input type="file" id="avatarInput" accept="image/*" style="display:none">
 <input type="file" id="resumeInput" accept=".pdf,application/pdf" style="display:none">
-
-<!-- ===== Toast ===== -->
 <div class="toast" id="toast"></div>
 
 <script>
 // ====================================================================
 //  常量
 // ====================================================================
-const GITHUB_OWNER = 'xyz-lly';
-const GITHUB_REPO = 'xyz-lly.github.io';
-const GITHUB_BRANCH = 'main';
+const GITHUB_OWNER = 'xyz-lly', GITHUB_REPO = 'xyz-lly.github.io', GITHUB_BRANCH = 'main';
 const API_BASE = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
+const KEYS = { avatar:'hp_avatar', resume:'hp_resume', content:'hp_content', token:'hp_github_token', dirty:'hp_dirty', theme:'theme' };
 
-const KEYS = {
-  avatar: 'hp_avatar',
-  resume: 'hp_resume',
-  token: 'hp_github_token',
-  dirty: 'hp_dirty',
-  theme: 'theme',
+// ====================================================================
+//  默认内容
+// ====================================================================
+const DEFAULT_CONTENT = {
+  name: "林小虾",
+  tagline: "机械工程师 · 业余 AI 捣鼓者",
+  heroDesc: "设计过 EMB 卡钳，搭过 VLM 服务，写过专利交底书。相信好工具能让工程师少加班，好知识能让人少走弯路。",
+  about: "机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。",
+  skills: ["机械结构设计", "EMB 制动系统", "花键传动设计", "专利检索与分析", "图纸标准化", "Python", "AI 工具集成", "Obsidian 知识管理", "3D 建模"],
+  projects: [
+    { title: "电子机械制动卡钳 · 万向铰接传动结构", date: "2026 · 发明专利申请中", desc: "核心创新：两级花键径向重叠布置 + 单球面副自调心偏转 + 双波簧预紧。相比于现有方案，消除了花键轴向布置的杠杆放大效应，避免卡滞，同时降低加工成本。", tags: ["EMB","花键传动","球面副","波簧"] },
+    { title: "本地 VLM 图像识别服务", date: "2026 · 自部署", desc: "基于 Qwen2-VL-2B + 4-bit 量化，在 RTX 3050（4.3GB VRAM）上本地运行。HTTP 服务形式，POST 图片 base64 返回识别结果。", tags: ["Python","transformers","VLM","量化部署"] },
+    { title: "结构化知识库体系搭建", date: "2026 · 持续迭代", desc: "基于 Obsidian Vault 构建三层知识索引体系（inbox → wiki → projects），引入语义搜索引擎实现本地 RAG。", tags: ["Obsidian","知识管理","语义搜索","自动化"] }
+  ],
+  experiences: [
+    { date: "2026", title: "EMB 制动卡钳专利 · 发明人", desc: "完成技术交底书撰写与答辩，核心创新点覆盖花键径向布置、球面副自调心、波簧预紧结构" },
+    { date: "2025 - 2026", title: "机械设计 · 接插件 / 传感器 / 工装", desc: "参与莫仕接插件、传感器选型、图纸标准化规范制定、试装工装设计" },
+    { date: "2025", title: "本地 AI 工具链搭建", desc: "从零搭建搜索引擎、VLM 服务、自动化工作流，形成稳定的个人 AI 工作站" }
+  ],
+  contacts: [
+    { icon:"✉️", label:"邮箱", value:"14759465982@163.com", type:"email" },
+    { icon:"💬", label:"微信", value:"#", type:"text" },
+    { icon:"🐙", label:"GitHub", value:"https://github.com/xyz-lly", type:"url" }
+  ]
 };
+
+// ====================================================================
+//  内容数据管理
+// ====================================================================
+function loadContent() {
+  const saved = localStorage.getItem(KEYS.content);
+  if (saved) {
+    try { return JSON.parse(saved); } catch {}
+  }
+  // First time: save defaults
+  localStorage.setItem(KEYS.content, JSON.stringify(DEFAULT_CONTENT));
+  return DEFAULT_CONTENT;
+}
+
+function saveContent(data) {
+  localStorage.setItem(KEYS.content, JSON.stringify(data));
+}
+
+function renderContent(data) {
+  // Name everywhere
+  document.getElementById('heroName').textContent = data.name;
+  document.getElementById('navName').textContent = data.name;
+  // Hero
+  document.getElementById('heroTagline').textContent = data.tagline;
+  document.getElementById('heroDesc').textContent = data.heroDesc;
+  // About
+  document.getElementById('aboutText').textContent = data.about;
+  // Skills
+  document.getElementById('skillsContainer').innerHTML = data.skills.map(s =>
+    `<span class="skill-tag">${escHtml(s)}</span>`
+  ).join('');
+  // Projects
+  document.getElementById('projectsContainer').innerHTML = data.projects.map((p, i) => `
+    <div class="project-card">
+      <h3>${escHtml(p.title)}</h3>
+      <div class="meta">${escHtml(p.date)}</div>
+      <p>${escHtml(p.desc)}</p>
+      <div class="tags">${(p.tags||[]).map(t => `<span>${escHtml(t)}</span>`).join('')}</div>
+    </div>
+  `).join('');
+  // Experiences
+  document.getElementById('timelineContainer').innerHTML = data.experiences.map(e => `
+    <div class="timeline-item">
+      <div class="date">${escHtml(e.date)}</div>
+      <h4>${escHtml(e.title)}</h4>
+      <p class="desc">${escHtml(e.desc)}</p>
+    </div>
+  `).join('');
+  // Contacts
+  const ctn = document.getElementById('contactContainer');
+  if (data.contacts.length === 0) {
+    ctn.innerHTML = '<p style="color:var(--text-muted);font-size:14px;">暂无联系方式</p>';
+  } else {
+    ctn.innerHTML = data.contacts.map(c => {
+      let href = c.value;
+      if (c.type === 'email') href = 'mailto:' + c.value;
+      else if (c.type === 'url' && !c.value.startsWith('http')) href = 'https://' + c.value;
+      else if (c.type === 'url' && c.value === '#') href = '#';
+      return `<a href="${escHtml(href)}">${c.icon || '🔗'} ${escHtml(c.label)}</a>`;
+    }).join('');
+  }
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ====================================================================
+//  编辑器
+// ====================================================================
+let editorData = null;
+
+function openEditor() {
+  editorData = JSON.parse(JSON.stringify(loadContent()));
+  populateEditor();
+  document.getElementById('editorOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditor() {
+  document.getElementById('editorOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function populateEditor() {
+  const d = editorData;
+  document.getElementById('e_name').value = d.name || '';
+  document.getElementById('e_tagline').value = d.tagline || '';
+  document.getElementById('e_heroDesc').value = d.heroDesc || '';
+  document.getElementById('e_about').value = d.about || '';
+  renderEditorSkills();
+  renderEditorProjects();
+  renderEditorExperiences();
+  renderEditorContacts();
+}
+
+function renderEditorSkills() {
+  const el = document.getElementById('e_skillsList');
+  el.innerHTML = editorData.skills.map((s, i) =>
+    `<div class="editor-tag">${escHtml(s)} <button onclick="removeEditorSkill(${i})">✕</button></div>`
+  ).join('');
+}
+
+function addEditorSkill() {
+  const s = prompt('输入新技能名称');
+  if (s && s.trim()) {
+    editorData.skills.push(s.trim());
+    renderEditorSkills();
+  }
+}
+
+function removeEditorSkill(i) {
+  editorData.skills.splice(i, 1);
+  renderEditorSkills();
+}
+
+function renderEditorProjects() {
+  document.getElementById('e_projectsList').innerHTML = editorData.projects.map((p, i) => `
+    <div class="editor-array-item">
+      <div class="editor-array-item-header">
+        <span class="item-label">项目 ${i+1}</span>
+        <button class="item-remove" onclick="removeEditorProject(${i})">🗑️</button>
+      </div>
+      <div class="editor-field"><label>标题</label><input value="${escHtml(p.title)}" onchange="editorData.projects[${i}].title=this.value"></div>
+      <div class="editor-field"><label>日期</label><input value="${escHtml(p.date)}" onchange="editorData.projects[${i}].date=this.value"></div>
+      <div class="editor-field"><label>描述</label><textarea rows="2" onchange="editorData.projects[${i}].desc=this.value">${escHtml(p.desc)}</textarea></div>
+      <div class="editor-field">
+        <label>标签（逗号分隔）</label>
+        <input value="${(p.tags||[]).join('，')}" onchange="editorData.projects[${i}].tags=this.value.split(/[,，]/).map(t=>t.trim()).filter(Boolean)">
+      </div>
+    </div>
+  `).join('');
+}
+
+function addEditorProject() {
+  editorData.projects.push({ title:'新项目', date:'', desc:'', tags:[] });
+  renderEditorProjects();
+}
+
+function removeEditorProject(i) {
+  editorData.projects.splice(i, 1);
+  renderEditorProjects();
+}
+
+function renderEditorExperiences() {
+  document.getElementById('e_experiencesList').innerHTML = editorData.experiences.map((e, i) => `
+    <div class="editor-array-item">
+      <div class="editor-array-item-header">
+        <span class="item-label">经历 ${i+1}</span>
+        <button class="item-remove" onclick="removeEditorExperience(${i})">🗑️</button>
+      </div>
+      <div class="editor-field"><label>时间</label><input value="${escHtml(e.date)}" onchange="editorData.experiences[${i}].date=this.value"></div>
+      <div class="editor-field"><label>标题</label><input value="${escHtml(e.title)}" onchange="editorData.experiences[${i}].title=this.value"></div>
+      <div class="editor-field"><label>描述</label><textarea rows="2" onchange="editorData.experiences[${i}].desc=this.value">${escHtml(e.desc)}</textarea></div>
+    </div>
+  `).join('');
+}
+
+function addEditorExperience() {
+  editorData.experiences.push({ date:'', title:'新经历', desc:'' });
+  renderEditorExperiences();
+}
+
+function removeEditorExperience(i) {
+  editorData.experiences.splice(i, 1);
+  renderEditorExperiences();
+}
+
+function renderEditorContacts() {
+  document.getElementById('e_contactsList').innerHTML = editorData.contacts.map((c, i) => `
+    <div class="editor-array-item">
+      <div class="editor-array-item-header">
+        <span class="item-label">联系 ${i+1}</span>
+        <button class="item-remove" onclick="removeEditorContact(${i})">🗑️</button>
+      </div>
+      <div class="editor-field"><label>图标（emoji）</label><input value="${c.icon||''}" onchange="editorData.contacts[${i}].icon=this.value"></div>
+      <div class="editor-field"><label>标签</label><input value="${escHtml(c.label)}" onchange="editorData.contacts[${i}].label=this.value"></div>
+      <div class="editor-field"><label>值（邮箱/链接/文本）</label><input value="${escHtml(c.value)}" onchange="editorData.contacts[${i}].value=this.value"></div>
+      <div class="editor-field">
+        <label>类型</label>
+        <select onchange="editorData.contacts[${i}].type=this.value" style="width:100%;padding:9px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;">
+          ${['text','email','url'].map(t => `<option value="${t}"${c.type===t?' selected':''}>${t==='text'?'文本':t==='email'?'邮箱':'链接'}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addEditorContact() {
+  editorData.contacts.push({ icon:'🔗', label:'新联系', value:'', type:'text' });
+  renderEditorContacts();
+}
+
+function removeEditorContact(i) {
+  editorData.contacts.splice(i, 1);
+  renderEditorContacts();
+}
+
+function saveEditor() {
+  const d = editorData;
+  d.name = document.getElementById('e_name').value.trim();
+  d.tagline = document.getElementById('e_tagline').value.trim();
+  d.heroDesc = document.getElementById('e_heroDesc').value.trim();
+  d.about = document.getElementById('e_about').value.trim();
+  saveContent(d);
+  renderContent(d);
+  markDirty('content');
+  closeEditor();
+  showToast('💾 内容已保存');
+}
 
 // ====================================================================
 //  主题
@@ -796,40 +895,30 @@ const KEYS = {
   const toggle = document.getElementById('navThemeToggle');
   const html = document.documentElement;
   const saved = localStorage.getItem(KEYS.theme);
-  if (saved === 'dark') {
-    html.classList.add('dark');
-    toggle.textContent = '☀️';
-  }
-  toggle.addEventListener('click', (e) => {
+  if (saved === 'dark') { html.classList.add('dark'); toggle.textContent = '☀️'; }
+  toggle.addEventListener('click', e => {
     e.preventDefault();
     html.classList.toggle('dark');
-    const isDark = html.classList.contains('dark');
-    toggle.textContent = isDark ? '☀️' : '🌙';
-    localStorage.setItem(KEYS.theme, isDark ? 'dark' : 'light');
+    toggle.textContent = html.classList.contains('dark') ? '☀️' : '🌙';
+    localStorage.setItem(KEYS.theme, html.classList.contains('dark') ? 'dark' : 'light');
   });
 })();
 
 // ====================================================================
-//  Toast
+//  Toast / Modal
 // ====================================================================
 let toastTimer = null;
-function showToast(msg, duration) {
+function showToast(msg, d) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), duration || 2500);
+  toastTimer = setTimeout(() => t.classList.remove('show'), d || 2500);
 }
-
-// ====================================================================
-//  Modal
-// ====================================================================
-function showModal(id) {
-  document.getElementById(id).classList.add('show');
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
-}
+function showModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('show'); });
+});
 
 // ====================================================================
 //  导航
@@ -837,166 +926,93 @@ function closeModal(id) {
 (function initNav() {
   const toggle = document.getElementById('navToggle');
   const links = document.getElementById('navLinks');
-
-  // Mobile hamburger
-  toggle.addEventListener('click', () => {
-    links.classList.toggle('open');
-  });
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
   document.querySelectorAll('[data-section]').forEach(a => {
     a.addEventListener('click', () => links.classList.remove('open'));
   });
-
-  // Active section highlight
   const sections = document.querySelectorAll('section[id]');
-  const navAnchors = document.querySelectorAll('[data-section]');
-
+  const anchors = document.querySelectorAll('[data-section]');
   function updateActive() {
     let current = '';
     const scrollY = window.scrollY + 100;
     sections.forEach(s => {
-      if (s.offsetTop <= scrollY && s.offsetTop + s.offsetHeight > scrollY) {
-        current = s.id;
-      }
+      if (s.offsetTop <= scrollY && s.offsetTop + s.offsetHeight > scrollY) current = s.id;
     });
-    navAnchors.forEach(a => {
-      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
-    });
+    anchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
   }
-
   window.addEventListener('scroll', updateActive, { passive: true });
   updateActive();
 })();
-
-// ====================================================================
-//  分享
-// ====================================================================
-document.getElementById('navShareBtn').addEventListener('click', async (e) => {
-  e.preventDefault();
-  const url = window.location.href;
-
-  // Try native share first (pops system share sheet with WeChat/QQ)
-  if (navigator.share) {
-    try {
-      await navigator.share({ title: '林小虾 — 个人主页', url });
-      return;
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        // API failed, show QR modal
-        showShareModal(url);
-      }
-      return;
-    }
-  }
-
-  // Fallback: show QR code modal
-  showShareModal(url);
-});
-
-function showShareModal(url) {
-  const qr = document.getElementById('shareQR');
-  qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(url);
-  qr.onerror = () => { qr.style.display = 'none'; };
-  showModal('shareModal');
-}
-
-function copyPageLink() {
-  const url = window.location.href;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(() => {
-      showToast('✅ 链接已复制，去微信/QQ粘贴分享', 3000);
-      closeModal('shareModal');
-    }).catch(() => fallbackCopy(url));
-  } else {
-    fallbackCopy(url);
-    closeModal('shareModal');
-  }
-}
-
-function fallbackCopy(text) {
-  const ta = document.createElement('textarea');
-  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-  document.body.appendChild(ta);
-  ta.select();
-  try { document.execCommand('copy'); showToast('✅ 链接已复制', 3000); }
-  catch { showToast('请手动复制链接'); }
-  document.body.removeChild(ta);
-}
 
 // ====================================================================
 //  Back to Top
 // ====================================================================
 (function initBackTop() {
   const btn = document.getElementById('backTop');
-  window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > 300);
-  }, { passive: true });
+  window.addEventListener('scroll', () => btn.classList.toggle('visible', window.scrollY > 300), { passive: true });
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 })();
 
 // ====================================================================
-//  Hero resume button
+//  分享
 // ====================================================================
-document.getElementById('heroResumeBtn').addEventListener('click', (e) => {
-  // Let the anchor scroll work, but if resume is already loaded, download directly
-  const dataUrl = localStorage.getItem(KEYS.resume);
-  if (dataUrl) {
-    e.preventDefault();
-    const a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = '林小虾_简历.pdf';
-    a.click();
+document.getElementById('navShareBtn').addEventListener('click', async e => {
+  e.preventDefault();
+  const url = window.location.href;
+  if (navigator.share) {
+    try { await navigator.share({ title: '林小虾 — 个人主页', url }); return; }
+    catch (err) { if (err.name !== 'AbortError') showShareModal(url); return; }
   }
-  // else: anchor scroll to #resume section
+  showShareModal(url);
 });
-
-// ====================================================================
-//  头像管理
-// ====================================================================
-function updateOGMeta(src) {
-  const og = document.getElementById('ogImage');
-  const tw = document.getElementById('twImage');
-  if (og) og.content = src;
-  if (tw) tw.content = src;
+function showShareModal(url) {
+  const qr = document.getElementById('shareQR');
+  qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(url);
+  qr.onerror = () => { qr.style.display = 'none'; };
+  showModal('shareModal');
+}
+function copyPageLink() {
+  const url = window.location.href;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => { showToast('✅ 链接已复制'); closeModal('shareModal'); }).catch(() => fallbackCopy(url));
+  } else { fallbackCopy(url); closeModal('shareModal'); }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); showToast('✅ 链接已复制'); } catch { showToast('请手动复制链接'); }
+  document.body.removeChild(ta);
 }
 
+// ====================================================================
+//  头像
+// ====================================================================
 function renderAvatar(src) {
-  const display = document.getElementById('avatarDisplay');
-  display.innerHTML = `<img src="${src}" class="avatar-img" alt="头像">`;
+  document.getElementById('avatarDisplay').innerHTML = `<img src="${src}" class="avatar-img" alt="头像">`;
   updateOGMeta(src);
 }
-
+function updateOGMeta(src) {
+  const og = document.getElementById('ogImage'), tw = document.getElementById('twImage');
+  if (og) og.content = src; if (tw) tw.content = src;
+}
 function initAvatar() {
   const saved = localStorage.getItem(KEYS.avatar);
-  if (saved) {
-    renderAvatar(saved);
-  } else {
-    // Check if published avatar exists on server
-    fetch('assets/avatar.jpg', { method: 'HEAD' })
-      .then(r => { if (r.ok) updateOGMeta('https://xyz-lly.github.io/assets/avatar.jpg'); })
-      .catch(() => {});
-  }
+  if (saved) renderAvatar(saved);
+  else fetch('assets/avatar.jpg', { method:'HEAD' }).then(r => { if (r.ok) updateOGMeta('https://xyz-lly.github.io/assets/avatar.jpg'); }).catch(()=>{});
 }
-
 function handleAvatarUpload(file) {
-  if (!file || !file.type.startsWith('image/')) {
-    showToast('请选择图片文件');
-    return;
-  }
-  if (file.size > 5 * 1024 * 1024) {
-    showToast('图片太大，请压缩到 5MB 以内');
-    return;
-  }
+  if (!file || !file.type.startsWith('image/')) { showToast('请选择图片文件'); return; }
+  if (file.size > 5*1024*1024) { showToast('图片太大，请压缩到 5MB 以内'); return; }
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = e => {
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement('canvas');
       const maxSize = 300;
       let w = img.width, h = img.height;
-      if (w > h) { if (w > maxSize) { h = h * maxSize / w; w = maxSize; } }
-      else { if (h > maxSize) { w = w * maxSize / h; h = maxSize; } }
-      canvas.width = Math.round(w);
-      canvas.height = Math.round(h);
+      if (w > h) { if (w > maxSize) { h = h*maxSize/w; w = maxSize; } } else { if (h > maxSize) { w = w*maxSize/h; h = maxSize; } }
+      canvas.width = Math.round(w); canvas.height = Math.round(h);
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       const dataUrl = canvas.toDataURL('image/webp', 0.85);
@@ -1009,279 +1025,112 @@ function handleAvatarUpload(file) {
   };
   reader.readAsDataURL(file);
 }
-
-document.getElementById('avatarWrapper').addEventListener('click', () => {
-  document.getElementById('avatarInput').click();
-});
-document.getElementById('avatarInput').addEventListener('change', (e) => {
-  if (e.target.files[0]) {
-    handleAvatarUpload(e.target.files[0]);
-    e.target.value = '';
-  }
-});
+document.getElementById('avatarWrapper').addEventListener('click', () => document.getElementById('avatarInput').click());
+document.getElementById('avatarInput').addEventListener('change', e => { if (e.target.files[0]) { handleAvatarUpload(e.target.files[0]); e.target.value = ''; } });
 
 // ====================================================================
-//  简历管理
+//  简历
 // ====================================================================
 function updateResumeUI(dataUrl) {
   const btn = document.getElementById('resumeDownloadBtn');
-  btn.href = dataUrl;
-  btn.classList.remove('disabled');
-  btn.title = '下载简历';
-  const sizeStr = formatDataUrlSize(dataUrl);
-  document.getElementById('resumeStatus').textContent = `已加载 · ${sizeStr}`;
-  const wrap = document.getElementById('resumePreview');
-  wrap.innerHTML = `<embed src="${dataUrl}" type="application/pdf">`;
+  btn.href = dataUrl; btn.classList.remove('disabled');
+  const raw = atob(dataUrl.split(',')[1]); const kb = (raw.length/1024).toFixed(1);
+  document.getElementById('resumeStatus').textContent = `已加载 · ${kb > 1024 ? (kb/1024).toFixed(1)+' MB' : kb+' KB'}`;
+  document.getElementById('resumePreview').innerHTML = `<embed src="${dataUrl}" type="application/pdf">`;
 }
-
-function formatDataUrlSize(dataUrl) {
-  try {
-    const raw = atob(dataUrl.split(',')[1]);
-    const kb = (raw.length / 1024).toFixed(1);
-    return kb > 1024 ? (kb / 1024).toFixed(1) + ' MB' : kb + ' KB';
-  } catch { return ''; }
-}
-
 function initResume() {
   const saved = localStorage.getItem(KEYS.resume);
-  if (saved) {
-    updateResumeUI(saved);
-  } else {
-    fetch('assets/resume.pdf', { method: 'HEAD' })
-      .then(res => {
-        if (res.ok) {
-          document.getElementById('resumeDownloadBtn').href = 'assets/resume.pdf';
-          document.getElementById('resumeDownloadBtn').classList.remove('disabled');
-          document.getElementById('resumeStatus').textContent = '仓库中 · 可下载';
-        }
-      })
-      .catch(() => {});
-  }
+  if (saved) updateResumeUI(saved);
+  else fetch('assets/resume.pdf',{method:'HEAD'}).then(r => { if (r.ok) { document.getElementById('resumeDownloadBtn').href='assets/resume.pdf'; document.getElementById('resumeDownloadBtn').classList.remove('disabled'); document.getElementById('resumeStatus').textContent='仓库中 · 可下载'; }}).catch(()=>{});
 }
-
 function handleResumeUpload(file) {
   if (!file) return;
-  if (file.type !== 'application/pdf') {
-    showToast('请选择 PDF 文件');
-    return;
-  }
-  if (file.size > 10 * 1024 * 1024) {
-    showToast('简历文件太大，请压缩到 10MB 以内');
-    return;
-  }
+  if (file.type !== 'application/pdf') { showToast('请选择 PDF 文件'); return; }
+  if (file.size > 10*1024*1024) { showToast('简历文件太大，请压缩到 10MB 以内'); return; }
   const reader = new FileReader();
-  reader.onload = (e) => {
-    const dataUrl = e.target.result;
-    localStorage.setItem(KEYS.resume, dataUrl);
-    updateResumeUI(dataUrl);
-    markDirty('resume');
-    showToast('简历已更新 ✓');
+  reader.onload = e => {
+    localStorage.setItem(KEYS.resume, e.target.result);
+    updateResumeUI(e.target.result); markDirty('resume'); showToast('简历已更新 ✓');
   };
   reader.readAsDataURL(file);
 }
-
-document.getElementById('resumeInput').addEventListener('change', (e) => {
-  if (e.target.files[0]) {
-    handleResumeUpload(e.target.files[0]);
-    e.target.value = '';
-  }
-});
-
+document.getElementById('resumeInput').addEventListener('change', e => { if (e.target.files[0]) { handleResumeUpload(e.target.files[0]); e.target.value = ''; } });
 let previewVisible = false;
 function toggleResumePreview() {
   previewVisible = !previewVisible;
-  const wrap = document.getElementById('resumePreview');
-  wrap.classList.toggle('show', previewVisible);
+  document.getElementById('resumePreview').classList.toggle('show', previewVisible);
   document.getElementById('previewToggleBtn').textContent = previewVisible ? '🙈 收起' : '👁️ 预览';
 }
 
 // ====================================================================
-//  脏标记
+//  脏标记 + Token + 发布
 // ====================================================================
-function getDirty() {
-  try { return JSON.parse(localStorage.getItem(KEYS.dirty)) || []; }
-  catch { return []; }
-}
-function setDirty(list) {
-  if (list.length === 0) localStorage.removeItem(KEYS.dirty);
-  else localStorage.setItem(KEYS.dirty, JSON.stringify(list));
-}
-function markDirty(type) {
-  const dirty = getDirty();
-  if (!dirty.includes(type)) dirty.push(type);
-  setDirty(dirty);
-  updatePublishBtn();
-}
-function clearDirty() {
-  setDirty([]);
-  updatePublishBtn();
-}
+function getDirty() { try { return JSON.parse(localStorage.getItem(KEYS.dirty))||[]; } catch { return []; } }
+function setDirty(list) { if (list.length===0) localStorage.removeItem(KEYS.dirty); else localStorage.setItem(KEYS.dirty, JSON.stringify(list)); }
+function markDirty(type) { const d = getDirty(); if (!d.includes(type)) d.push(type); setDirty(d); updatePublishBtn(); }
+function clearDirty() { setDirty([]); updatePublishBtn(); }
 function updatePublishBtn() {
   const btn = document.getElementById('publishBtn');
-  const dirty = getDirty();
-  if (dirty.length > 0) {
-    btn.style.display = 'inline-flex';
-    btn.textContent = `☁️ 发布到线上 (${dirty.join('+')})`;
-  } else {
-    btn.style.display = 'none';
-  }
+  const d = getDirty();
+  if (d.length > 0) { btn.style.display = 'inline-flex'; btn.textContent = `☁️ 发布到线上 (${d.join('+')})`; }
+  else btn.style.display = 'none';
 }
-
-// ====================================================================
-//  GitHub Token
-// ====================================================================
-function hasToken() {
-  return !!localStorage.getItem(KEYS.token);
-}
+function hasToken() { return !!localStorage.getItem(KEYS.token); }
 function showTokenConfig() {
-  if (hasToken()) {
-    document.getElementById('tokenModalBody').innerHTML = `
-      <div class="modal-success">
-        <div class="icon">✅</div>
-        <p><b>GitHub Token 已配置</b></p>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">如需更换，重新输入保存即可</p>
-        <input type="password" id="tokenInput" placeholder="新 Token（留空不修改）" value="" style="margin-bottom:8px">
-        <div class="modal-actions">
-          <button class="btn btn-outline" onclick="closeModal('tokenModal')">关闭</button>
-          <button class="btn btn-primary" onclick="updateToken()">更新</button>
-        </div>
-      </div>
-    `;
-  } else {
-    document.getElementById('tokenModalBody').innerHTML = `
-      <h3>🔑 配置 GitHub Token</h3>
-      <p>让「发布到线上」功能可以将头像和简历提交到仓库</p>
-      <ol>
-        <li>打开 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a></li>
-        <li>点击 <b>Generate new token (classic)</b>，勾选 <code>repo</code> 权限</li>
-        <li>复制生成的 token，粘贴到下方</li>
-      </ol>
-      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
-      <div class="modal-actions">
-        <button class="btn btn-outline" onclick="closeModal('tokenModal')">取消</button>
-        <button class="btn btn-primary" onclick="saveToken()">保存</button>
-      </div>
-    `;
-  }
+  document.getElementById('tokenModalBody').innerHTML = hasToken()
+    ? `<div class="modal-success"><div class="icon">✅</div><p><b>GitHub Token 已配置</b></p><p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">如需更换，重新输入保存即可</p><input type="password" id="tokenInput" placeholder="新 Token（留空不修改）" value="" style="margin-bottom:8px"><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('tokenModal')">关闭</button><button class="btn btn-primary" onclick="updateToken()">更新</button></div></div>`
+    : `<h3>🔑 配置 GitHub Token</h3><p>让「发布到线上」功能可以将内容提交到仓库</p><ol><li>打开 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a></li><li>点击 <b>Generate new token (classic)</b>，勾选 <code>repo</code> 权限</li><li>复制粘贴到下方</li></ol><input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('tokenModal')">取消</button><button class="btn btn-primary" onclick="saveToken()">保存</button></div>`;
   showModal('tokenModal');
 }
-function saveToken() {
-  const token = document.getElementById('tokenInput').value.trim();
-  if (!token) { showToast('请输入 Token'); return; }
-  localStorage.setItem(KEYS.token, token);
-  closeModal('tokenModal');
-  updateTokenStatus();
-  showToast('Token 已保存 ✓');
-}
-function updateToken() {
-  const token = document.getElementById('tokenInput').value.trim();
-  if (token) localStorage.setItem(KEYS.token, token);
-  closeModal('tokenModal');
-  updateTokenStatus();
-  showToast('Token 已更新 ✓');
-}
-function updateTokenStatus() {
-  const btn = document.getElementById('tokenStatusBtn');
-  btn.textContent = hasToken() ? '✅ Token' : '🔑 Token';
-}
+function saveToken() { const t = document.getElementById('tokenInput').value.trim(); if (!t) { showToast('请输入 Token'); return; } localStorage.setItem(KEYS.token, t); closeModal('tokenModal'); updateTokenStatus(); showToast('Token 已保存 ✓'); }
+function updateToken() { const t = document.getElementById('tokenInput').value.trim(); if (t) localStorage.setItem(KEYS.token, t); closeModal('tokenModal'); updateTokenStatus(); showToast('Token 已更新 ✓'); }
+function updateTokenStatus() { document.getElementById('tokenStatusBtn').textContent = hasToken() ? '✅ Token' : '🔑 Token'; }
 
-// ====================================================================
-//  发布到 GitHub
-// ====================================================================
 async function publishToGitHub() {
   const token = localStorage.getItem(KEYS.token);
   if (!token) { showTokenConfig(); return; }
-
   const avatarData = localStorage.getItem(KEYS.avatar);
   const resumeData = localStorage.getItem(KEYS.resume);
-
-  if (!avatarData && !resumeData) {
-    showToast('没有需要发布的内容');
-    return;
-  }
-
+  const contentData = localStorage.getItem(KEYS.content);
+  if (!avatarData && !resumeData && !contentData) { showToast('没有需要发布的内容'); return; }
   showModal('publishModal');
   document.getElementById('publishLoading').querySelector('.icon').textContent = '⏳';
   document.getElementById('publishStatus').textContent = '准备中…';
-
-  const headers = {
-    Authorization: `token ${token}`,
-    Accept: 'application/vnd.github.v3+json',
-    'Content-Type': 'application/json',
-  };
-
+  const headers = { Authorization:`token ${token}`, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' };
   let success = 0, fail = 0;
-
   if (avatarData) {
-    try {
-      document.getElementById('publishStatus').textContent = '上传头像…';
-      await uploadToGitHub(token, 'assets/avatar.jpg', avatarData, '更新头像', headers);
-      success++;
-    } catch (e) { fail++; console.error('头像上传失败:', e); }
+    try { document.getElementById('publishStatus').textContent = '上传头像…'; await ghUpload(token, 'assets/avatar.jpg', avatarData, '更新头像', headers); success++; } catch(e) { fail++; }
   }
   if (resumeData) {
-    try {
-      document.getElementById('publishStatus').textContent = '上传简历…';
-      await uploadToGitHub(token, 'assets/resume.pdf', resumeData, '更新简历', headers);
-      success++;
-    } catch (e) { fail++; console.error('简历上传失败:', e); }
+    try { document.getElementById('publishStatus').textContent = '上传简历…'; await ghUpload(token, 'assets/resume.pdf', resumeData, '更新简历', headers); success++; } catch(e) { fail++; }
   }
-
+  if (contentData) {
+    try { document.getElementById('publishStatus').textContent = '上传内容…'; await ghUpload(token, 'assets/content.json', 'data:application/json;base64,' + btoa(unescape(encodeURIComponent(contentData))), '更新内容', headers); success++; } catch(e) { fail++; }
+  }
   if (success > 0) {
     document.getElementById('publishLoading').querySelector('.icon').textContent = '✅';
-    document.getElementById('publishStatus').textContent =
-      `${success} 项已提交到 GitHub，等待 Pages 部署（约 1-2 分钟）…`;
+    document.getElementById('publishStatus').textContent = `${success} 项已提交到 GitHub，等待 Pages 部署（约 1-2 分钟）…`;
     clearDirty();
   }
-  if (fail > 0) showToast(`❌ ${fail} 项上传失败，查看控制台了解详情`);
-
+  if (fail > 0) showToast(`❌ ${fail} 项上传失败`);
   setTimeout(() => closeModal('publishModal'), success > 0 ? 4000 : 2000);
 }
 
-async function uploadToGitHub(token, path, dataUrl, message, headers) {
-  const commaIdx = dataUrl.indexOf(',');
-  const base64 = dataUrl.substring(commaIdx + 1);
-
+async function ghUpload(token, path, dataUrl, message, headers) {
+  const comma = dataUrl.indexOf(','); const base64 = dataUrl.substring(comma + 1);
   let sha = null;
-  try {
-    const res = await fetch(`${API_BASE}/contents/${path}?ref=${GITHUB_BRANCH}`, { headers });
-    if (res.ok) {
-      const data = await res.json();
-      sha = data.sha;
-    }
-  } catch (e) {}
-
-  const body = {
-    message: `${message} [via homepage admin]`,
-    content: base64,
-    branch: GITHUB_BRANCH,
-  };
+  try { const r = await fetch(`${API_BASE}/contents/${path}?ref=${GITHUB_BRANCH}`, { headers }); if (r.ok) sha = (await r.json()).sha; } catch {}
+  const body = { message:`${message} [via homepage admin]`, content:base64, branch:GITHUB_BRANCH };
   if (sha) body.sha = sha;
-
-  const res = await fetch(`${API_BASE}/contents/${path}`, {
-    method: 'PUT',
-    headers,
-    body: JSON.stringify(body),
-  });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || `HTTP ${res.status}`);
-  }
+  const r = await fetch(`${API_BASE}/contents/${path}`, { method:'PUT', headers, body:JSON.stringify(body) });
+  if (!r.ok) throw new Error((await r.json().catch(()=>({}))).message || `HTTP ${r.status}`);
 }
-
-// ====================================================================
-//  Modal 遮罩关闭
-// ====================================================================
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', (e) => {
-    if (e.target === el) el.classList.remove('show');
-  });
-});
 
 // ====================================================================
 //  初始化
 // ====================================================================
+const pageData = loadContent();
+renderContent(pageData);
 initAvatar();
 initResume();
 updatePublishBtn();
