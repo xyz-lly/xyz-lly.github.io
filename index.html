@@ -756,6 +756,8 @@ function renderContent(data) {
       return `<a href="${escHtml(href)}">${c.icon || '🔗'} ${escHtml(c.label)}</a>`;
     }).join('');
   }
+  // Observe newly rendered reveal elements
+  initReveal();
 }
 
 function escHtml(s) {
@@ -1187,17 +1189,23 @@ async function ghUpload(token, path, dataUrl, message, headers) {
 // ====================================================================
 //  滚动动画 + 进度条
 // ====================================================================
+function initReveal() {
+  document.querySelectorAll('.reveal:not(.observed)').forEach(el => {
+    el.classList.add('observed');
+    if (revealObserver) revealObserver.observe(el);
+  });
+}
+
+let revealObserver = null;
 (function initScrollEffects() {
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
+  revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+        revealObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
 
   // Progress bar
   const bar = document.getElementById('progressBar');
