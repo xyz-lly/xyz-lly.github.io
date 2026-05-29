@@ -872,11 +872,24 @@ function onSkillDrop(e, idx) {
 }
 
 function addEditorSkill() {
-  const s = prompt('输入新技能名称');
-  if (s && s.trim()) {
-    editorData.skills.push(s.trim());
-    renderEditorSkills();
-  }
+  const container = document.getElementById('e_skillsList');
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = '输入技能名称…';
+  input.className = 'editor-skill-input';
+  input.style.cssText = 'width:auto;min-width:140px;padding:6px 12px;border-radius:14px;border:1px solid var(--accent);background:var(--card);color:var(--text);font-size:13px;outline:none;font-family:inherit;';
+  container.appendChild(input);
+  input.focus();
+  const commit = () => {
+    const val = input.value.trim();
+    if (val) { editorData.skills.push(val); renderEditorSkills(); }
+    else input.remove();
+  };
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { input.blur(); }
+    if (e.key === 'Escape') { input.remove(); }
+  });
 }
 
 function removeEditorSkill(i) {
@@ -1125,8 +1138,14 @@ document.getElementById('avatarInput').addEventListener('change', e => { if (e.t
 function updateResumeUI(dataUrl) {
   const btn = document.getElementById('resumeDownloadBtn');
   btn.href = dataUrl; btn.classList.remove('disabled');
-  const raw = atob(dataUrl.split(',')[1]); const kb = (raw.length/1024).toFixed(1);
-  document.getElementById('resumeStatus').textContent = `已加载 · ${kb > 1024 ? (kb/1024).toFixed(1)+' MB' : kb+' KB'}`;
+  // Size display with safe atob
+  let sizeStr = '';
+  try {
+    const raw = atob(dataUrl.split(',')[1]);
+    const kb = (raw.length/1024).toFixed(1);
+    sizeStr = kb > 1024 ? (kb/1024).toFixed(1)+' MB' : kb+' KB';
+  } catch { sizeStr = ''; }
+  document.getElementById('resumeStatus').textContent = sizeStr ? `已加载 · ${sizeStr}` : '已加载';
   document.getElementById('resumePreview').innerHTML = `<embed src="${dataUrl}" type="application/pdf">`;
 }
 function initResume() {
@@ -1225,8 +1244,9 @@ function initReveal() {
     el.classList.add('observed', 'hidden');
     if (revealObserver) {
       revealObserver.observe(el);
-      // If already intersecting, fire immediately
-      if (revealObserver.thresholds && el.getBoundingClientRect().top < window.innerHeight) {
+      // Check if already in viewport (above threshold)
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 20) {
         el.classList.remove('hidden');
         el.classList.add('visible');
         revealObserver.unobserve(el);
