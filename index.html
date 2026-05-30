@@ -262,6 +262,28 @@
   .timeline-item .date { font-size:13px; color:var(--text-muted); margin-bottom:2px; }
   .timeline-item h4 { font-size:16px; margin-bottom:2px; }
   .timeline-item .desc { font-size:14px; color:var(--text-secondary); }
+  .timeline-item .detail-toggle {
+    font-size:13px; color:var(--accent); cursor:pointer;
+    background:none; border:none; padding:4px 0; font-family:inherit;
+    transition:color .15s;
+  }
+  .timeline-item .detail-toggle:hover { color:var(--accent-hover); }
+  .timeline-item .detail-content {
+    font-size:14px; color:var(--text-secondary); line-height:1.8;
+    max-height:0; overflow:hidden; opacity:0; visibility:hidden;
+    padding:0 0 0 12px; border-left:2px solid var(--accent-light);
+    transition:max-height .35s ease, opacity .3s ease, visibility .3s ease;
+    margin:0;
+  }
+  .timeline-item .detail-content.open {
+    max-height:600px; opacity:1; visibility:visible;
+    margin-top:8px; padding-top:2px; padding-bottom:2px;
+  }
+  .timeline-item .detail-content ul { list-style:none; padding:0; margin:0; }
+  .timeline-item .detail-content li { padding:2px 0 2px 14px; position:relative; }
+  .timeline-item .detail-content li::before {
+    content:'\2022'; position:absolute; left:0; color:var(--accent); font-weight:bold;
+  }
 
   .resume-box {
     background:var(--card); border:1px solid var(--border);
@@ -827,7 +849,7 @@ function renderContent(data) {
       <div class="date">${escHtml(e.date)}</div>
       <h4>${escHtml(e.title)}</h4>
       <p class="desc">${escHtml(e.desc)}</p>
-      ${e.detail ? `<button class="detail-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'▼ 收起详情':'▶ 展开详情'">▶ 展开详情</button><div class="detail-content">${formatDetail(e.detail)}</div>` : ''}
+      ${e.detail ? `<button class="detail-toggle" onclick="toggleDetail(this)">▶ 展开详情</button><div class="detail-content">${formatDetail(e.detail)}</div>` : ''}
     </div>
   `).join('');
   // Contacts
@@ -1000,6 +1022,12 @@ function formatDetail(text) {
   const lines = text.split('\n').filter(Boolean);
   if (lines.length <= 1) return escHtml(text);
   return '<ul>' + lines.map(l => `<li>${escHtml(l.trim())}</li>`).join('') + '</ul>';
+}
+
+function toggleDetail(btn) {
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
+  btn.textContent = content.classList.contains('open') ? '▼ 收起详情' : '▶ 展开详情';
 }
 
 function renderEditorExperiences() {
