@@ -15,6 +15,9 @@
 <meta name="twitter:description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。">
 <meta name="twitter:image" content="https://xyz-lly.github.io/assets/avatar.jpg" id="twImage">
 <meta name="theme-color" content="#2563eb">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <style>
   /* ===== Variables ===== */
   :root {
@@ -1380,6 +1383,7 @@ let revealObserver = null;
 // ====================================================================
 //  初始化
 // ====================================================================
+// 缓存爆破标记 - v7.1
 loadContentAsync().then(pageData => {
   renderContent(pageData);
   initAvatar();
