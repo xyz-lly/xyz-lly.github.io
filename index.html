@@ -957,9 +957,71 @@ function editorDrop(e, idx) {
 }
 
 function initEditorDrag() {
+  // Touch drag support (mobile) - separate from HTML5 drag
   document.querySelectorAll('#e_projectsList, #e_experiencesList, #e_contactsList').forEach(function(container) {
-    container.querySelectorAll('.editor-array-item').forEach(function(item, idx) {
-      // Remove old inline handlers by re-setting them
+    var touchState = null;
+    
+    container.addEventListener('touchstart', function(e) {
+      var handle = e.target.closest('.drag-handle');
+      if (!handle || e.target.closest('.item-remove')) return;
+      var item = handle.closest('.editor-array-item');
+      if (!item) return;
+      var touch = e.touches[0];
+      var items = Array.from(container.children);
+      touchState = {
+        item: item,
+        idx: items.indexOf(item),
+        startY: touch.clientY,
+        container: container,
+        moved: false
+      };
+      item.classList.add('dragging');
+      item.style.touchAction = 'none';
+    }, { passive: true });
+    
+    container.addEventListener('touchmove', function(e) {
+      if (!touchState) return;
+      e.preventDefault();
+      touchState.moved = true;
+      var touch = e.touches[0];
+      
+      // Find which item the finger is over
+      var target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (!target) return;
+      var dropTarget = target.closest('.editor-array-item');
+      if (!dropTarget || dropTarget === touchState.item) return;
+      
+      container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+      dropTarget.classList.add('drag-over');
+    }, { passive: false });
+    
+    container.addEventListener('touchend', function(e) {
+      if (!touchState) return;
+      touchState.item.classList.remove('dragging');
+      touchState.item.style.touchAction = '';
+      container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+      
+      if (touchState.moved) {
+        var dropTarget = container.querySelector('.drag-over');
+        if (dropTarget) {
+          var fromIdx = touchState.idx;
+          var toIdx = Array.from(container.children).indexOf(dropTarget);
+          if (fromIdx !== toIdx && fromIdx >= 0 && toIdx >= 0) {
+            var arr = null;
+            var renderFn = null;
+            if (container.id === 'e_projectsList') { arr = editorData.projects; renderFn = renderEditorProjects; }
+            else if (container.id === 'e_experiencesList') { arr = editorData.experiences; renderFn = renderEditorExperiences; }
+            else if (container.id === 'e_contactsList') { arr = editorData.contacts; renderFn = renderEditorContacts; }
+            if (arr && fromIdx < arr.length && toIdx < arr.length) {
+              var item = arr.splice(fromIdx, 1)[0];
+              arr.splice(toIdx, 0, item);
+              renderFn();
+              triggerAutoSave();
+            }
+          }
+        }
+      }
+      touchState = null;
     });
   });
 }
