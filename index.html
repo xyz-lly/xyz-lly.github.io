@@ -433,6 +433,14 @@
     user-select:none; padding:0 6px 0 2px;
   }
   .editor-array-item .drag-handle:hover { color:var(--text-secondary); }
+  .editor-array-item .item-move { display:inline-flex; gap:0; margin-left:auto; }
+  .editor-array-item .move-btn {
+    background:none; border:none; cursor:pointer;
+    color:var(--text-muted); font-size:14px; padding:0 6px;
+    line-height:1; transition:color .15s;
+  }
+  .editor-array-item .move-btn:hover { color:var(--accent); }
+  .editor-array-item .move-btn:disabled { opacity:.2; cursor:default; }
   .editor-array-item.dragging { opacity:.4; }
   .editor-array-item.drag-over {
     border-color:var(--accent) !important;
@@ -912,6 +920,19 @@ function closeEditor() {
 
 
 // Editor array item drag (pointer events for desktop + mobile)
+
+
+function moveItem(arrName, idx, dir) {
+  var arr = editorData[arrName];
+  var newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= arr.length) return;
+  var item = arr.splice(idx, 1)[0];
+  arr.splice(newIdx, 0, item);
+  if (arrName === 'projects') renderEditorProjects();
+  else if (arrName === 'experiences') renderEditorExperiences();
+  else if (arrName === 'contacts') renderEditorContacts();
+  triggerAutoSave();
+}
 var editorDragState = null;
 
 function editorDragStart(e, idx, containerId, arrName) {
@@ -1121,6 +1142,10 @@ function renderEditorProjects() {
         ondrop="editorDrop(event, ${i})">
       <div class="editor-array-item-header">
         <span><span class="drag-handle">⢿</span><span class="item-label">项目 ${i+1}</span></span>
+        <span class="item-move">
+          <button class="move-btn" onclick="moveItem('projects', ${i}, -1)" ${i===0?'disabled':''} title="上移">↑</button>
+          <button class="move-btn" onclick="moveItem('projects', ${i}, 1)" ${i===editorData.projects.length-1?'disabled':''} title="下移">↓</button>
+        </span>
         <button class="item-remove" onclick="removeEditorProject(${i})">🗑️</button>
       </div>
       <div class="editor-field"><label>标题</label><input value="${escHtml(p.title)}" onchange="editorData.projects[${i}].title=this.value;triggerAutoSave()"></div>
@@ -1173,6 +1198,10 @@ function renderEditorExperiences() {
         ondrop="editorDrop(event, ${i})">
       <div class="editor-array-item-header">
         <span><span class="drag-handle">⢿</span><span class="item-label">经历 ${i+1}</span></span>
+        <span class="item-move">
+          <button class="move-btn" onclick="moveItem('experiences', ${i}, -1)" ${i===0?'disabled':''} title="上移">↑</button>
+          <button class="move-btn" onclick="moveItem('experiences', ${i}, 1)" ${i===editorData.experiences.length-1?'disabled':''} title="下移">↓</button>
+        </span>
         <button class="item-remove" onclick="removeEditorExperience(${i})">🗑️</button>
       </div>
       <div class="editor-field"><label>时间</label><input value="${escHtml(e.date)}" onchange="editorData.experiences[${i}].date=this.value;triggerAutoSave()"></div>
@@ -1202,6 +1231,10 @@ function renderEditorContacts() {
         ondrop="editorDrop(event, ${i})">
       <div class="editor-array-item-header">
         <span><span class="drag-handle">⢿</span><span class="item-label">联系 ${i+1}</span></span>
+        <span class="item-move">
+          <button class="move-btn" onclick="moveItem('contacts', ${i}, -1)" ${i===0?'disabled':''} title="上移">↑</button>
+          <button class="move-btn" onclick="moveItem('contacts', ${i}, 1)" ${i===editorData.contacts.length-1?'disabled':''} title="下移">↓</button>
+        </span>
         <button class="item-remove" onclick="removeEditorContact(${i})">🗑️</button>
       </div>
       <div class="editor-field"><label>图标（emoji）</label><input value="${c.icon||''}" onchange="editorData.contacts[${i}].icon=this.value"></div>
