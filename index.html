@@ -420,7 +420,42 @@
 
   footer { text-align:center; padding:48px 24px 80px; font-size:13px; color:var(--text-muted); }
 
-  .img-lightbox {
+  /* ===== Editor Field Spacing ===== */
+.editor-array-item {
+  background:var(--bg-alt); border-radius:var(--radius-sm);
+  padding:16px; margin-bottom:12px;
+  border:1px solid var(--border);
+}
+.editor-array-item-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:10px; padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+.editor-array-item-header .item-label {
+  font-size:14px; font-weight:600; color:var(--text);
+}
+.editor-field { margin-bottom:12px; }
+.editor-field:last-child { margin-bottom:0; }
+.editor-field label {
+  display:block; font-size:12px; color:var(--text-muted);
+  margin-bottom:4px; font-weight:500;
+}
+.editor-field input,
+.editor-field textarea,
+.editor-field select {
+  width:100%; padding:8px 10px;
+  border:1px solid var(--border); border-radius:6px;
+  background:var(--card); color:var(--text);
+  font-size:14px; font-family:inherit;
+  transition:border-color .15s;
+}
+.editor-field input:focus,
+.editor-field textarea:focus {
+  outline:none; border-color:var(--accent);
+  box-shadow:0 0 0 2px var(--accent-glow);
+}
+
+.img-lightbox {
   display:none; position:fixed; inset:0; z-index:250;
   background:rgba(0,0,0,0.85); align-items:center; justify-content:center;
   padding:40px; cursor:zoom-out;
@@ -792,6 +827,7 @@ function renderContent(data) {
       <div class="date">${escHtml(e.date)}</div>
       <h4>${escHtml(e.title)}</h4>
       <p class="desc">${escHtml(e.desc)}</p>
+      ${e.detail ? `<button class="detail-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'▼ 收起详情':'▶ 展开详情'">▶ 展开详情</button><div class="detail-content">${formatDetail(e.detail)}</div>` : ''}
     </div>
   `).join('');
   // Contacts
@@ -959,6 +995,13 @@ function removeEditorProject(i) {
   renderEditorProjects();
 }
 
+function formatDetail(text) {
+  if (!text) return '';
+  const lines = text.split('\n').filter(Boolean);
+  if (lines.length <= 1) return escHtml(text);
+  return '<ul>' + lines.map(l => `<li>${escHtml(l.trim())}</li>`).join('') + '</ul>';
+}
+
 function renderEditorExperiences() {
   document.getElementById('e_experiencesList').innerHTML = editorData.experiences.map((e, i) => `
     <div class="editor-array-item">
@@ -966,15 +1009,16 @@ function renderEditorExperiences() {
         <span class="item-label">经历 ${i+1}</span>
         <button class="item-remove" onclick="removeEditorExperience(${i})">🗑️</button>
       </div>
-      <div class="editor-field"><label>时间</label><input value="${escHtml(e.date)}" onchange="editorData.experiences[${i}].date=this.value"></div>
-      <div class="editor-field"><label>标题</label><input value="${escHtml(e.title)}" onchange="editorData.experiences[${i}].title=this.value"></div>
-      <div class="editor-field"><label>描述</label><textarea rows="2" onchange="editorData.experiences[${i}].desc=this.value">${escHtml(e.desc)}</textarea></div>
+      <div class="editor-field"><label>时间</label><input value="${escHtml(e.date)}" onchange="editorData.experiences[${i}].date=this.value;triggerAutoSave()"></div>
+      <div class="editor-field"><label>标题</label><input value="${escHtml(e.title)}" onchange="editorData.experiences[${i}].title=this.value;triggerAutoSave()"></div>
+      <div class="editor-field"><label>简述</label><textarea rows="2" onchange="editorData.experiences[${i}].desc=this.value;triggerAutoSave()">${escHtml(e.desc)}</textarea></div>
+      <div class="editor-field"><label>详细描述（每行一条，自动转列表）</label><textarea rows="4" onchange="editorData.experiences[${i}].detail=this.value;triggerAutoSave()" placeholder="留空则不显示展开详情">${escHtml(e.detail||'')}</textarea></div>
     </div>
   `).join('');
 }
 
 function addEditorExperience() {
-  editorData.experiences.push({ date:'', title:'新经历', desc:'' });
+  editorData.experiences.push({ date:'', title:'新经历', desc:'', detail:'' });
   renderEditorExperiences();
 }
 
