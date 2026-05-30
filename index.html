@@ -1163,82 +1163,43 @@ function setupAutoSave() {
   body.addEventListener('change', window._autoSaveHandler);
 }
 
-// Drag & Drop sortable
+// Drag & Drop sortable (pointer events for desktop + mobile)
 function makeSortable(containerId, getArr, renderFn) {
   const container = document.getElementById(containerId);
   if (!container) return;
   
-  container.addEventListener('dragstart', function(e) {
-    const item = e.target.closest('.editor-array-item');
-    if (!item || e.target.closest('.item-remove')) return;
-    item.dataset.dragIdx = Array.from(container.children).indexOf(item);
-    item.classList.add('dragging');
-    e.dataTransfer.effectAllowed = 'move';
-  });
+  var state = null;
   
-  container.addEventListener('dragend', function(e) {
-    const item = e.target.closest('.editor-array-item');
-    if (item) item.classList.remove('dragging');
-    container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
-  });
-  
-  container.addEventListener('dragover', function(e) {
-    e.preventDefault();
-    const target = e.target.closest('.editor-array-item');
-    if (!target || target.classList.contains('dragging')) return;
-    container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
-    target.classList.add('drag-over');
-    e.dataTransfer.dropEffect = 'move';
-  });
-  
-  container.addEventListener('drop', function(e) {
-    e.preventDefault();
-    const target = e.target.closest('.editor-array-item');
-    const srcIdx = container.querySelector('.dragging');
-    if (!target || !srcIdx) return;
-    const fromIdx = parseInt(srcIdx.dataset.dragIdx);
-    const toIdx = Array.from(container.children).indexOf(target);
-    if (fromIdx === toIdx) return;
-    
-    const arr = getArr();
-    if (!arr || fromIdx >= arr.length || toIdx >= arr.length) return;
-    const item = arr.splice(fromIdx, 1)[0];
-    arr.splice(toIdx, 0, item);
-    renderFn();
-  });
-  
-  // Mobile touch drag
-  var touchState = null;
-  container.addEventListener('touchstart', function(e) {
+  container.addEventListener('pointerdown', function(e) {
     var handle = e.target.closest('.drag-handle');
-    if (!handle) return;
+    if (!handle || e.target.closest('.item-remove')) return;
     var item = handle.closest('.editor-array-item');
     if (!item) return;
-    var touch = e.touches[0];
-    touchState = { item: item, idx: Array.from(container.children).indexOf(item), startY: touch.clientY };
-    item.dataset.dragIdx = touchState.idx;
+    item.setPointerCapture(e.pointerId);
+    state = { item: item, idx: Array.from(container.children).indexOf(item) };
+    item.dataset.dragIdx = state.idx;
     item.classList.add('dragging');
-  }, { passive: true });
-  
-  container.addEventListener('touchmove', function(e) {
-    if (!touchState) return;
     e.preventDefault();
-    var touch = e.touches[0];
-    var target = document.elementFromPoint(touch.clientX, touch.clientY);
+  });
+  
+  container.addEventListener('pointermove', function(e) {
+    if (!state) return;
+    e.preventDefault();
+    var target = document.elementFromPoint(e.clientX, e.clientY);
     if (!target) return;
     var dropTarget = target.closest('.editor-array-item');
-    if (!dropTarget || dropTarget === touchState.item) return;
+    if (!dropTarget || dropTarget === state.item) return;
     container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
     dropTarget.classList.add('drag-over');
-  }, { passive: false });
+  });
   
-  container.addEventListener('touchend', function(e) {
-    if (!touchState) return;
-    touchState.item.classList.remove('dragging');
+  container.addEventListener('pointerup', function(e) {
+    if (!state) return;
+    state.item.classList.remove('dragging');
     container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
     var target = container.querySelector('.drag-over');
     if (target) {
-      var fromIdx = touchState.idx;
+      var fromIdx = state.idx;
       var toIdx = Array.from(container.children).indexOf(target);
       if (fromIdx !== toIdx) {
         var arr = getArr();
@@ -1249,7 +1210,7 @@ function makeSortable(containerId, getArr, renderFn) {
         }
       }
     }
-    touchState = null;
+    state = null;
   });
 }
 
