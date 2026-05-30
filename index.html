@@ -406,6 +406,12 @@
     background:none; border:none; cursor:pointer;
     color:var(--tag-text); font-size:14px; padding:0; line-height:1;
   }
+  .skill-move-btn {
+    background:none; border:none; cursor:pointer;
+    color:var(--text-muted); font-size:12px; padding:0 3px; line-height:1;
+  }
+  .skill-move-btn:hover { color:var(--accent); }
+  .skill-move-btn:disabled { opacity:.2; cursor:default; }
   .editor-array-item {
     background:var(--card); border:1px solid var(--border);
     border-radius:var(--radius-sm); padding:16px; margin-bottom:12px;
@@ -1072,7 +1078,10 @@ function renderEditorSkills() {
         ondragover="onSkillDragOver(event, ${i})"
         ondragend="onSkillDragEnd(event)"
         ondrop="onSkillDrop(event, ${i})">
-      ⠿ ${escHtml(s)} <button onclick="removeEditorSkill(${i})" title="删除">✕</button>
+      ⠿ ${escHtml(s)}
+      <button class="skill-move-btn" onclick="moveItem('skills', ${i}, -1)" ${i===0?'disabled':''} title="上移">↑</button>
+      <button class="skill-move-btn" onclick="moveItem('skills', ${i}, 1)" ${i===editorData.skills.length-1?'disabled':''} title="下移">↓</button>
+      <button onclick="removeEditorSkill(${i})" title="删除">✕</button>
     </div>`
   ).join('');
 }
