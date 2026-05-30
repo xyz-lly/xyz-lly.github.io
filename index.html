@@ -241,6 +241,12 @@
   .project-card p { font-size:14px; color:var(--text-secondary); margin-bottom:12px; line-height:1.7; }
   .project-card .tags { display:flex; flex-wrap:wrap; gap:6px; }
   .project-card .tags span { font-size:12px; padding:2px 10px; border-radius:12px; background:var(--accent-light); color:var(--accent); }
+  .project-card-img { margin-bottom:12px; border-radius:8px; overflow:hidden; cursor:pointer; }
+  .project-card-img img { width:100%; height:180px; object-fit:cover; transition:transform .3s; }
+  .project-card-img img:hover { transform:scale(1.03); }
+  .project-card-links { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .project-card-links a { font-size:13px; padding:4px 12px; border-radius:6px; border:1px solid var(--border); color:var(--accent); text-decoration:none; transition:all .15s; }
+  .project-card-links a:hover { background:var(--accent-light); border-color:var(--accent); }
 
   .timeline { position:relative; padding-left:26px; }
   .timeline::before { content:''; position:absolute; left:0; top:6px; bottom:6px; width:2px; background:var(--border); }
@@ -411,8 +417,18 @@
 
   footer { text-align:center; padding:48px 24px 80px; font-size:13px; color:var(--text-muted); }
 
-  .back-top {
-    position:fixed; right:24px; bottom:88px; z-index:80;
+  .img-lightbox {
+  display:none; position:fixed; inset:0; z-index:250;
+  background:rgba(0,0,0,0.85); align-items:center; justify-content:center;
+  padding:40px; cursor:zoom-out;
+}
+.img-lightbox.show { display:flex; }
+.img-lightbox img {
+  max-width:100%; max-height:90vh; border-radius:8px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.4);
+}
+
+.back-top {
     width:40px; height:40px; border-radius:50%;
     border:1px solid var(--border); background:var(--card);
     color:var(--text-secondary); cursor:pointer; font-size:18px;
@@ -668,6 +684,7 @@
 <input type="file" id="avatarInput" accept="image/*" style="display:none">
 <input type="file" id="resumeInput" accept=".pdf,application/pdf" style="display:none">
 <div class="toast" id="toast"></div>
+<div class="img-lightbox" id="imgLightbox" onclick="this.classList.remove('show')"></div>
 
 <script>
 // ====================================================================
@@ -752,14 +769,19 @@ function renderContent(data) {
     `<span class="skill-tag">${escHtml(s)}</span>`
   ).join('');
   // Projects
-  document.getElementById('projectsContainer').innerHTML = data.projects.map((p, i) => `
+  document.getElementById('projectsContainer').innerHTML = data.projects.map((p, i) => {
+    const hasImg = p.image && p.image.startsWith('data:');
+    const hasUrl = p.url && p.url.trim();
+    return `
     <div class="project-card reveal reveal-delay-${Math.min(i,3)}">
+      ${hasImg ? `<div class="project-card-img"><img src="${p.image}" alt="${escHtml(p.title)}截图" onclick="event.stopPropagation();showImageLightbox('${p.image}')" loading="lazy"></div>` : ''}
       <h3>${escHtml(p.title)}</h3>
       <div class="meta">${escHtml(p.date)}</div>
       <p>${escHtml(p.desc)}</p>
       <div class="tags">${(p.tags||[]).map(t => `<span>${escHtml(t)}</span>`).join('')}</div>
+      ${hasUrl ? `<div class="project-card-links"><a href="${escHtml(p.url)}" target="_blank" rel="noopener">🔗 查看项目</a></div>` : ''}
     </div>
-  `).join('');
+  `}).join('');
   // Experiences
   document.getElementById('timelineContainer').innerHTML = data.experiences.map((e, i) => `
     <div class="timeline-item reveal reveal-delay-${Math.min(i,3)}">
@@ -824,6 +846,7 @@ function populateEditor() {
   renderEditorProjects();
   renderEditorExperiences();
   renderEditorContacts();
+  setupAutoSave();
 }
 
 let dragSkillIdx = null;
@@ -904,12 +927,19 @@ function renderEditorProjects() {
         <span class="item-label">项目 ${i+1}</span>
         <button class="item-remove" onclick="removeEditorProject(${i})">🗑️</button>
       </div>
-      <div class="editor-field"><label>标题</label><input value="${escHtml(p.title)}" onchange="editorData.projects[${i}].title=this.value"></div>
-      <div class="editor-field"><label>日期</label><input value="${escHtml(p.date)}" onchange="editorData.projects[${i}].date=this.value"></div>
-      <div class="editor-field"><label>描述</label><textarea rows="2" onchange="editorData.projects[${i}].desc=this.value">${escHtml(p.desc)}</textarea></div>
+      <div class="editor-field"><label>标题</label><input value="${escHtml(p.title)}" onchange="editorData.projects[${i}].title=this.value;triggerAutoSave()"></div>
+      <div class="editor-field"><label>日期</label><input value="${escHtml(p.date)}" onchange="editorData.projects[${i}].date=this.value;triggerAutoSave()"></div>
+      <div class="editor-field"><label>描述</label><textarea rows="2" onchange="editorData.projects[${i}].desc=this.value;triggerAutoSave()">${escHtml(p.desc)}</textarea></div>
       <div class="editor-field">
         <label>标签（逗号分隔）</label>
-        <input value="${(p.tags||[]).join('，')}" onchange="editorData.projects[${i}].tags=this.value.split(/[,，]/).map(t=>t.trim()).filter(Boolean)">
+        <input value="${(p.tags||[]).join('，')}" onchange="editorData.projects[${i}].tags=this.value.split(/[,，]/).map(t=>t.trim()).filter(Boolean);triggerAutoSave()">
+      </div>
+      <div class="editor-field"><label>项目链接</label><input value="${escHtml(p.url||'')}" onchange="editorData.projects[${i}].url=this.value;triggerAutoSave()" placeholder="https://github.com/..."></div>
+      <div class="editor-field"><label>截图</label>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" type="button" onclick="editorProjectImage(${i})">📷 上传截图</button>
+          ${p.image ? `<span style="font-size:13px;color:var(--text-muted)">已上传</span><button class="btn btn-outline btn-sm" type="button" onclick="editorData.projects[${i}].image='';renderEditorProjects();showToast('截图已移除')">✕ 移除</button>` : ''}
+        </div>
       </div>
     </div>
   `).join('');
@@ -979,7 +1009,78 @@ function removeEditorContact(i) {
   renderEditorContacts();
 }
 
+function showImageLightbox(src) {
+  const lb = document.getElementById('imgLightbox');
+  lb.innerHTML = '<img src="' + src + '" alt="项目截图">';
+  lb.classList.add('show');
+}
+
+function editorProjectImage(idx) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5*1024*1024) { showToast('图片太大，请压缩到 5MB 以内'); return; }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxSize = 1200;
+        let w = img.width, h = img.height;
+        if (w > h) { if (w > maxSize) { h = h*maxSize/w; w = maxSize; } } else { if (h > maxSize) { w = w*maxSize/h; h = maxSize; } }
+        canvas.width = Math.round(w); canvas.height = Math.round(h);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        editorData.projects[idx].image = canvas.toDataURL('image/webp', 0.8);
+        renderEditorProjects();
+        triggerAutoSave();
+        showToast('截图已添加 ✓');
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+// Auto-save: debounced localStorage write
+let autoSaveTimer = null;
+function triggerAutoSave() {
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => {
+    if (editorData) {
+      saveContent(editorData);
+    }
+  }, 1000);
+}
+
+function setupAutoSave() {
+  const body = document.getElementById('editorBody');
+  if (window._autoSaveHandler) {
+    body.removeEventListener('input', window._autoSaveHandler);
+    body.removeEventListener('change', window._autoSaveHandler);
+  }
+  window._autoSaveHandler = (e) => {
+    if (e.target.classList.contains('editor-skill-input')) return;
+    triggerAutoSave();
+  };
+  body.addEventListener('input', window._autoSaveHandler);
+  body.addEventListener('change', window._autoSaveHandler);
+}
+
+// Keyboard shortcuts for editor
+document.addEventListener('keydown', (e) => {
+  const editor = document.getElementById('editorOverlay');
+  if (!editor.classList.contains('show')) return;
+  if (e.key === 'Escape') { closeEditor(); e.preventDefault(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveEditor(); }
+});
+
 function saveEditor() {
+  clearTimeout(autoSaveTimer);
   const d = editorData;
   d.name = document.getElementById('e_name').value.trim();
   d.tagline = document.getElementById('e_tagline').value.trim();
