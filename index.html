@@ -426,6 +426,18 @@
     color:var(--accent); font-family:inherit; transition:all .15s;
   }
   .editor-add-btn:hover { background:var(--accent-light); }
+  
+  /* Drag & Drop */
+  .editor-array-item .drag-handle {
+    cursor:grab; color:var(--text-muted); font-size:16px;
+    user-select:none; padding:0 6px 0 2px;
+  }
+  .editor-array-item .drag-handle:hover { color:var(--text-secondary); }
+  .editor-array-item.dragging { opacity:.4; }
+  .editor-array-item.drag-over {
+    border-color:var(--accent) !important;
+    box-shadow:0 0 0 2px var(--accent-glow);
+  }
   .editor-footer {
     padding:16px 24px; border-top:1px solid var(--border);
     background:var(--card); display:flex; gap:10px; justify-content:flex-end; flex-shrink:0;
@@ -909,6 +921,9 @@ function populateEditor() {
   renderEditorExperiences();
   renderEditorContacts();
   setupAutoSave();
+  makeSortable('e_projectsList', function() { return editorData.projects; }, renderEditorProjects);
+  makeSortable('e_experiencesList', function() { return editorData.experiences; }, renderEditorExperiences);
+  makeSortable('e_contactsList', function() { return editorData.contacts; }, renderEditorContacts);
 }
 
 let dragSkillIdx = null;
@@ -984,9 +999,9 @@ function removeEditorSkill(i) {
 
 function renderEditorProjects() {
   document.getElementById('e_projectsList').innerHTML = editorData.projects.map((p, i) => `
-    <div class="editor-array-item">
+    <div class="editor-array-item" draggable="true">
       <div class="editor-array-item-header">
-        <span class="item-label">项目 ${i+1}</span>
+        <span><span class="drag-handle">⠿</span><span class="item-label">项目 ${i+1}</span></span>
         <button class="item-remove" onclick="removeEditorProject(${i})">🗑️</button>
       </div>
       <div class="editor-field"><label>标题</label><input value="${escHtml(p.title)}" onchange="editorData.projects[${i}].title=this.value;triggerAutoSave()"></div>
@@ -1032,9 +1047,9 @@ function toggleDetail(btn) {
 
 function renderEditorExperiences() {
   document.getElementById('e_experiencesList').innerHTML = editorData.experiences.map((e, i) => `
-    <div class="editor-array-item">
+    <div class="editor-array-item" draggable="true">
       <div class="editor-array-item-header">
-        <span class="item-label">经历 ${i+1}</span>
+        <span><span class="drag-handle">⠿</span><span class="item-label">经历 ${i+1}</span></span>
         <button class="item-remove" onclick="removeEditorExperience(${i})">🗑️</button>
       </div>
       <div class="editor-field"><label>时间</label><input value="${escHtml(e.date)}" onchange="editorData.experiences[${i}].date=this.value;triggerAutoSave()"></div>
@@ -1057,9 +1072,9 @@ function removeEditorExperience(i) {
 
 function renderEditorContacts() {
   document.getElementById('e_contactsList').innerHTML = editorData.contacts.map((c, i) => `
-    <div class="editor-array-item">
+    <div class="editor-array-item" draggable="true">
       <div class="editor-array-item-header">
-        <span class="item-label">联系 ${i+1}</span>
+        <span><span class="drag-handle">⠿</span><span class="item-label">联系 ${i+1}</span></span>
         <button class="item-remove" onclick="removeEditorContact(${i})">🗑️</button>
       </div>
       <div class="editor-field"><label>图标（emoji）</label><input value="${c.icon||''}" onchange="editorData.contacts[${i}].icon=this.value"></div>
@@ -1145,6 +1160,51 @@ function setupAutoSave() {
   };
   body.addEventListener('input', window._autoSaveHandler);
   body.addEventListener('change', window._autoSaveHandler);
+}
+
+// Drag & Drop sortable
+function makeSortable(containerId, getArr, renderFn) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  container.addEventListener('dragstart', function(e) {
+    const item = e.target.closest('.editor-array-item');
+    if (!item || e.target.closest('.item-remove')) return;
+    item.dataset.dragIdx = Array.from(container.children).indexOf(item);
+    item.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  
+  container.addEventListener('dragend', function(e) {
+    const item = e.target.closest('.editor-array-item');
+    if (item) item.classList.remove('dragging');
+    container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+  });
+  
+  container.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    const target = e.target.closest('.editor-array-item');
+    if (!target || target.classList.contains('dragging')) return;
+    container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+    target.classList.add('drag-over');
+    e.dataTransfer.dropEffect = 'move';
+  });
+  
+  container.addEventListener('drop', function(e) {
+    e.preventDefault();
+    const target = e.target.closest('.editor-array-item');
+    const srcIdx = container.querySelector('.dragging');
+    if (!target || !srcIdx) return;
+    const fromIdx = parseInt(srcIdx.dataset.dragIdx);
+    const toIdx = Array.from(container.children).indexOf(target);
+    if (fromIdx === toIdx) return;
+    
+    const arr = getArr();
+    if (!arr || fromIdx >= arr.length || toIdx >= arr.length) return;
+    const item = arr.splice(fromIdx, 1)[0];
+    arr.splice(toIdx, 0, item);
+    renderFn();
+  });
 }
 
 // Keyboard shortcuts for editor
