@@ -15,6 +15,9 @@
 <meta name="twitter:description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。">
 <meta name="twitter:image" content="https://xyz-lly.github.io/assets/avatar.jpg" id="twImage">
 <meta name="theme-color" content="#2563eb">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <style>
   /* ===== Variables ===== */
   :root {
@@ -109,9 +112,15 @@
     padding: 6px 14px; border-radius: 6px;
     font-size: 14px; color: var(--text-secondary);
     transition: all .15s; text-decoration: none;
+    position: relative;
   }
   nav .nav-links a:hover { color:var(--text); background:var(--accent-light); }
   nav .nav-links a.active { color:var(--accent); font-weight:500; }
+  nav .nav-links a.active::after {
+    content:''; position:absolute; left:50%; bottom:2px; transform:translateX(-50%);
+    width:16px; height:2px; border-radius:1px;
+    background:var(--accent);
+  }
   nav .nav-toggle {
     width:40px; height:40px; border-radius:8px;
     border:1px solid var(--border); background:transparent;
@@ -133,6 +142,21 @@
   }
 
   /* ===== Sections ===== */
+  /* ===== Scroll Reveal ===== */
+  .reveal { transition:opacity .55s ease, transform .55s ease; }
+  .reveal.hidden { opacity:0; transform:translateY(24px); }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  .reveal-delay-1 { transition-delay:.08s; }
+  .reveal-delay-2 { transition-delay:.16s; }
+  .reveal-delay-3 { transition-delay:.24s; }
+
+  /* ===== Progress Bar ===== */
+  .progress-bar {
+    position:fixed; top:0; left:0; z-index:101;
+    height:2px; background:linear-gradient(90deg,var(--avatar-bg-1),var(--avatar-bg-2));
+    width:0; transition:width .1s linear;
+  }
+
   section { padding:80px 0; scroll-margin-top:16px; }
   section:nth-child(even) { background:var(--bg-alt); }
   section h2 {
@@ -220,6 +244,12 @@
   .project-card p { font-size:14px; color:var(--text-secondary); margin-bottom:12px; line-height:1.7; }
   .project-card .tags { display:flex; flex-wrap:wrap; gap:6px; }
   .project-card .tags span { font-size:12px; padding:2px 10px; border-radius:12px; background:var(--accent-light); color:var(--accent); }
+  .project-card-img { margin-bottom:12px; border-radius:8px; overflow:hidden; cursor:pointer; }
+  .project-card-img img { width:100%; height:180px; object-fit:cover; transition:transform .3s; }
+  .project-card-img img:hover { transform:scale(1.03); }
+  .project-card-links { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .project-card-links a { font-size:13px; padding:4px 12px; border-radius:6px; border:1px solid var(--border); color:var(--accent); text-decoration:none; transition:all .15s; }
+  .project-card-links a:hover { background:var(--accent-light); border-color:var(--accent); }
 
   .timeline { position:relative; padding-left:26px; }
   .timeline::before { content:''; position:absolute; left:0; top:6px; bottom:6px; width:2px; background:var(--border); }
@@ -232,6 +262,28 @@
   .timeline-item .date { font-size:13px; color:var(--text-muted); margin-bottom:2px; }
   .timeline-item h4 { font-size:16px; margin-bottom:2px; }
   .timeline-item .desc { font-size:14px; color:var(--text-secondary); }
+  .timeline-item .detail-toggle {
+    font-size:13px; color:var(--accent); cursor:pointer;
+    background:none; border:none; padding:4px 0; font-family:inherit;
+    transition:color .15s;
+  }
+  .timeline-item .detail-toggle:hover { color:var(--accent-hover); }
+  .timeline-item .detail-content {
+    font-size:14px; color:var(--text-secondary); line-height:1.8;
+    max-height:0; overflow:hidden; opacity:0; visibility:hidden;
+    padding:0 0 0 12px; border-left:2px solid var(--accent-light);
+    transition:max-height .35s ease, opacity .3s ease, visibility .3s ease;
+    margin:0;
+  }
+  .timeline-item .detail-content.open {
+    max-height:600px; opacity:1; visibility:visible;
+    margin-top:8px; padding-top:2px; padding-bottom:2px;
+  }
+  .timeline-item .detail-content ul { list-style:none; padding:0; margin:0; }
+  .timeline-item .detail-content li { padding:2px 0 2px 14px; position:relative; }
+  .timeline-item .detail-content li::before {
+    content:'\2022'; position:absolute; left:0; color:var(--accent); font-weight:bold;
+  }
 
   .resume-box {
     background:var(--card); border:1px solid var(--border);
@@ -374,6 +426,18 @@
     color:var(--accent); font-family:inherit; transition:all .15s;
   }
   .editor-add-btn:hover { background:var(--accent-light); }
+  
+  /* Drag & Drop */
+  .editor-array-item .drag-handle {
+    cursor:grab; color:var(--text-muted); font-size:16px;
+    user-select:none; padding:0 6px 0 2px;
+  }
+  .editor-array-item .drag-handle:hover { color:var(--text-secondary); }
+  .editor-array-item.dragging { opacity:.4; }
+  .editor-array-item.drag-over {
+    border-color:var(--accent) !important;
+    box-shadow:0 0 0 2px var(--accent-glow);
+  }
   .editor-footer {
     padding:16px 24px; border-top:1px solid var(--border);
     background:var(--card); display:flex; gap:10px; justify-content:flex-end; flex-shrink:0;
@@ -390,7 +454,53 @@
 
   footer { text-align:center; padding:48px 24px 80px; font-size:13px; color:var(--text-muted); }
 
-  .back-top {
+  /* ===== Editor Field Spacing ===== */
+.editor-array-item {
+  background:var(--bg-alt); border-radius:var(--radius-sm);
+  padding:16px; margin-bottom:12px;
+  border:1px solid var(--border);
+}
+.editor-array-item-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:10px; padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+.editor-array-item-header .item-label {
+  font-size:14px; font-weight:600; color:var(--text);
+}
+.editor-field { margin-bottom:12px; }
+.editor-field:last-child { margin-bottom:0; }
+.editor-field label {
+  display:block; font-size:12px; color:var(--text-muted);
+  margin-bottom:4px; font-weight:500;
+}
+.editor-field input,
+.editor-field textarea,
+.editor-field select {
+  width:100%; padding:8px 10px;
+  border:1px solid var(--border); border-radius:6px;
+  background:var(--card); color:var(--text);
+  font-size:14px; font-family:inherit;
+  transition:border-color .15s;
+}
+.editor-field input:focus,
+.editor-field textarea:focus {
+  outline:none; border-color:var(--accent);
+  box-shadow:0 0 0 2px var(--accent-glow);
+}
+
+.img-lightbox {
+  display:none; position:fixed; inset:0; z-index:250;
+  background:rgba(0,0,0,0.85); align-items:center; justify-content:center;
+  padding:40px; cursor:zoom-out;
+}
+.img-lightbox.show { display:flex; }
+.img-lightbox img {
+  max-width:100%; max-height:90vh; border-radius:8px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.4);
+}
+
+.back-top {
     position:fixed; right:24px; bottom:88px; z-index:80;
     width:40px; height:40px; border-radius:50%;
     border:1px solid var(--border); background:var(--card);
@@ -421,6 +531,8 @@
 </style>
 </head>
 <body>
+
+<div class="progress-bar" id="progressBar"></div>
 
 <!-- ===== Navigation ===== -->
 <nav id="navbar" role="navigation">
@@ -460,7 +572,7 @@
 </section>
 
 <!-- ===== 关于 ===== -->
-<section id="about">
+<section id="about" class="reveal">
   <div class="section-inner">
     <h2>👤 关于我</h2>
     <p class="about-text" id="aboutText">机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。</p>
@@ -468,7 +580,7 @@
 </section>
 
 <!-- ===== 技能 ===== -->
-<section id="skills">
+<section id="skills" class="reveal">
   <div class="section-inner">
     <h2>🛠️ 技能</h2>
     <div class="skills" id="skillsContainer"></div>
@@ -476,7 +588,7 @@
 </section>
 
 <!-- ===== 项目 ===== -->
-<section id="projects">
+<section id="projects" class="reveal">
   <div class="section-inner">
     <h2>📦 项目</h2>
     <div id="projectsContainer"></div>
@@ -484,7 +596,7 @@
 </section>
 
 <!-- ===== 简历 ===== -->
-<section id="resume">
+<section id="resume" class="reveal">
   <div class="section-inner">
     <h2>📄 简历</h2>
     <div class="resume-box">
@@ -505,7 +617,7 @@
 </section>
 
 <!-- ===== 经历 ===== -->
-<section id="experience">
+<section id="experience" class="reveal">
   <div class="section-inner">
     <h2>📋 经历</h2>
     <div class="timeline" id="timelineContainer"></div>
@@ -513,7 +625,7 @@
 </section>
 
 <!-- ===== 联系 ===== -->
-<section id="contact">
+<section id="contact" class="reveal">
   <div class="section-inner">
     <h2>📬 联系</h2>
     <div class="contact" id="contactContainer"></div>
@@ -645,6 +757,7 @@
 <input type="file" id="avatarInput" accept="image/*" style="display:none">
 <input type="file" id="resumeInput" accept=".pdf,application/pdf" style="display:none">
 <div class="toast" id="toast"></div>
+<div class="img-lightbox" id="imgLightbox" onclick="this.classList.remove('show')"></div>
 
 <script>
 // ====================================================================
@@ -688,7 +801,25 @@ function loadContent() {
   if (saved) {
     try { return JSON.parse(saved); } catch {}
   }
-  // First time: save defaults
+  return null; // Need to fetch or use default
+}
+
+async function loadContentAsync() {
+  // 1. Try localStorage first
+  const saved = localStorage.getItem(KEYS.content);
+  if (saved) {
+    try { return JSON.parse(saved); } catch {}
+  }
+  // 2. Try server (published content)
+  try {
+    const res = await fetch('assets/content.json?t=' + Date.now());
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem(KEYS.content, JSON.stringify(data));
+      return data;
+    }
+  } catch {}
+  // 3. Fallback to defaults
   localStorage.setItem(KEYS.content, JSON.stringify(DEFAULT_CONTENT));
   return DEFAULT_CONTENT;
 }
@@ -711,20 +842,26 @@ function renderContent(data) {
     `<span class="skill-tag">${escHtml(s)}</span>`
   ).join('');
   // Projects
-  document.getElementById('projectsContainer').innerHTML = data.projects.map((p, i) => `
-    <div class="project-card">
+  document.getElementById('projectsContainer').innerHTML = data.projects.map((p, i) => {
+    const hasImg = p.image && p.image.startsWith('data:');
+    const hasUrl = p.url && p.url.trim();
+    return `
+    <div class="project-card reveal reveal-delay-${Math.min(i,3)}">
+      ${hasImg ? `<div class="project-card-img"><img src="${p.image}" alt="${escHtml(p.title)}截图" onclick="event.stopPropagation();showImageLightbox('${p.image}')" loading="lazy"></div>` : ''}
       <h3>${escHtml(p.title)}</h3>
       <div class="meta">${escHtml(p.date)}</div>
       <p>${escHtml(p.desc)}</p>
       <div class="tags">${(p.tags||[]).map(t => `<span>${escHtml(t)}</span>`).join('')}</div>
+      ${hasUrl ? `<div class="project-card-links"><a href="${escHtml(p.url)}" target="_blank" rel="noopener">🔗 查看项目</a></div>` : ''}
     </div>
-  `).join('');
+  `}).join('');
   // Experiences
-  document.getElementById('timelineContainer').innerHTML = data.experiences.map(e => `
-    <div class="timeline-item">
+  document.getElementById('timelineContainer').innerHTML = data.experiences.map((e, i) => `
+    <div class="timeline-item reveal reveal-delay-${Math.min(i,3)}">
       <div class="date">${escHtml(e.date)}</div>
       <h4>${escHtml(e.title)}</h4>
       <p class="desc">${escHtml(e.desc)}</p>
+      ${e.detail ? `<button class="detail-toggle" onclick="toggleDetail(this)">▶ 展开详情</button><div class="detail-content">${formatDetail(e.detail)}</div>` : ''}
     </div>
   `).join('');
   // Contacts
@@ -740,6 +877,8 @@ function renderContent(data) {
       return `<a href="${escHtml(href)}">${c.icon || '🔗'} ${escHtml(c.label)}</a>`;
     }).join('');
   }
+  // Observe newly rendered reveal elements
+  initReveal();
 }
 
 function escHtml(s) {
@@ -754,7 +893,13 @@ function escHtml(s) {
 let editorData = null;
 
 function openEditor() {
-  editorData = JSON.parse(JSON.stringify(loadContent()));
+  const saved = localStorage.getItem(KEYS.content);
+  if (saved) {
+    try { editorData = JSON.parse(saved); }
+    catch { editorData = JSON.parse(JSON.stringify(DEFAULT_CONTENT)); }
+  } else {
+    editorData = JSON.parse(JSON.stringify(DEFAULT_CONTENT));
+  }
   populateEditor();
   document.getElementById('editorOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
@@ -763,6 +908,122 @@ function openEditor() {
 function closeEditor() {
   document.getElementById('editorOverlay').classList.remove('show');
   document.body.style.overflow = '';
+}
+
+
+// Editor array item drag (pointer events for desktop + mobile)
+var editorDragState = null;
+
+function editorDragStart(e, idx, containerId, arrName) {
+  var item = e.currentTarget;
+  editorDragState = { idx: idx, arr: editorData[arrName], containerId: containerId };
+  item.classList.add('dragging');
+  // For touch: prevent scrolling
+  if (e.type === 'touchstart') {
+    e.preventDefault();
+  }
+}
+
+function editorDragOver(e, idx) {
+  e.preventDefault();
+  var container = document.getElementById(editorDragState.containerId);
+  container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+  if (editorDragState && editorDragState.idx !== idx) {
+    e.currentTarget.classList.add('drag-over');
+  }
+}
+
+function editorDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  var container = document.getElementById(editorDragState ? editorDragState.containerId : '');
+  if (container) {
+    container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+  }
+}
+
+function editorDrop(e, idx) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (!editorDragState || editorDragState.idx === idx) return;
+  var arr = editorDragState.arr;
+  var from = editorDragState.idx;
+  var moved = arr.splice(from, 1)[0];
+  arr.splice(idx, 0, moved);
+  editorDragState = null;
+  if (arr === editorData.projects) renderEditorProjects();
+  else if (arr === editorData.experiences) renderEditorExperiences();
+  else if (arr === editorData.contacts) renderEditorContacts();
+  triggerAutoSave();
+}
+
+function initEditorDrag() {
+  // Touch drag support (mobile) - separate from HTML5 drag
+  document.querySelectorAll('#e_projectsList, #e_experiencesList, #e_contactsList').forEach(function(container) {
+    var touchState = null;
+    
+    container.addEventListener('touchstart', function(e) {
+      var handle = e.target.closest('.drag-handle');
+      if (!handle || e.target.closest('.item-remove')) return;
+      var item = handle.closest('.editor-array-item');
+      if (!item) return;
+      var touch = e.touches[0];
+      var items = Array.from(container.children);
+      touchState = {
+        item: item,
+        idx: items.indexOf(item),
+        startY: touch.clientY,
+        container: container,
+        moved: false
+      };
+      item.classList.add('dragging');
+      item.style.touchAction = 'none';
+    }, { passive: true });
+    
+    container.addEventListener('touchmove', function(e) {
+      if (!touchState) return;
+      e.preventDefault();
+      touchState.moved = true;
+      var touch = e.touches[0];
+      
+      // Find which item the finger is over
+      var target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (!target) return;
+      var dropTarget = target.closest('.editor-array-item');
+      if (!dropTarget || dropTarget === touchState.item) return;
+      
+      container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+      dropTarget.classList.add('drag-over');
+    }, { passive: false });
+    
+    container.addEventListener('touchend', function(e) {
+      if (!touchState) return;
+      touchState.item.classList.remove('dragging');
+      touchState.item.style.touchAction = '';
+      container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+      
+      if (touchState.moved) {
+        var dropTarget = container.querySelector('.drag-over');
+        if (dropTarget) {
+          var fromIdx = touchState.idx;
+          var toIdx = Array.from(container.children).indexOf(dropTarget);
+          if (fromIdx !== toIdx && fromIdx >= 0 && toIdx >= 0) {
+            var arr = null;
+            var renderFn = null;
+            if (container.id === 'e_projectsList') { arr = editorData.projects; renderFn = renderEditorProjects; }
+            else if (container.id === 'e_experiencesList') { arr = editorData.experiences; renderFn = renderEditorExperiences; }
+            else if (container.id === 'e_contactsList') { arr = editorData.contacts; renderFn = renderEditorContacts; }
+            if (arr && fromIdx < arr.length && toIdx < arr.length) {
+              var item = arr.splice(fromIdx, 1)[0];
+              arr.splice(toIdx, 0, item);
+              renderFn();
+              triggerAutoSave();
+            }
+          }
+        }
+      }
+      touchState = null;
+    });
+  });
 }
 
 function populateEditor() {
@@ -775,6 +1036,9 @@ function populateEditor() {
   renderEditorProjects();
   renderEditorExperiences();
   renderEditorContacts();
+  setupAutoSave();
+  initEditorDrag();
+
 }
 
 let dragSkillIdx = null;
@@ -823,11 +1087,24 @@ function onSkillDrop(e, idx) {
 }
 
 function addEditorSkill() {
-  const s = prompt('输入新技能名称');
-  if (s && s.trim()) {
-    editorData.skills.push(s.trim());
-    renderEditorSkills();
-  }
+  const container = document.getElementById('e_skillsList');
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = '输入技能名称…';
+  input.className = 'editor-skill-input';
+  input.style.cssText = 'width:auto;min-width:140px;padding:6px 12px;border-radius:14px;border:1px solid var(--accent);background:var(--card);color:var(--text);font-size:13px;outline:none;font-family:inherit;';
+  container.appendChild(input);
+  input.focus();
+  const commit = () => {
+    const val = input.value.trim();
+    if (val) { editorData.skills.push(val); renderEditorSkills(); }
+    else input.remove();
+  };
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { input.blur(); }
+    if (e.key === 'Escape') { input.remove(); }
+  });
 }
 
 function removeEditorSkill(i) {
@@ -837,17 +1114,28 @@ function removeEditorSkill(i) {
 
 function renderEditorProjects() {
   document.getElementById('e_projectsList').innerHTML = editorData.projects.map((p, i) => `
-    <div class="editor-array-item">
+    <div class="editor-array-item" draggable="true"
+        ondragstart="editorDragStart(event, ${i}, 'e_projectsList', 'projects')"
+        ondragover="editorDragOver(event, ${i})"
+        ondragend="editorDragEnd(event)"
+        ondrop="editorDrop(event, ${i})">
       <div class="editor-array-item-header">
-        <span class="item-label">项目 ${i+1}</span>
+        <span><span class="drag-handle">⢿</span><span class="item-label">项目 ${i+1}</span></span>
         <button class="item-remove" onclick="removeEditorProject(${i})">🗑️</button>
       </div>
-      <div class="editor-field"><label>标题</label><input value="${escHtml(p.title)}" onchange="editorData.projects[${i}].title=this.value"></div>
-      <div class="editor-field"><label>日期</label><input value="${escHtml(p.date)}" onchange="editorData.projects[${i}].date=this.value"></div>
-      <div class="editor-field"><label>描述</label><textarea rows="2" onchange="editorData.projects[${i}].desc=this.value">${escHtml(p.desc)}</textarea></div>
+      <div class="editor-field"><label>标题</label><input value="${escHtml(p.title)}" onchange="editorData.projects[${i}].title=this.value;triggerAutoSave()"></div>
+      <div class="editor-field"><label>日期</label><input value="${escHtml(p.date)}" onchange="editorData.projects[${i}].date=this.value;triggerAutoSave()"></div>
+      <div class="editor-field"><label>描述</label><textarea rows="2" onchange="editorData.projects[${i}].desc=this.value;triggerAutoSave()">${escHtml(p.desc)}</textarea></div>
       <div class="editor-field">
         <label>标签（逗号分隔）</label>
-        <input value="${(p.tags||[]).join('，')}" onchange="editorData.projects[${i}].tags=this.value.split(/[,，]/).map(t=>t.trim()).filter(Boolean)">
+        <input value="${(p.tags||[]).join('，')}" onchange="editorData.projects[${i}].tags=this.value.split(/[,，]/).map(t=>t.trim()).filter(Boolean);triggerAutoSave()">
+      </div>
+      <div class="editor-field"><label>项目链接</label><input value="${escHtml(p.url||'')}" onchange="editorData.projects[${i}].url=this.value;triggerAutoSave()" placeholder="https://github.com/..."></div>
+      <div class="editor-field"><label>截图</label>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" type="button" onclick="editorProjectImage(${i})">📷 上传截图</button>
+          ${p.image ? `<span style="font-size:13px;color:var(--text-muted)">已上传</span><button class="btn btn-outline btn-sm" type="button" onclick="editorData.projects[${i}].image='';renderEditorProjects();showToast('截图已移除')">✕ 移除</button>` : ''}
+        </div>
       </div>
     </div>
   `).join('');
@@ -863,22 +1151,40 @@ function removeEditorProject(i) {
   renderEditorProjects();
 }
 
+function formatDetail(text) {
+  if (!text) return '';
+  const lines = text.split('\n').filter(Boolean);
+  if (lines.length <= 1) return escHtml(text);
+  return '<ul>' + lines.map(l => `<li>${escHtml(l.trim())}</li>`).join('') + '</ul>';
+}
+
+function toggleDetail(btn) {
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
+  btn.textContent = content.classList.contains('open') ? '▼ 收起详情' : '▶ 展开详情';
+}
+
 function renderEditorExperiences() {
   document.getElementById('e_experiencesList').innerHTML = editorData.experiences.map((e, i) => `
-    <div class="editor-array-item">
+    <div class="editor-array-item" draggable="true"
+        ondragstart="editorDragStart(event, ${i}, 'e_experiencesList', 'experiences')"
+        ondragover="editorDragOver(event, ${i})"
+        ondragend="editorDragEnd(event)"
+        ondrop="editorDrop(event, ${i})">
       <div class="editor-array-item-header">
-        <span class="item-label">经历 ${i+1}</span>
+        <span><span class="drag-handle">⢿</span><span class="item-label">经历 ${i+1}</span></span>
         <button class="item-remove" onclick="removeEditorExperience(${i})">🗑️</button>
       </div>
-      <div class="editor-field"><label>时间</label><input value="${escHtml(e.date)}" onchange="editorData.experiences[${i}].date=this.value"></div>
-      <div class="editor-field"><label>标题</label><input value="${escHtml(e.title)}" onchange="editorData.experiences[${i}].title=this.value"></div>
-      <div class="editor-field"><label>描述</label><textarea rows="2" onchange="editorData.experiences[${i}].desc=this.value">${escHtml(e.desc)}</textarea></div>
+      <div class="editor-field"><label>时间</label><input value="${escHtml(e.date)}" onchange="editorData.experiences[${i}].date=this.value;triggerAutoSave()"></div>
+      <div class="editor-field"><label>标题</label><input value="${escHtml(e.title)}" onchange="editorData.experiences[${i}].title=this.value;triggerAutoSave()"></div>
+      <div class="editor-field"><label>简述</label><textarea rows="2" onchange="editorData.experiences[${i}].desc=this.value;triggerAutoSave()">${escHtml(e.desc)}</textarea></div>
+      <div class="editor-field"><label>详细描述（每行一条，自动转列表）</label><textarea rows="4" onchange="editorData.experiences[${i}].detail=this.value;triggerAutoSave()" placeholder="留空则不显示展开详情">${escHtml(e.detail||'')}</textarea></div>
     </div>
   `).join('');
 }
 
 function addEditorExperience() {
-  editorData.experiences.push({ date:'', title:'新经历', desc:'' });
+  editorData.experiences.push({ date:'', title:'新经历', desc:'', detail:'' });
   renderEditorExperiences();
 }
 
@@ -889,9 +1195,13 @@ function removeEditorExperience(i) {
 
 function renderEditorContacts() {
   document.getElementById('e_contactsList').innerHTML = editorData.contacts.map((c, i) => `
-    <div class="editor-array-item">
+    <div class="editor-array-item" draggable="true"
+        ondragstart="editorDragStart(event, ${i}, 'e_contactsList', 'contacts')"
+        ondragover="editorDragOver(event, ${i})"
+        ondragend="editorDragEnd(event)"
+        ondrop="editorDrop(event, ${i})">
       <div class="editor-array-item-header">
-        <span class="item-label">联系 ${i+1}</span>
+        <span><span class="drag-handle">⢿</span><span class="item-label">联系 ${i+1}</span></span>
         <button class="item-remove" onclick="removeEditorContact(${i})">🗑️</button>
       </div>
       <div class="editor-field"><label>图标（emoji）</label><input value="${c.icon||''}" onchange="editorData.contacts[${i}].icon=this.value"></div>
@@ -917,7 +1227,80 @@ function removeEditorContact(i) {
   renderEditorContacts();
 }
 
+function showImageLightbox(src) {
+  const lb = document.getElementById('imgLightbox');
+  lb.innerHTML = '<img src="' + src + '" alt="项目截图">';
+  lb.classList.add('show');
+}
+
+function editorProjectImage(idx) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5*1024*1024) { showToast('图片太大，请压缩到 5MB 以内'); return; }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxSize = 1200;
+        let w = img.width, h = img.height;
+        if (w > h) { if (w > maxSize) { h = h*maxSize/w; w = maxSize; } } else { if (h > maxSize) { w = w*maxSize/h; h = maxSize; } }
+        canvas.width = Math.round(w); canvas.height = Math.round(h);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        editorData.projects[idx].image = canvas.toDataURL('image/webp', 0.8);
+        renderEditorProjects();
+        triggerAutoSave();
+        showToast('截图已添加 ✓');
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+// Auto-save: debounced localStorage write
+let autoSaveTimer = null;
+function triggerAutoSave() {
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => {
+    if (editorData) {
+      saveContent(editorData);
+    }
+  }, 1000);
+}
+
+function setupAutoSave() {
+  const body = document.getElementById('editorBody');
+  if (window._autoSaveHandler) {
+    body.removeEventListener('input', window._autoSaveHandler);
+    body.removeEventListener('change', window._autoSaveHandler);
+  }
+  window._autoSaveHandler = (e) => {
+    if (e.target.classList.contains('editor-skill-input')) return;
+    triggerAutoSave();
+  };
+  body.addEventListener('input', window._autoSaveHandler);
+  body.addEventListener('change', window._autoSaveHandler);
+}
+
+
+
+// Keyboard shortcuts for editor
+document.addEventListener('keydown', (e) => {
+  const editor = document.getElementById('editorOverlay');
+  if (!editor.classList.contains('show')) return;
+  if (e.key === 'Escape') { closeEditor(); e.preventDefault(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveEditor(); }
+});
+
 function saveEditor() {
+  clearTimeout(autoSaveTimer);
   const d = editorData;
   d.name = document.getElementById('e_name').value.trim();
   d.tagline = document.getElementById('e_tagline').value.trim();
@@ -1076,8 +1459,14 @@ document.getElementById('avatarInput').addEventListener('change', e => { if (e.t
 function updateResumeUI(dataUrl) {
   const btn = document.getElementById('resumeDownloadBtn');
   btn.href = dataUrl; btn.classList.remove('disabled');
-  const raw = atob(dataUrl.split(',')[1]); const kb = (raw.length/1024).toFixed(1);
-  document.getElementById('resumeStatus').textContent = `已加载 · ${kb > 1024 ? (kb/1024).toFixed(1)+' MB' : kb+' KB'}`;
+  // Size display with safe atob
+  let sizeStr = '';
+  try {
+    const raw = atob(dataUrl.split(',')[1]);
+    const kb = (raw.length/1024).toFixed(1);
+    sizeStr = kb > 1024 ? (kb/1024).toFixed(1)+' MB' : kb+' KB';
+  } catch { sizeStr = ''; }
+  document.getElementById('resumeStatus').textContent = sizeStr ? `已加载 · ${sizeStr}` : '已加载';
   document.getElementById('resumePreview').innerHTML = `<embed src="${dataUrl}" type="application/pdf">`;
 }
 function initResume() {
@@ -1169,14 +1558,55 @@ async function ghUpload(token, path, dataUrl, message, headers) {
 }
 
 // ====================================================================
+//  滚动动画 + 进度条
+// ====================================================================
+function initReveal() {
+  document.querySelectorAll('.reveal:not(.observed)').forEach(el => {
+    el.classList.add('observed', 'hidden');
+    if (revealObserver) {
+      revealObserver.observe(el);
+      // Check if already in viewport (above threshold)
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 20) {
+        el.classList.remove('hidden');
+        el.classList.add('visible');
+        revealObserver.unobserve(el);
+      }
+    }
+  });
+}
+
+let revealObserver = null;
+(function initScrollEffects() {
+  revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.remove('hidden');
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+
+  // Progress bar
+  const bar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0';
+  }, { passive: true });
+})();
+
+// ====================================================================
 //  初始化
 // ====================================================================
-const pageData = loadContent();
-renderContent(pageData);
-initAvatar();
-initResume();
-updatePublishBtn();
-updateTokenStatus();
+// 缓存爆破标记 - v7.1
+loadContentAsync().then(pageData => {
+  renderContent(pageData);
+  initAvatar();
+  initResume();
+  updatePublishBtn();
+  updateTokenStatus();
+});
 </script>
 
 </body>
