@@ -157,7 +157,7 @@
     width:0; transition:width .1s linear;
   }
 
-  section { padding:80px 0; scroll-margin-top:16px; }
+  section { padding:80px 0; scroll-margin-top:72px; }
   section:nth-child(even) { background:var(--bg-alt); }
   section h2 {
     font-size:20px; margin-bottom:24px; padding-bottom:10px;
@@ -1167,6 +1167,7 @@ function makeSortable(containerId, getArr, renderFn) {
   const container = document.getElementById(containerId);
   if (!container) return;
   
+  // Mouse drag
   container.addEventListener('dragstart', function(e) {
     const item = e.target.closest('.editor-array-item');
     if (!item || e.target.closest('.item-remove')) return;
@@ -1204,6 +1205,54 @@ function makeSortable(containerId, getArr, renderFn) {
     const item = arr.splice(fromIdx, 1)[0];
     arr.splice(toIdx, 0, item);
     renderFn();
+  });
+  
+  // Touch drag (mobile)
+  var touchState = null;
+  container.addEventListener('touchstart', function(e) {
+    const item = e.target.closest('.editor-array-item');
+    if (!item || e.target.closest('.item-remove')) return;
+    if (!e.target.closest('.drag-handle')) return; // Only on handle
+    var touch = e.touches[0];
+    touchState = { item: item, idx: Array.from(container.children).indexOf(item), startY: touch.clientY, moved: false };
+    item.dataset.dragIdx = touchState.idx;
+    item.classList.add('dragging');
+  }, { passive: true });
+  
+  container.addEventListener('touchmove', function(e) {
+    if (!touchState) return;
+    e.preventDefault();
+    touchState.moved = true;
+    var touch = e.touches[0];
+    var target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (!target) return;
+    var dropTarget = target.closest('.editor-array-item');
+    if (!dropTarget || dropTarget === touchState.item) return;
+    container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+    dropTarget.classList.add('drag-over');
+  }, { passive: false });
+  
+  container.addEventListener('touchend', function(e) {
+    if (!touchState) return;
+    touchState.item.classList.remove('dragging');
+    container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+    
+    if (touchState.moved) {
+      var target = container.querySelector('.drag-over');
+      if (target) {
+        var fromIdx = touchState.idx;
+        var toIdx = Array.from(container.children).indexOf(target);
+        if (fromIdx !== toIdx) {
+          var arr = getArr();
+          if (arr && fromIdx < arr.length && toIdx < arr.length) {
+            var item = arr.splice(fromIdx, 1)[0];
+            arr.splice(toIdx, 0, item);
+            renderFn();
+          }
+        }
+      }
+    }
+    touchState = null;
   });
 }
 
@@ -1280,6 +1329,13 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
       if (s.offsetTop <= scrollY && s.offsetTop + s.offsetHeight > scrollY) current = s.id;
     });
     anchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+    // Keep last section active when scrolled past bottom
+    if (!current && sections.length > 0) {
+      const last = sections[sections.length - 1];
+      if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 10) {
+        anchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + last.id));
+      }
+    }
   }
   window.addEventListener('scroll', updateActive, { passive: true });
   updateActive();
