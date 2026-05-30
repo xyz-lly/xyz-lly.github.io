@@ -430,7 +430,7 @@
   /* Drag & Drop */
   .editor-array-item .drag-handle {
     cursor:grab; color:var(--text-muted); font-size:16px;
-    user-select:none; touch-action:none; padding:0 6px 0 2px;
+    user-select:none; padding:0 6px 0 2px;
   }
   .editor-array-item .drag-handle:hover { color:var(--text-secondary); }
   .editor-array-item.dragging { opacity:.4; }
@@ -912,49 +912,118 @@ function closeEditor() {
 
 
 // Editor array item drag (pointer events for desktop + mobile)
-// Pointer event drag (desktop + mobile unified)
 var editorDragState = null;
 
-function editorPtrStart(e, idx, containerId, arrName) {
+function editorDragStart(e, idx, containerId, arrName) {
   var item = e.currentTarget;
-  item.setPointerCapture(e.pointerId);
   editorDragState = { idx: idx, arr: editorData[arrName], containerId: containerId };
   item.classList.add('dragging');
-  e.preventDefault();
+  // For touch: prevent scrolling
+  if (e.type === 'touchstart') {
+    e.preventDefault();
+  }
 }
 
-function editorPtrOver(e, idx) {
-  if (!editorDragState || editorDragState.idx === idx) return;
+function editorDragOver(e, idx) {
+  e.preventDefault();
   var container = document.getElementById(editorDragState.containerId);
   container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
-  e.currentTarget.classList.add('drag-over');
-  e.preventDefault();
+  if (editorDragState && editorDragState.idx !== idx) {
+    e.currentTarget.classList.add('drag-over');
+  }
 }
 
-function editorPtrEnd(e) {
-  if (!editorDragState) return;
+function editorDragEnd(e) {
   e.currentTarget.classList.remove('dragging');
-  var container = document.getElementById(editorDragState.containerId);
+  var container = document.getElementById(editorDragState ? editorDragState.containerId : '');
   if (container) {
     container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
-    var target = container.querySelector('.drag-over');
-    if (target) {
-      var fromIdx = editorDragState.idx;
-      var toIdx = Array.from(container.children).indexOf(target);
-      if (fromIdx !== toIdx) {
-        var arr = editorDragState.arr;
-        if (arr && fromIdx < arr.length && toIdx < arr.length) {
-          var item = arr.splice(fromIdx, 1)[0];
-          arr.splice(toIdx, 0, item);
-          if (arr === editorData.projects) renderEditorProjects();
-          else if (arr === editorData.experiences) renderEditorExperiences();
-          else renderEditorContacts();
-          triggerAutoSave();
+  }
+}
+
+function editorDrop(e, idx) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (!editorDragState || editorDragState.idx === idx) return;
+  var arr = editorDragState.arr;
+  var from = editorDragState.idx;
+  var moved = arr.splice(from, 1)[0];
+  arr.splice(idx, 0, moved);
+  editorDragState = null;
+  if (arr === editorData.projects) renderEditorProjects();
+  else if (arr === editorData.experiences) renderEditorExperiences();
+  else if (arr === editorData.contacts) renderEditorContacts();
+  triggerAutoSave();
+}
+
+function initEditorDrag() {
+  // Touch drag support (mobile) - separate from HTML5 drag
+  document.querySelectorAll('#e_projectsList, #e_experiencesList, #e_contactsList').forEach(function(container) {
+    var touchState = null;
+    
+    container.addEventListener('touchstart', function(e) {
+      var handle = e.target.closest('.drag-handle');
+      if (!handle || e.target.closest('.item-remove')) return;
+      var item = handle.closest('.editor-array-item');
+      if (!item) return;
+      var touch = e.touches[0];
+      var items = Array.from(container.children);
+      touchState = {
+        item: item,
+        idx: items.indexOf(item),
+        startY: touch.clientY,
+        container: container,
+        moved: false
+      };
+      item.classList.add('dragging');
+      item.style.touchAction = 'none';
+    }, { passive: true });
+    
+    container.addEventListener('touchmove', function(e) {
+      if (!touchState) return;
+      e.preventDefault();
+      touchState.moved = true;
+      var touch = e.touches[0];
+      
+      // Find which item the finger is over
+      var target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (!target) return;
+      var dropTarget = target.closest('.editor-array-item');
+      if (!dropTarget || dropTarget === touchState.item) return;
+      
+      container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+      dropTarget.classList.add('drag-over');
+    }, { passive: false });
+    
+    container.addEventListener('touchend', function(e) {
+      if (!touchState) return;
+      touchState.item.classList.remove('dragging');
+      touchState.item.style.touchAction = '';
+      container.querySelectorAll('.editor-array-item').forEach(function(el) { el.classList.remove('drag-over'); });
+      
+      if (touchState.moved) {
+        var dropTarget = container.querySelector('.drag-over');
+        if (dropTarget) {
+          var fromIdx = touchState.idx;
+          var toIdx = Array.from(container.children).indexOf(dropTarget);
+          if (fromIdx !== toIdx && fromIdx >= 0 && toIdx >= 0) {
+            var arr = null;
+            var renderFn = null;
+            if (container.id === 'e_projectsList') { arr = editorData.projects; renderFn = renderEditorProjects; }
+            else if (container.id === 'e_experiencesList') { arr = editorData.experiences; renderFn = renderEditorExperiences; }
+            else if (container.id === 'e_contactsList') { arr = editorData.contacts; renderFn = renderEditorContacts; }
+            if (arr && fromIdx < arr.length && toIdx < arr.length) {
+              var item = arr.splice(fromIdx, 1)[0];
+              arr.splice(toIdx, 0, item);
+              renderFn();
+              triggerAutoSave();
+            }
+          }
         }
       }
-    }
-  }
-  editorDragState = null;
+      touchState = null;
+    });
+  });
 }
 
 function populateEditor() {
@@ -968,7 +1037,7 @@ function populateEditor() {
   renderEditorExperiences();
   renderEditorContacts();
   setupAutoSave();
-
+  initEditorDrag();
 
 }
 
@@ -1045,10 +1114,11 @@ function removeEditorSkill(i) {
 
 function renderEditorProjects() {
   document.getElementById('e_projectsList').innerHTML = editorData.projects.map((p, i) => `
-    <div class="editor-array-item"
-        onpointerdown="editorPtrStart(event, ${i}, 'e_projectsList', 'projects')"
-        onpointermove="editorPtrOver(event, ${i})"
-        onpointerup="editorPtrEnd(event)">
+    <div class="editor-array-item" draggable="true"
+        ondragstart="editorDragStart(event, ${i}, 'e_projectsList', 'projects')"
+        ondragover="editorDragOver(event, ${i})"
+        ondragend="editorDragEnd(event)"
+        ondrop="editorDrop(event, ${i})">
       <div class="editor-array-item-header">
         <span><span class="drag-handle">⢿</span><span class="item-label">项目 ${i+1}</span></span>
         <button class="item-remove" onclick="removeEditorProject(${i})">🗑️</button>
@@ -1096,10 +1166,11 @@ function toggleDetail(btn) {
 
 function renderEditorExperiences() {
   document.getElementById('e_experiencesList').innerHTML = editorData.experiences.map((e, i) => `
-    <div class="editor-array-item"
-        onpointerdown="editorPtrStart(event, ${i}, 'e_experiencesList', 'experiences')"
-        onpointermove="editorPtrOver(event, ${i})"
-        onpointerup="editorPtrEnd(event)">
+    <div class="editor-array-item" draggable="true"
+        ondragstart="editorDragStart(event, ${i}, 'e_experiencesList', 'experiences')"
+        ondragover="editorDragOver(event, ${i})"
+        ondragend="editorDragEnd(event)"
+        ondrop="editorDrop(event, ${i})">
       <div class="editor-array-item-header">
         <span><span class="drag-handle">⢿</span><span class="item-label">经历 ${i+1}</span></span>
         <button class="item-remove" onclick="removeEditorExperience(${i})">🗑️</button>
@@ -1124,10 +1195,11 @@ function removeEditorExperience(i) {
 
 function renderEditorContacts() {
   document.getElementById('e_contactsList').innerHTML = editorData.contacts.map((c, i) => `
-    <div class="editor-array-item"
-        onpointerdown="editorPtrStart(event, ${i}, 'e_contactsList', 'contacts')"
-        onpointermove="editorPtrOver(event, ${i})"
-        onpointerup="editorPtrEnd(event)">
+    <div class="editor-array-item" draggable="true"
+        ondragstart="editorDragStart(event, ${i}, 'e_contactsList', 'contacts')"
+        ondragover="editorDragOver(event, ${i})"
+        ondragend="editorDragEnd(event)"
+        ondrop="editorDrop(event, ${i})">
       <div class="editor-array-item-header">
         <span><span class="drag-handle">⢿</span><span class="item-label">联系 ${i+1}</span></span>
         <button class="item-remove" onclick="removeEditorContact(${i})">🗑️</button>
