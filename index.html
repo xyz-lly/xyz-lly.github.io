@@ -204,11 +204,12 @@
   }
   .hero-pattern {
     background-image:
-      /* Dot grid pattern */
+      radial-gradient(ellipse 500px 300px at 20% 30%, var(--accent-light) 0%, transparent 60%),
+      radial-gradient(ellipse 400px 200px at 80% 70%, var(--accent-light) 0%, transparent 50%),
       radial-gradient(circle at 25% 25%, var(--accent) 1px, transparent 1px),
       radial-gradient(circle at 75% 75%, var(--accent) 1px, transparent 1px);
-    background-size: 60px 60px;
-    opacity: 0.08;
+    background-size: auto, auto, 60px 60px, 60px 60px;
+    opacity: 0.35;
   }
   .hero-pattern::before {
     content:''; position:absolute;
@@ -216,7 +217,7 @@
     width: 200px; height: 200px;
     border: 2px solid var(--accent);
     border-radius: 50%;
-    opacity: 0.08;
+    opacity: 0.15;
   }
   .hero-pattern::after {
     content:''; position:absolute;
@@ -224,7 +225,7 @@
     width: 150px; height: 150px;
     border: 1.5px solid var(--accent);
     border-radius: 50%;
-    opacity: 0.06;
+    opacity: 0.12;
   }
   #hero .container { position:relative; z-index:1; }
 
