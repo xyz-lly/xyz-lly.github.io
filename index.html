@@ -831,12 +831,7 @@ function loadContent() {
 }
 
 async function loadContentAsync() {
-  // 1. Try localStorage first
-  const saved = localStorage.getItem(KEYS.content);
-  if (saved) {
-    try { return JSON.parse(saved); } catch {}
-  }
-  // 2. Try server (published content)
+  // 1. Try server first (published content = source of truth)
   try {
     const res = await fetch('assets/content.json?t=' + Date.now());
     if (res.ok) {
@@ -845,6 +840,11 @@ async function loadContentAsync() {
       return data;
     }
   } catch {}
+  // 2. Fallback to localStorage (local edits / offline)
+  const saved = localStorage.getItem(KEYS.content);
+  if (saved) {
+    try { return JSON.parse(saved); } catch {}
+  }
   // 3. Fallback to defaults
   localStorage.setItem(KEYS.content, JSON.stringify(DEFAULT_CONTENT));
   return DEFAULT_CONTENT;
@@ -1292,7 +1292,7 @@ function renderEditorContacts() {
       </div>
       <div class="editor-field">
         <label>二维码（可选）</label>
-        ${c.image ? `<div style="display:flex;align-items:center;gap:10px;"><img src="${escHtml(c.image)}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer;" onclick="showImageLightbox('${escHtml(c.image)}')" title="点击放大">
+        ${c.image ? `<div style="display:flex;align-items:center;gap:10px;"><img src="${escHtml(c.image)}" style="width:60px;height:auto;max-height:80px;border-radius:8px;border:1px solid var(--border);cursor:pointer;" onclick="showImageLightbox('${escHtml(c.image)}')" title="点击放大">
           <button class="btn btn-sm btn-outline" onclick="editorData.contacts[${i}].image='';renderEditorContacts();triggerAutoSave()">删除</button></div>`
           : `<button class="btn btn-sm btn-outline" onclick="editorUploadContactImage(${i})">上传二维码</button>`}
       </div>
