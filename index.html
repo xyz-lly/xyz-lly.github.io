@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>林小虾 — 个人主页</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "林小虾",
+  "alternateName": "林",
+  "jobTitle": "机械设计工程师",
+  "description": "机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。",
+  "url": "https://xyz-lly.github.io",
+  "image": "https://xyz-lly.github.io/assets/avatar.jpg",
+  "knowsAbout": ["EMB制动系统", "花键传动", "机械设计", "专利分析", "AI工具应用", "知识管理"],
+  "sameAs": [
+    "https://github.com/xyz-lly"
+  ]
+}
+</script>
 <meta name="description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。">
 <meta property="og:title" content="林小虾 — 个人主页">
 <meta property="og:type" content="website">
@@ -160,20 +176,25 @@
     width:0; transition:width .1s linear;
   }
 
-  section { padding:80px 0; scroll-margin-top:16px; background-image:var(--bg-pattern); }
+  section { padding:72px 0; scroll-margin-top:16px; background-image:var(--bg-pattern); }
   section:nth-child(even) { background:var(--bg-alt); background-image:var(--bg-pattern); }
   section h2 {
-    font-size:20px; margin-bottom:24px; padding-bottom:10px;
-    border-bottom:2px solid var(--border);
-    display:flex; align-items:center; gap:8px;
+    font-size:18px; margin-bottom:24px; padding-bottom:0;
+    font-weight:600; letter-spacing:0.3px;
+    color:var(--text);
+  }
+  section h2::after {
+    content:''; display:block; width:24px; height:2px;
+    background:var(--accent); border-radius:1px; margin-top:8px;
   }
   .section-inner { max-width:760px; margin:0 auto; padding:0 24px; }
 
   /* ===== Hero ===== */
-  #hero { padding:100px 0 80px; text-align:center; }
+  #hero { padding:80px 0 64px; text-align:center; }
   #hero .avatar-wrapper {
     position:relative; width:110px; height:110px;
     margin:0 auto 28px; cursor:pointer; border-radius:50%;
+    box-shadow:0 8px 32px var(--accent-glow);
   }
   #hero .avatar-wrapper:hover .avatar-hover { opacity:1; }
   #hero .avatar-hover {
@@ -182,14 +203,6 @@
     color:#fff; font-size:26px; font-weight:600;
     opacity:0; transition:opacity .25s; pointer-events:none; backdrop-filter:blur(2px);
   }
-  #hero .avatar-ring {
-    position:absolute; inset:-4px; border-radius:50%;
-    background:linear-gradient(135deg,var(--avatar-bg-1),var(--avatar-bg-2),var(--avatar-bg-1));
-    animation:spin 6s linear infinite;
-    mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));
-    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));
-  }
-  @keyframes spin { to { transform:rotate(360deg); } }
   #hero .avatar {
     width:100%; height:100%; border-radius:50%;
     background:linear-gradient(135deg,var(--avatar-bg-1),var(--avatar-bg-2));
@@ -585,7 +598,7 @@
 <section id="hero">
   <div class="section-inner">
     <div class="avatar-wrapper" id="avatarWrapper" title="点击更换头像">
-      <div class="avatar-ring"></div>
+      
       <div class="avatar" id="avatarDisplay"><span id="avatarText">林</span></div>
       <div class="avatar-hover">📷</div>
     </div>
@@ -594,7 +607,7 @@
     <p class="hero-desc" id="heroDesc">设计过 EMB 卡钳，搭过 VLM 服务，写过专利交底书。相信好工具能让工程师少加班，好知识能让人少走弯路。</p>
     <div class="hero-actions">
       <a href="#resume" class="btn btn-primary" id="heroResumeBtn">📄 下载简历</a>
-      <a href="#contact" class="btn btn-outline">📬 联系我</a>
+      <a href="#contact" class="btn btn-outline">联系我</a>
     </div>
     <div class="scroll-hint"><span class="arrow">↓</span><span>向下滚动</span></div>
   </div>
@@ -603,7 +616,7 @@
 <!-- ===== 关于 ===== -->
 <section id="about" class="reveal">
   <div class="section-inner">
-    <h2>👤 关于我</h2>
+    <h2>关于我</h2>
     <p class="about-text" id="aboutText">机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。</p>
   </div>
 </section>
@@ -611,7 +624,7 @@
 <!-- ===== 技能 ===== -->
 <section id="skills" class="reveal">
   <div class="section-inner">
-    <h2>🛠️ 技能</h2>
+    <h2>技能</h2>
     <div class="skills" id="skillsContainer"></div>
   </div>
 </section>
@@ -627,7 +640,7 @@
 <!-- ===== 简历 ===== -->
 <section id="resume" class="reveal">
   <div class="section-inner">
-    <h2>📄 简历</h2>
+    <h2>简历</h2>
     <div class="resume-box">
       <div class="resume-info">
         <h3>我的简历</h3>
@@ -656,7 +669,7 @@
 <!-- ===== 联系 ===== -->
 <section id="contact" class="reveal">
   <div class="section-inner">
-    <h2>📬 联系</h2>
+    <h2>联系</h2>
     <div class="contact" id="contactContainer"></div>
   </div>
 </section>
@@ -668,7 +681,7 @@
 <!-- ===== Admin Bar ===== -->
 <div class="admin-bar" id="adminBar">
   <button class="admin-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">💬 联系</button>
-  <button class="admin-btn" onclick="document.getElementById('resumeInput').click()">📄 简历</button>
+  <button class="admin-btn" onclick="document.getElementById('resumeInput').click()">简历</button>
   <button class="admin-btn" onclick="openEditor()">✏️ 内容</button>
   <div class="admin-divider"></div>
   <button class="admin-btn" onclick="showTokenConfig()" id="tokenStatusBtn">🔑 Token</button>
@@ -722,7 +735,7 @@
 
       <!-- Skills -->
       <div class="editor-section">
-        <h4>🛠️ 技能</h4>
+        <h4>技能</h4>
         <div id="e_skillsList"></div>
         <button class="editor-add-btn" onclick="addEditorSkill()">+ 添加技能</button>
       </div>
@@ -743,7 +756,7 @@
 
       <!-- Contacts -->
       <div class="editor-section">
-        <h4>📬 联系方式</h4>
+        <h4>联系方式</h4>
         <div id="e_contactsList"></div>
         <button class="editor-add-btn" onclick="addEditorContact()">+ 添加联系</button>
       </div>
@@ -843,7 +856,10 @@ async function loadContentAsync() {
       localStorage.setItem(KEYS.content, JSON.stringify(data));
       return data;
     }
-  } catch {}
+  } catch {
+    // Silent fallback: network unavailable on first load is normal
+    window._isOffline = true;
+  }
   // 2. Fallback to localStorage (local edits / offline)
   const saved = localStorage.getItem(KEYS.content);
   if (saved) {
@@ -931,7 +947,7 @@ function showContactCard(jsonStr) {
       <div style="font-size:36px;margin-bottom:10px;">${c.icon}</div>
       <h3 style="margin-bottom:4px;">${escHtml(c.label)}</h3>
       <p style="font-size:15px;color:var(--accent);word-break:break-all;margin:12px 0 24px;padding:0 4px;">${escHtml(c.value)}</p>
-      <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${escHtml(c.value)}').then(()=>{showToast('✅ 已复制');closeContactCard()})">📋 复制</button>
+      <button class="btn btn-primary" onclick="copyToClipboard('${escHtml(c.value)}')">📋 复制</button>
       ${c.image ? `<div style="margin-top:24px;"><img src="${escHtml(c.image)}" style="display:block;max-width:200px;max-height:300px;border-radius:12px;border:1px solid var(--border);margin:0 auto;"></div>` : ''}
       <div style="margin-top:24px;"><button class="btn btn-outline btn-sm" onclick="closeContactCard()">关闭</button></div>
     </div>
@@ -950,6 +966,9 @@ function closeContactCard() {
 let editorData = null;
 
 function openEditor() {
+  if (window._isOffline) {
+    if (!confirm('当前处于离线状态，编辑内容不会自动保存到服务器。发布前需要联网。是否继续？')) return;
+  }
   const saved = localStorage.getItem(KEYS.content);
   if (saved) {
     try { editorData = JSON.parse(saved); }
@@ -1315,32 +1334,37 @@ function removeEditorContact(i) {
   renderEditorContacts();
 }
 
-function editorUploadContactImage(idx) {
+function uploadImage(maxSize, maxMB, callback) {
   const input = document.createElement('input');
   input.type = 'file'; input.accept = 'image/*';
   input.onchange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (file.size > 2*1024*1024) { showToast('图片太大，请压缩到 2MB 以内'); return; }
+    if (file.size > maxMB*1024*1024) { showToast('图片太大'); return; }
     const reader = new FileReader();
     reader.onload = (ev) => {
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        const maxSize = 400;
         let w = img.width, h = img.height;
         if (w > h) { if (w > maxSize) { h = h*maxSize/w; w = maxSize; } } else { if (h > maxSize) { w = w*maxSize/h; h = maxSize; } }
         canvas.width = Math.round(w); canvas.height = Math.round(h);
         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-        editorData.contacts[idx].image = canvas.toDataURL('image/webp', 0.8);
-        renderEditorContacts();
-        showToast('二维码已添加 ✓');
+        callback(canvas.toDataURL('image/webp', 0.8));
       };
       img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   };
   input.click();
+}
+
+function editorUploadContactImage(idx) {
+  uploadImage(400, 2, (dataUrl) => {
+    editorData.contacts[idx].image = dataUrl;
+    renderEditorContacts();
+    showToast('二维码已添加 ✓');
+  });
 }
 
 function showImageLightbox(el) {
@@ -1350,34 +1374,12 @@ function showImageLightbox(el) {
 }
 
 function editorProjectImage(idx) {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
-  input.onchange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size > 5*1024*1024) { showToast('图片太大，请压缩到 5MB 以内'); return; }
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const maxSize = 1200;
-        let w = img.width, h = img.height;
-        if (w > h) { if (w > maxSize) { h = h*maxSize/w; w = maxSize; } } else { if (h > maxSize) { w = w*maxSize/h; h = maxSize; } }
-        canvas.width = Math.round(w); canvas.height = Math.round(h);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        editorData.projects[idx].image = canvas.toDataURL('image/webp', 0.8);
-        renderEditorProjects();
-        triggerAutoSave();
-        showToast('截图已添加 ✓');
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
-  };
-  input.click();
+  uploadImage(1200, 5, (dataUrl) => {
+    editorData.projects[idx].image = dataUrl;
+    renderEditorProjects();
+    triggerAutoSave();
+    showToast('截图已添加 ✓');
+  });
 }
 
 // Auto-save: debounced localStorage write
@@ -1448,6 +1450,22 @@ function saveEditor() {
 // ====================================================================
 //  Toast / Modal
 // ====================================================================
+function copyToClipboard(val) {
+  navigator.clipboard.writeText(val).then(() => {
+    showToast('✅ 已复制');
+    closeContactCard();
+  }).catch(() => {
+    // Fallback for non-HTTPS / insecure context
+    const ta = document.createElement('textarea');
+    ta.value = val; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✅ 已复制');
+    closeContactCard();
+  });
+}
+
 let toastTimer = null;
 function showToast(msg, d) {
   const t = document.getElementById('toast');
@@ -1467,7 +1485,11 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
 (function initNav() {
   const toggle = document.getElementById('navToggle');
   const links = document.getElementById('navLinks');
-  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  toggle.addEventListener('click', () => {
+    links.classList.toggle('open');
+    // Bug 4: Sync active state when mobile menu toggles
+    if (window._updateActive) window._updateActive();
+  });
   document.querySelectorAll('[data-section]').forEach(a => {
     a.addEventListener('click', () => links.classList.remove('open'));
   });
@@ -1481,6 +1503,7 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
     });
     anchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
   }
+  window._updateActive = updateActive;
   window.addEventListener('scroll', updateActive, { passive: true });
   updateActive();
 })();
@@ -1788,13 +1811,13 @@ async function publishToGitHub() {
   const headers = { Authorization:`token ${token}`, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' };
   let success = 0, fail = 0;
   if (avatarData) {
-    try { document.getElementById('publishStatus').textContent = '上传头像…'; await ghUpload(token, 'assets/avatar.jpg', avatarData, '更新头像', headers); success++; } catch(e) { fail++; }
+    try { document.getElementById('publishStatus').textContent = '上传头像…'; await ghUpload(token, 'assets/avatar.jpg', avatarData, '更新头像', headers); success++; } catch(e) { fail++; showToast(`头像上传失败: ${e.message}`); }
   }
   if (resumeData) {
-    try { document.getElementById('publishStatus').textContent = '上传简历…'; await ghUpload(token, 'assets/resume.pdf', resumeData, '更新简历', headers); success++; } catch(e) { fail++; }
+    try { document.getElementById('publishStatus').textContent = '上传简历…'; await ghUpload(token, 'assets/resume.pdf', resumeData, '更新简历', headers); success++; } catch(e) { fail++; showToast(`简历上传失败: ${e.message}`); }
   }
   if (contentData) {
-    try { document.getElementById('publishStatus').textContent = '上传内容…'; await ghUpload(token, 'assets/content.json', 'data:application/json;base64,' + btoa(unescape(encodeURIComponent(contentData))), '更新内容', headers); success++; } catch(e) { fail++; }
+    try { document.getElementById('publishStatus').textContent = '上传内容…'; await ghUpload(token, 'assets/content.json', 'data:application/json;base64,' + btoa(unescape(encodeURIComponent(contentData))), '更新内容', headers); success++; } catch(e) { fail++; showToast(`内容上传失败: ${e.message}`); }
   }
   if (success > 0) {
     document.getElementById('publishLoading').querySelector('.icon').textContent = '✅';
