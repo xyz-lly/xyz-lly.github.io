@@ -1636,11 +1636,12 @@ function showAvatarCrop(img) {
     dragStartX = px; dragStartY = py;
     startOffX = offX; startOffY = offY;
   }
+  let dragRaf = 0;
   function moveDrag(px, py) {
     if (dragStartX == null) return;
     offX = startOffX + (px - dragStartX);
     offY = startOffY + (py - dragStartY);
-    applyTransform();
+    if (!dragRaf) dragRaf = requestAnimationFrame(() => { dragRaf = 0; applyTransform(); });
   }
   function endDrag() { dragStartX = null; pinchDist = 0; }
 
