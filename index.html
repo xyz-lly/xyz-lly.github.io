@@ -1575,6 +1575,7 @@ function showAvatarCrop(img) {
     offY = Math.min(0, Math.max(size - ch, offY));
     const el = document.getElementById('cropImg');
     if (!el) return;
+    el.style.willChange = 'transform';
     el.style.left = offX + 'px';
     el.style.top = offY + 'px';
     el.style.width = cw + 'px';
@@ -1605,6 +1606,8 @@ function showAvatarCrop(img) {
     const slider = document.getElementById('zoomSlider');
     if (!slider) return;
     slider.addEventListener('input', function () {
+      if (Date.now() - (this._t || 0) < 30) return;
+      this._t = Date.now();
       const pct = this.value / 100;
       scale = minScale + pct * minScale * 4;
       applyTransform();
@@ -1670,7 +1673,7 @@ function showAvatarCrop(img) {
       const t = e.touches[0]; startDrag(t.clientX, t.clientY);
     }
   }, {passive:true});
-  document.addEventListener('touchmove', onTouchMove, {passive:false});
+  document.getElementById('cropArea').addEventListener('touchmove', onTouchMove, {passive:false});
   document.addEventListener('touchend', onTouchEnd);
 
   function cleanupCrop() {
