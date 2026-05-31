@@ -18,6 +18,10 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="林小虾">
 <style>
   /* ===== Variables ===== */
   :root {
@@ -1685,7 +1689,7 @@ function showAvatarCrop(img) {
     const visTop = -offY / scale;
     const visSize = size / scale;
     ctx.drawImage(img, visLeft, visTop, visSize, visSize, 0, 0, outSize, outSize);
-    const dataUrl = canvas.toDataURL('image/webp', 0.85);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
     localStorage.setItem(KEYS.avatar, dataUrl);
     renderAvatar(dataUrl);
     markDirty('avatar');
@@ -1855,6 +1859,17 @@ loadContentAsync().then(pageData => {
   updatePublishBtn();
   updateTokenStatus();
 });
+
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+      console.log('SW registered:', reg.scope);
+    }).catch(err => {
+      console.log('SW registration failed:', err);
+    });
+  });
+}
 </script>
 
 </body>
