@@ -843,7 +843,10 @@ async function loadContentAsync() {
       localStorage.setItem(KEYS.content, JSON.stringify(data));
       return data;
     }
-  } catch {}
+  } catch {
+    // Silent fallback: network unavailable on first load is normal
+    window._isOffline = true;
+  }
   // 2. Fallback to localStorage (local edits / offline)
   const saved = localStorage.getItem(KEYS.content);
   if (saved) {
@@ -931,7 +934,7 @@ function showContactCard(jsonStr) {
       <div style="font-size:36px;margin-bottom:10px;">${c.icon}</div>
       <h3 style="margin-bottom:4px;">${escHtml(c.label)}</h3>
       <p style="font-size:15px;color:var(--accent);word-break:break-all;margin:12px 0 24px;padding:0 4px;">${escHtml(c.value)}</p>
-      <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${escHtml(c.value)}').then(()=>{showToast('✅ 已复制');closeContactCard()})">📋 复制</button>
+      <button class="btn btn-primary" onclick="copyToClipboard('${escHtml(c.value)}')">📋 复制</button>
       ${c.image ? `<div style="margin-top:24px;"><img src="${escHtml(c.image)}" style="display:block;max-width:200px;max-height:300px;border-radius:12px;border:1px solid var(--border);margin:0 auto;"></div>` : ''}
       <div style="margin-top:24px;"><button class="btn btn-outline btn-sm" onclick="closeContactCard()">关闭</button></div>
     </div>
@@ -950,6 +953,9 @@ function closeContactCard() {
 let editorData = null;
 
 function openEditor() {
+  if (window._isOffline) {
+    if (!confirm('当前处于离线状态，编辑内容不会自动保存到服务器。发布前需要联网。是否继续？')) return;
+  }
   const saved = localStorage.getItem(KEYS.content);
   if (saved) {
     try { editorData = JSON.parse(saved); }
@@ -1315,32 +1321,37 @@ function removeEditorContact(i) {
   renderEditorContacts();
 }
 
-function editorUploadContactImage(idx) {
+function uploadImage(maxSize, maxMB, callback) {
   const input = document.createElement('input');
   input.type = 'file'; input.accept = 'image/*';
   input.onchange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (file.size > 2*1024*1024) { showToast('图片太大，请压缩到 2MB 以内'); return; }
+    if (file.size > maxMB*1024*1024) { showToast('图片太大'); return; }
     const reader = new FileReader();
     reader.onload = (ev) => {
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        const maxSize = 400;
         let w = img.width, h = img.height;
         if (w > h) { if (w > maxSize) { h = h*maxSize/w; w = maxSize; } } else { if (h > maxSize) { w = w*maxSize/h; h = maxSize; } }
         canvas.width = Math.round(w); canvas.height = Math.round(h);
         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-        editorData.contacts[idx].image = canvas.toDataURL('image/webp', 0.8);
-        renderEditorContacts();
-        showToast('二维码已添加 ✓');
+        callback(canvas.toDataURL('image/webp', 0.8));
       };
       img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   };
   input.click();
+}
+
+function editorUploadContactImage(idx) {
+  uploadImage(400, 2, (dataUrl) => {
+    editorData.contacts[idx].image = dataUrl;
+    renderEditorContacts();
+    showToast('二维码已添加 ✓');
+  });
 }
 
 function showImageLightbox(el) {
@@ -1350,34 +1361,12 @@ function showImageLightbox(el) {
 }
 
 function editorProjectImage(idx) {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
-  input.onchange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size > 5*1024*1024) { showToast('图片太大，请压缩到 5MB 以内'); return; }
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const maxSize = 1200;
-        let w = img.width, h = img.height;
-        if (w > h) { if (w > maxSize) { h = h*maxSize/w; w = maxSize; } } else { if (h > maxSize) { w = w*maxSize/h; h = maxSize; } }
-        canvas.width = Math.round(w); canvas.height = Math.round(h);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        editorData.projects[idx].image = canvas.toDataURL('image/webp', 0.8);
-        renderEditorProjects();
-        triggerAutoSave();
-        showToast('截图已添加 ✓');
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
-  };
-  input.click();
+  uploadImage(1200, 5, (dataUrl) => {
+    editorData.projects[idx].image = dataUrl;
+    renderEditorProjects();
+    triggerAutoSave();
+    showToast('截图已添加 ✓');
+  });
 }
 
 // Auto-save: debounced localStorage write
@@ -1448,6 +1437,22 @@ function saveEditor() {
 // ====================================================================
 //  Toast / Modal
 // ====================================================================
+function copyToClipboard(val) {
+  navigator.clipboard.writeText(val).then(() => {
+    showToast('✅ 已复制');
+    closeContactCard();
+  }).catch(() => {
+    // Fallback for non-HTTPS / insecure context
+    const ta = document.createElement('textarea');
+    ta.value = val; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✅ 已复制');
+    closeContactCard();
+  });
+}
+
 let toastTimer = null;
 function showToast(msg, d) {
   const t = document.getElementById('toast');
@@ -1467,7 +1472,11 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
 (function initNav() {
   const toggle = document.getElementById('navToggle');
   const links = document.getElementById('navLinks');
-  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  toggle.addEventListener('click', () => {
+    links.classList.toggle('open');
+    // Bug 4: Sync active state when mobile menu toggles
+    if (window._updateActive) window._updateActive();
+  });
   document.querySelectorAll('[data-section]').forEach(a => {
     a.addEventListener('click', () => links.classList.remove('open'));
   });
@@ -1481,6 +1490,7 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
     });
     anchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
   }
+  window._updateActive = updateActive;
   window.addEventListener('scroll', updateActive, { passive: true });
   updateActive();
 })();
@@ -1788,13 +1798,13 @@ async function publishToGitHub() {
   const headers = { Authorization:`token ${token}`, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' };
   let success = 0, fail = 0;
   if (avatarData) {
-    try { document.getElementById('publishStatus').textContent = '上传头像…'; await ghUpload(token, 'assets/avatar.jpg', avatarData, '更新头像', headers); success++; } catch(e) { fail++; }
+    try { document.getElementById('publishStatus').textContent = '上传头像…'; await ghUpload(token, 'assets/avatar.jpg', avatarData, '更新头像', headers); success++; } catch(e) { fail++; showToast(`头像上传失败: ${e.message}`); }
   }
   if (resumeData) {
-    try { document.getElementById('publishStatus').textContent = '上传简历…'; await ghUpload(token, 'assets/resume.pdf', resumeData, '更新简历', headers); success++; } catch(e) { fail++; }
+    try { document.getElementById('publishStatus').textContent = '上传简历…'; await ghUpload(token, 'assets/resume.pdf', resumeData, '更新简历', headers); success++; } catch(e) { fail++; showToast(`简历上传失败: ${e.message}`); }
   }
   if (contentData) {
-    try { document.getElementById('publishStatus').textContent = '上传内容…'; await ghUpload(token, 'assets/content.json', 'data:application/json;base64,' + btoa(unescape(encodeURIComponent(contentData))), '更新内容', headers); success++; } catch(e) { fail++; }
+    try { document.getElementById('publishStatus').textContent = '上传内容…'; await ghUpload(token, 'assets/content.json', 'data:application/json;base64,' + btoa(unescape(encodeURIComponent(contentData))), '更新内容', headers); success++; } catch(e) { fail++; showToast(`内容上传失败: ${e.message}`); }
   }
   if (success > 0) {
     document.getElementById('publishLoading').querySelector('.icon').textContent = '✅';
