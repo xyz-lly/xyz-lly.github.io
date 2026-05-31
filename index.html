@@ -1632,18 +1632,35 @@ function showAvatarCrop(img) {
     offY = startOffY + (py - dragStartY);
     applyTransform();
   }
-  function endDrag() { dragStartX = null; }
+  function endDrag() { dragStartX = null; pinchDist = 0; }
 
   const onMouseMove = e => moveDrag(e.clientX, e.clientY);
   const onMouseUp = endDrag;
-  const onTouchMove = e => { e.preventDefault(); const t = e.touches[0]; moveDrag(t.clientX, t.clientY); };
+  const onTouchMove = e => {
+    e.preventDefault();
+    if (e.touches.length === 2 && pinchDist > 0) {
+      const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      const delta = (d - pinchDist) * 0.005;
+      pinchDist = d;
+      window._cropZoom(delta);
+    } else if (e.touches.length === 1) {
+      moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  };
   const onTouchEnd = endDrag;
 
   cropImg.addEventListener('wheel', e => { e.preventDefault(); window._cropZoom(e.deltaY > 0 ? -0.15 : 0.15); }, {passive:false});
   cropImg.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
-  cropImg.addEventListener('touchstart', e => { const t = e.touches[0]; startDrag(t.clientX, t.clientY); }, {passive:true});
+  let pinchDist = 0;
+  cropImg.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      pinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    } else {
+      const t = e.touches[0]; startDrag(t.clientX, t.clientY);
+    }
+  }, {passive:true});
   document.addEventListener('touchmove', onTouchMove, {passive:false});
   document.addEventListener('touchend', onTouchEnd);
 
