@@ -1637,6 +1637,8 @@ function showAvatarCrop(img) {
   const onMouseMove = e => moveDrag(e.clientX, e.clientY);
   const onMouseUp = endDrag;
   const onTouchMove = e => {
+    // Don't intercept slider touch
+    if (e.target && e.target.id === 'zoomSlider') return;
     e.preventDefault();
     if (e.touches.length === 2 && pinchDist > 0) {
       const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
