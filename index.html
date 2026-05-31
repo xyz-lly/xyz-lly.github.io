@@ -209,7 +209,7 @@
     position:relative; width:110px; height:110px;
     margin:0 auto 28px; cursor:pointer; border-radius:50%;
     box-shadow:0 8px 32px var(--accent-glow);
-    animation:avatarFloat 4s ease-in-out infinite;
+    animation:avatarFloat 5s ease-in-out infinite;
   }
   @keyframes heroFadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
   @keyframes avatarFloat {
@@ -295,10 +295,10 @@
   .project-card p { font-size:14px; color:var(--text-secondary); margin-bottom:12px; line-height:1.7; }
   .project-card .tags { display:flex; flex-wrap:wrap; gap:6px; }
   .project-card .tags span { font-size:12px; padding:2px 10px; border-radius:12px; background:var(--accent-light); color:var(--accent); }
-  .project-card-img { cursor:pointer; border-radius:var(--radius); overflow:hidden; }
-  .project-card-img img:hover { transform:scale(1.05); }
-  .project-card-img, .project-card-img img { transition:transform .3s; }
-  @media (max-width:600px) { .project-card-img img { max-height:180px; object-fit:cover; } }
+  .project-card-img { cursor:pointer; border-radius:var(--radius); overflow:hidden; padding:0; }
+  .project-card-img img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s; }
+  .project-card-img:hover img { transform:scale(1.05); }
+  @media (max-width:640px) { .project-row { flex-direction:column; } .project-card-img { min-height:160px; } .project-card-img img { min-height:160px; } }
   .project-card-links { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
   .project-card-links a { font-size:13px; padding:4px 12px; border-radius:6px; border:1px solid var(--border); color:var(--accent); text-decoration:none; transition:all .15s; }
   .project-card-links a:hover { background:var(--accent-light); border-color:var(--accent); }
@@ -624,17 +624,46 @@
 
 <!-- ===== Hero ===== -->
 <section id="hero">
-    <div class="hero-lineart" aria-hidden="true">
-      <svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;opacity:0.5;">
-        <path d="M0 350 L60 220 L120 270 L180 140 L240 230 L300 100 L360 180 L420 80 L480 160 L540 60 L600 120 L600 400 L0 400 Z" fill="none" stroke="#7c3aed" stroke-width="2" opacity="0.3"/>
-        <path d="M0 320 L80 240 L150 280 L220 180 L290 250 L360 150 L430 210 L500 120 L560 180 L600 160 L600 400 L0 400 Z" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.2"/>
-        <path d="M80 380 L88 280 L96 380 M88 280 L80 300 L88 280 L96 300" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.35"/>
-        <path d="M180 380 L185 310 L190 380 M185 310 L180 325 L185 310 L190 325" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.35"/>
-        <path d="M420 380 L425 320 L430 380 M425 320 L420 335 L425 320 L430 335" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.3"/>
-        <path d="M500 380 L504 340 L508 380 M504 340 L500 350 L504 340 L508 350" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.25"/>
-        <path d="M520 60 Q525 53 530 60 Q535 53 540 60" fill="none" stroke="#7c3aed" stroke-width="1" opacity="0.3"/>
-        <path d="M490 80 Q494 75 498 80 Q502 75 506 80" fill="none" stroke="#7c3aed" stroke-width="1" opacity="0.2"/>
-        <path d="M50 100 Q65 85 80 100 Q95 85 110 100" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.15"/>
+        <div class="hero-lineart" aria-hidden="true">
+      <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;opacity:0.55;">
+        <!-- Back mountain range (smooth bezier curves) -->
+        <path d="M0,420 Q30,280 80,240 Q130,200 160,220 Q200,245 240,190 Q280,135 320,170 Q360,205 400,150 Q440,95 480,130 Q520,165 560,110 Q600,55 640,90 Q680,125 720,80 Q760,35 800,60 L800,500 L0,500 Z" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.25"/>
+        
+        <!-- Front mountain range (smooth bezier) -->
+        <path d="M0,440 Q50,350 100,310 Q150,270 190,290 Q230,310 270,260 Q310,210 350,240 Q390,270 430,220 Q470,170 510,200 Q550,230 590,180 Q630,130 670,160 Q710,190 750,140 Q790,90 800,110 L800,500 L0,500 Z" fill="none" stroke="#7c3aed" stroke-width="2" opacity="0.3"/>
+        
+        <!-- Hand-drawn style tree 1 -->
+        <path d="M100,440 Q105,410 100,390 Q95,370 105,360 Q115,350 120,360 Q130,370 125,390 Q120,410 125,440" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.35"/>
+        <path d="M112,440 L112,460" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.35"/>
+        
+        <!-- Hand-drawn style tree 2 -->
+        <path d="M220,440 Q223,420 220,405 Q217,390 224,382 Q231,374 236,382 Q243,390 240,405 Q237,420 240,440" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.35"/>
+        <path d="M230,440 L230,455" fill="none" stroke="#7c3aed" stroke-width="1" opacity="0.35"/>
+        
+        <!-- Hand-drawn style tree 3 (larger, foreground) -->
+        <path d="M680,450 Q685,415 680,395 Q675,375 685,365 Q695,355 700,365 Q710,375 705,395 Q700,415 705,450" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.4"/>
+        <path d="M692,450 L692,470" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.4"/>
+        <path d="M688,385 Q680,378 684,370" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.3"/>
+        <path d="M700,390 Q708,382 704,375" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.3"/>
+        
+        <!-- Grass / ground strokes -->
+        <path d="M50,460 Q55,450 60,460" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.2"/>
+        <path d="M70,465 Q75,455 80,465" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.2"/>
+        <path d="M160,455 Q163,447 166,455" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.2"/>
+        <path d="M320,460 Q324,452 328,460" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.2"/>
+        <path d="M460,455 Q464,447 468,455" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.2"/>
+        <path d="M560,465 Q563,458 566,465" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.2"/>
+        <path d="M740,460 Q744,452 748,460" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.2"/>
+        
+        <!-- Birds (flying V shapes, smooth) -->
+        <path d="M600,60 Q605,53 610,60 Q615,53 620,60" fill="none" stroke="#7c3aed" stroke-width="1" opacity="0.35"/>
+        <path d="M570,80 Q574,74 578,80 Q582,74 586,80" fill="none" stroke="#7c3aed" stroke-width="0.9" opacity="0.25"/>
+        <path d="M640,90 Q643,85 646,90 Q649,85 652,90" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.2"/>
+        <path d="M300,45 Q304,38 308,45 Q312,38 316,45" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.2"/>
+        
+        <!-- Mist / fog at mountain base -->
+        <path d="M0,380 Q100,370 200,380 Q300,390 400,380 Q500,370 600,380 Q700,390 800,380" fill="none" stroke="#7c3aed" stroke-width="0.5" opacity="0.12"/>
+        <path d="M0,400 Q150,390 300,400 Q450,410 600,400 Q700,390 800,400" fill="none" stroke="#7c3aed" stroke-width="0.5" opacity="0.08"/>
       </svg>
     </div>
 
