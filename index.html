@@ -176,20 +176,25 @@
     width:0; transition:width .1s linear;
   }
 
-  section { padding:80px 0; scroll-margin-top:16px; background-image:var(--bg-pattern); }
+  section { padding:72px 0; scroll-margin-top:16px; background-image:var(--bg-pattern); }
   section:nth-child(even) { background:var(--bg-alt); background-image:var(--bg-pattern); }
   section h2 {
-    font-size:20px; margin-bottom:24px; padding-bottom:10px;
-    border-bottom:2px solid var(--border);
-    display:flex; align-items:center; gap:8px;
+    font-size:18px; margin-bottom:24px; padding-bottom:0;
+    font-weight:600; letter-spacing:0.3px;
+    color:var(--text);
+  }
+  section h2::after {
+    content:''; display:block; width:24px; height:2px;
+    background:var(--accent); border-radius:1px; margin-top:8px;
   }
   .section-inner { max-width:760px; margin:0 auto; padding:0 24px; }
 
   /* ===== Hero ===== */
-  #hero { padding:100px 0 80px; text-align:center; }
+  #hero { padding:80px 0 64px; text-align:center; }
   #hero .avatar-wrapper {
     position:relative; width:110px; height:110px;
     margin:0 auto 28px; cursor:pointer; border-radius:50%;
+    box-shadow:0 8px 32px var(--accent-glow);
   }
   #hero .avatar-wrapper:hover .avatar-hover { opacity:1; }
   #hero .avatar-hover {
@@ -198,14 +203,6 @@
     color:#fff; font-size:26px; font-weight:600;
     opacity:0; transition:opacity .25s; pointer-events:none; backdrop-filter:blur(2px);
   }
-  #hero .avatar-ring {
-    position:absolute; inset:-4px; border-radius:50%;
-    background:linear-gradient(135deg,var(--avatar-bg-1),var(--avatar-bg-2),var(--avatar-bg-1));
-    animation:spin 6s linear infinite;
-    mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));
-    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));
-  }
-  @keyframes spin { to { transform:rotate(360deg); } }
   #hero .avatar {
     width:100%; height:100%; border-radius:50%;
     background:linear-gradient(135deg,var(--avatar-bg-1),var(--avatar-bg-2));
@@ -601,7 +598,7 @@
 <section id="hero">
   <div class="section-inner">
     <div class="avatar-wrapper" id="avatarWrapper" title="点击更换头像">
-      <div class="avatar-ring"></div>
+      
       <div class="avatar" id="avatarDisplay"><span id="avatarText">林</span></div>
       <div class="avatar-hover">📷</div>
     </div>
@@ -610,7 +607,7 @@
     <p class="hero-desc" id="heroDesc">设计过 EMB 卡钳，搭过 VLM 服务，写过专利交底书。相信好工具能让工程师少加班，好知识能让人少走弯路。</p>
     <div class="hero-actions">
       <a href="#resume" class="btn btn-primary" id="heroResumeBtn">📄 下载简历</a>
-      <a href="#contact" class="btn btn-outline">📬 联系我</a>
+      <a href="#contact" class="btn btn-outline">联系我</a>
     </div>
     <div class="scroll-hint"><span class="arrow">↓</span><span>向下滚动</span></div>
   </div>
@@ -619,7 +616,7 @@
 <!-- ===== 关于 ===== -->
 <section id="about" class="reveal">
   <div class="section-inner">
-    <h2>👤 关于我</h2>
+    <h2>关于我</h2>
     <p class="about-text" id="aboutText">机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。</p>
   </div>
 </section>
@@ -627,7 +624,7 @@
 <!-- ===== 技能 ===== -->
 <section id="skills" class="reveal">
   <div class="section-inner">
-    <h2>🛠️ 技能</h2>
+    <h2>技能</h2>
     <div class="skills" id="skillsContainer"></div>
   </div>
 </section>
@@ -643,7 +640,7 @@
 <!-- ===== 简历 ===== -->
 <section id="resume" class="reveal">
   <div class="section-inner">
-    <h2>📄 简历</h2>
+    <h2>简历</h2>
     <div class="resume-box">
       <div class="resume-info">
         <h3>我的简历</h3>
@@ -672,7 +669,7 @@
 <!-- ===== 联系 ===== -->
 <section id="contact" class="reveal">
   <div class="section-inner">
-    <h2>📬 联系</h2>
+    <h2>联系</h2>
     <div class="contact" id="contactContainer"></div>
   </div>
 </section>
@@ -684,7 +681,7 @@
 <!-- ===== Admin Bar ===== -->
 <div class="admin-bar" id="adminBar">
   <button class="admin-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">💬 联系</button>
-  <button class="admin-btn" onclick="document.getElementById('resumeInput').click()">📄 简历</button>
+  <button class="admin-btn" onclick="document.getElementById('resumeInput').click()">简历</button>
   <button class="admin-btn" onclick="openEditor()">✏️ 内容</button>
   <div class="admin-divider"></div>
   <button class="admin-btn" onclick="showTokenConfig()" id="tokenStatusBtn">🔑 Token</button>
@@ -738,7 +735,7 @@
 
       <!-- Skills -->
       <div class="editor-section">
-        <h4>🛠️ 技能</h4>
+        <h4>技能</h4>
         <div id="e_skillsList"></div>
         <button class="editor-add-btn" onclick="addEditorSkill()">+ 添加技能</button>
       </div>
@@ -759,7 +756,7 @@
 
       <!-- Contacts -->
       <div class="editor-section">
-        <h4>📬 联系方式</h4>
+        <h4>联系方式</h4>
         <div id="e_contactsList"></div>
         <button class="editor-add-btn" onclick="addEditorContact()">+ 添加联系</button>
       </div>
