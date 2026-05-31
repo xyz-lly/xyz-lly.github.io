@@ -14,59 +14,59 @@
 <meta name="twitter:title" content="林小虾 — 个人主页">
 <meta name="twitter:description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。">
 <meta name="twitter:image" content="https://xyz-lly.github.io/assets/avatar.jpg" id="twImage">
-<meta name="theme-color" content="#2563eb">
+<meta name="theme-color" content="#7c3aed">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <style>
   /* ===== Variables ===== */
   :root {
-    --bg: #f8f9fa;
-    --bg-alt: #f1f3f6;
-    --card: #ffffff;
-    --text: #1a1a2e;
-    --text-secondary: #64748b;
-    --text-muted: #94a3b8;
-    --accent: #2563eb;
-    --accent-hover: #1d4ed8;
-    --accent-light: #dbeafe;
-    --accent-glow: rgba(37, 99, 235, 0.15);
-    --border: #e5e7eb;
-    --shadow: 0 4px 24px rgba(0,0,0,0.06);
-    --shadow-lg: 0 8px 40px rgba(0,0,0,0.08);
-    --radius: 12px;
+    --bg: #faf7fd;
+    --bg-alt: #f5f0fa;
+    --card: rgba(255,255,255,0.75);
+    --text: #1a0a2e;
+    --text-secondary: #6b5b7b;
+    --text-muted: #9a8aaa;
+    --accent: #7c3aed;
+    --accent-hover: #6d28d9;
+    --accent-light: #ede9fe;
+    --accent-glow: rgba(124, 58, 237, 0.15);
+    --border: #e0d8ea;
+    --shadow: 0 4px 24px rgba(124,58,237,0.06);
+    --shadow-lg: 0 8px 40px rgba(124,58,237,0.10);
+    --radius: 14px;
     --radius-sm: 8px;
-    --tag-bg: #f0f4ff;
-    --tag-text: #2563eb;
-    --avatar-bg-1: #2563eb;
-    --avatar-bg-2: #7c3aed;
+    --tag-bg: #ede9fe;
+    --tag-text: #7c3aed;
+    --avatar-bg-1: #7c3aed;
+    --avatar-bg-2: #a855f7;
     --modal-bg: rgba(0,0,0,0.4);
-    --nav-bg: rgba(248,249,250,0.8);
-    --nav-border: rgba(229,231,235,0.5);
+    --nav-bg: rgba(250,247,253,0.8);
+    --nav-border: rgba(224,216,234,0.5);
     --danger: #ef4444;
     --danger-light: #fee2e2;
   }
   .dark {
-    --bg: #0b1120;
-    --bg-alt: #0f172a;
-    --card: #1a2332;
-    --text: #e2e8f0;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --accent: #60a5fa;
-    --accent-hover: #93c5fd;
-    --accent-light: #1e3a5f;
-    --accent-glow: rgba(96,165,250,0.12);
-    --border: #1e293b;
-    --shadow: 0 4px 24px rgba(0,0,0,0.25);
-    --shadow-lg: 0 8px 40px rgba(0,0,0,0.35);
-    --tag-bg: #1e3a5f;
-    --tag-text: #93c5fd;
-    --avatar-bg-1: #3b82f6;
-    --avatar-bg-2: #8b5cf6;
+    --bg: #0d081a;
+    --bg-alt: #140e24;
+    --card: rgba(26,16,46,0.8);
+    --text: #e4dcf0;
+    --text-secondary: #a898c0;
+    --text-muted: #7a6a92;
+    --accent: #a78bfa;
+    --accent-hover: #c4b5fd;
+    --accent-light: #2e1065;
+    --accent-glow: rgba(167,139,250,0.12);
+    --border: #2a1e40;
+    --shadow: 0 4px 24px rgba(0,0,0,0.35);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.45);
+    --tag-bg: #2e1065;
+    --tag-text: #a78bfa;
+    --avatar-bg-1: #8b5cf6;
+    --avatar-bg-2: #a78bfa;
     --modal-bg: rgba(0,0,0,0.6);
-    --nav-bg: rgba(11,17,32,0.85);
-    --nav-border: rgba(30,41,59,0.5);
+    --nav-bg: rgba(13,8,26,0.85);
+    --nav-border: rgba(42,30,64,0.5);
     --danger: #f87171;
     --danger-light: #3b1a1a;
   }
@@ -143,12 +143,13 @@
 
   /* ===== Sections ===== */
   /* ===== Scroll Reveal ===== */
-  .reveal { transition:opacity .55s ease, transform .55s ease; }
-  .reveal.hidden { opacity:0; }
+  .reveal { transition:opacity .6s ease, transform .6s ease; }
+  .reveal.hidden { opacity:0; transform:translateY(24px); }
   .reveal.visible { opacity:1; transform:translateY(0); }
-  .reveal-delay-1 { transition-delay:.08s; }
-  .reveal-delay-2 { transition-delay:.16s; }
-  .reveal-delay-3 { transition-delay:.24s; }
+  .reveal-delay-1 { transition-delay:.1s; }
+  .reveal-delay-2 { transition-delay:.2s; }
+  .reveal-delay-3 { transition-delay:.3s; }
+  .reveal-delay-4 { transition-delay:.4s; }
 
   /* ===== Progress Bar ===== */
   .progress-bar {
@@ -228,17 +229,25 @@
   .skill-tag {
     padding:6px 18px; border-radius:20px; font-size:14px;
     background:var(--tag-bg); color:var(--tag-text);
-    transition:transform .2s,box-shadow .2s; cursor:default;
+    transition:transform .25s,box-shadow .25s,border-color .25s; cursor:default;
+    border:1px solid transparent;
   }
-  .skill-tag:hover { transform:translateY(-2px); box-shadow:0 4px 12px var(--accent-glow); }
+  .skill-tag:hover { transform:translateY(-3px); box-shadow:0 6px 20px var(--accent-glow); border-color:var(--accent-light); }
+
+  @supports (backdrop-filter: blur(12px)) {
+    .project-card, .resume-box, .contact a, .skill-tag {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
 
   .project-card {
     background:var(--card); border:1px solid var(--border);
     border-radius:var(--radius); padding:22px 26px;
     margin-bottom:16px; box-shadow:var(--shadow);
-    transition:transform .2s,box-shadow .2s;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s;
   }
-  .project-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .project-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--accent-light); }
   .project-card h3 { font-size:17px; margin-bottom:6px; }
   .project-card .meta { color:var(--text-muted); font-size:13px; margin-bottom:8px; }
   .project-card p { font-size:14px; color:var(--text-secondary); margin-bottom:12px; line-height:1.7; }
@@ -265,9 +274,9 @@
   .timeline-item .detail-toggle {
     font-size:13px; color:var(--accent); cursor:pointer;
     background:none; border:none; padding:4px 0; font-family:inherit;
-    transition:color .15s;
+    transition:color .15s, transform .2s;
   }
-  .timeline-item .detail-toggle:hover { color:var(--accent-hover); }
+  .timeline-item .detail-toggle:hover { color:var(--accent-hover); transform:translateX(4px); }
   .timeline-item .detail-content {
     font-size:14px; color:var(--text-secondary); line-height:1.8;
     max-height:0; overflow:hidden; opacity:0; visibility:hidden;
@@ -289,7 +298,9 @@
     background:var(--card); border:1px solid var(--border);
     border-radius:var(--radius); padding:28px 32px;
     box-shadow:var(--shadow); display:flex; align-items:center; gap:28px; flex-wrap:wrap;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s;
   }
+  .resume-box:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); border-color:var(--accent-light); }
   .resume-info { flex:1; min-width:200px; }
   .resume-info h3 { font-size:17px; margin-bottom:4px; }
   .resume-info p { font-size:14px; color:var(--text-secondary); }
@@ -303,11 +314,11 @@
   .contact { display:flex; flex-wrap:wrap; gap:12px; }
   .contact a {
     display:flex; align-items:center; gap:6px;
-    padding:10px 20px; border-radius:var(--radius-sm);
+    padding:10px 20px; border-radius:var(--radius);
     border:1px solid var(--border); background:var(--card);
-    font-size:14px; color:var(--text); transition:all .2s; box-shadow:var(--shadow);
+    font-size:14px; color:var(--text); transition:all .25s; box-shadow:var(--shadow);
   }
-  .contact a:hover { border-color:var(--accent); color:var(--accent); box-shadow:0 4px 16px var(--accent-glow); text-decoration:none; }
+  .contact a:hover { border-color:var(--accent); color:var(--accent); box-shadow:0 6px 24px var(--accent-glow); transform:translateY(-2px); text-decoration:none; }
 
   .admin-bar {
     position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:90;
@@ -338,7 +349,8 @@
     padding:32px; max-width:480px; width:100%;
     box-shadow:var(--shadow-lg); max-height:90vh; overflow-y:auto;
   }
-  .modal h3 { font-size:18px; margin-bottom:4px; }
+  .modal { transition:transform .2s ease, opacity .2s ease; }
+.modal h3 { font-size:18px; margin-bottom:4px; }
   .modal p { font-size:14px; color:var(--text-secondary); margin-bottom:16px; }
   .modal ol { font-size:14px; color:var(--text-secondary); padding-left:20px; margin-bottom:16px; line-height:2; }
   .modal input, .modal textarea, .modal select {
@@ -581,7 +593,7 @@
 </section>
 
 <!-- ===== 关于 ===== -->
-<section id="about" class="reveal">
+<section id="about" class="reveal reveal-delay-1">
   <div class="section-inner">
     <h2>👤 关于我</h2>
     <p class="about-text" id="aboutText">机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。</p>
@@ -589,7 +601,7 @@
 </section>
 
 <!-- ===== 技能 ===== -->
-<section id="skills" class="reveal">
+<section id="skills" class="reveal reveal-delay-1">
   <div class="section-inner">
     <h2>🛠️ 技能</h2>
     <div class="skills" id="skillsContainer"></div>
@@ -597,7 +609,7 @@
 </section>
 
 <!-- ===== 项目 ===== -->
-<section id="projects" class="reveal">
+<section id="projects" class="reveal reveal-delay-2">
   <div class="section-inner">
     <h2>📦 项目</h2>
     <div id="projectsContainer"></div>
@@ -605,7 +617,7 @@
 </section>
 
 <!-- ===== 简历 ===== -->
-<section id="resume" class="reveal">
+<section id="resume" class="reveal reveal-delay-2">
   <div class="section-inner">
     <h2>📄 简历</h2>
     <div class="resume-box">
@@ -626,7 +638,7 @@
 </section>
 
 <!-- ===== 经历 ===== -->
-<section id="experience" class="reveal">
+<section id="experience" class="reveal reveal-delay-3">
   <div class="section-inner">
     <h2>📋 经历</h2>
     <div class="timeline" id="timelineContainer"></div>
@@ -634,7 +646,7 @@
 </section>
 
 <!-- ===== 联系 ===== -->
-<section id="contact" class="reveal">
+<section id="contact" class="reveal reveal-delay-3">
   <div class="section-inner">
     <h2>📬 联系</h2>
     <div class="contact" id="contactContainer"></div>
@@ -1486,6 +1498,30 @@ function handleAvatarUpload(file) {
 }
 document.getElementById('avatarWrapper').addEventListener('click', () => document.getElementById('avatarInput').click());
 document.getElementById('avatarInput').addEventListener('change', e => { if (e.target.files[0]) { handleAvatarUpload(e.target.files[0]); e.target.value = ''; } });
+
+// Avatar 3D hover effect
+(function initAvatar3D() {
+  const wrapper = document.getElementById('avatarWrapper');
+  const ring = wrapper.querySelector('.avatar-ring');
+  let ticking = false;
+  wrapper.addEventListener('mousemove', e => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const rect = wrapper.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        wrapper.style.transform = `perspective(300px) rotateY(${x*15}deg) rotateX(${-y*15}deg)`;
+        if (ring) ring.style.transform = `rotateY(${x*30}deg) rotateX(${-y*30}deg)`;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+  wrapper.addEventListener('mouseleave', () => {
+    wrapper.style.transform = 'perspective(300px) rotateY(0deg) rotateX(0deg)';
+    if (ring) ring.style.transform = '';
+  });
+})();
 
 // ====================================================================
 //  简历
