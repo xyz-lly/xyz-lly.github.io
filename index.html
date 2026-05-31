@@ -19,14 +19,6 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <style>
-  @font-face {
-    font-family: 'Noto Sans SC';
-    src: url('assets/fonts/notosanssc.woff2') format('woff2');
-    font-weight: 300 700;
-    font-style: normal;
-    font-display: swap;
-  }
-
   /* ===== Variables ===== */
   :root {
     --bg: #faf7fd;
@@ -82,7 +74,7 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.7;
@@ -176,29 +168,7 @@
   .section-inner { max-width:760px; margin:0 auto; padding:0 24px; }
 
   /* ===== Hero ===== */
-  #hero {
-    padding:100px 0 80px; text-align:center;
-    position:relative; overflow:hidden;
-  }
-  #hero::before {
-    content:''; position:absolute; inset:0;
-    background:radial-gradient(ellipse 600px 400px at 50% 30%, var(--accent-glow), transparent 70%);
-    opacity:0.6; pointer-events:none;
-    animation:heroPulse 6s ease-in-out infinite alternate;
-  }
-  @keyframes heroPulse {
-    0% { opacity:0.4; transform:scale(1); }
-    100% { opacity:0.7; transform:scale(1.05); }
-  }
-  #hero .hero-tagline {
-    display:inline-block;
-    font-size:16px; color:var(--accent); margin-bottom:16px; font-weight:500;
-    overflow:hidden; white-space:nowrap; border-right:2px solid var(--accent);
-    animation:typing 2s steps(20,end) forwards, blink .8s step-end 3;
-    max-width:fit-content;
-  }
-  @keyframes typing { from { width:0; } to { width:100%; } }
-  @keyframes blink { 50% { border-color:transparent; } }
+  #hero { padding:100px 0 80px; text-align:center; }
   #hero .avatar-wrapper {
     position:relative; width:110px; height:110px;
     margin:0 auto 28px; cursor:pointer; border-radius:50%;
