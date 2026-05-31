@@ -1689,7 +1689,7 @@ function showAvatarCrop(img) {
     const visTop = -offY / scale;
     const visSize = size / scale;
     ctx.drawImage(img, visLeft, visTop, visSize, visSize, 0, 0, outSize, outSize);
-    const dataUrl = canvas.toDataURL('image/webp', 0.85);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
     localStorage.setItem(KEYS.avatar, dataUrl);
     renderAvatar(dataUrl);
     markDirty('avatar');
