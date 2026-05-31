@@ -1292,7 +1292,7 @@ function renderEditorContacts() {
       </div>
       <div class="editor-field">
         <label>二维码（可选）</label>
-        ${c.image ? `<div style="display:flex;align-items:center;gap:10px;"><img src="${escHtml(c.image)}" style="width:60px;height:auto;max-height:80px;border-radius:8px;border:1px solid var(--border);cursor:pointer;" onclick="showImageLightbox('${escHtml(c.image)}')" title="点击放大">
+        ${c.image ? `<div style="display:flex;align-items:center;gap:10px;"><img src="${escHtml(c.image)}" style="max-width:80px;max-height:80px;border-radius:8px;border:1px solid var(--border);cursor:pointer;" onclick="showImageLightbox('${escHtml(c.image)}')" title="点击放大">
           <button class="btn btn-sm btn-outline" onclick="editorData.contacts[${i}].image='';renderEditorContacts();triggerAutoSave()">删除</button></div>`
           : `<button class="btn btn-sm btn-outline" onclick="editorUploadContactImage(${i})">上传二维码</button>`}
       </div>
@@ -1535,8 +1535,12 @@ function updateOGMeta(src) {
 }
 function initAvatar() {
   const saved = localStorage.getItem(KEYS.avatar);
-  if (saved) renderAvatar(saved);
-  else fetch('assets/avatar.jpg', { method:'HEAD' }).then(r => { if (r.ok) updateOGMeta('https://xyz-lly.github.io/assets/avatar.jpg'); }).catch(()=>{});
+  if (saved) { renderAvatar(saved); return; }
+  // Try server for cross-device sync
+  fetch('assets/avatar.jpg?t=' + Date.now())
+    .then(r => { if (r.ok) return r.blob(); })
+    .then(blob => { if (blob) { const reader = new FileReader(); reader.onload = e => { localStorage.setItem(KEYS.avatar, e.target.result); renderAvatar(e.target.result); }; reader.readAsDataURL(blob); } })
+    .catch(() => {});
 }
 function handleAvatarUpload(file) {
   if (!file || !file.type.startsWith('image/')) { showToast('请选择图片文件'); return; }
@@ -1583,8 +1587,12 @@ function updateResumeUI(dataUrl) {
 }
 function initResume() {
   const saved = localStorage.getItem(KEYS.resume);
-  if (saved) updateResumeUI(saved);
-  else fetch('assets/resume.pdf',{method:'HEAD'}).then(r => { if (r.ok) { document.getElementById('resumeDownloadBtn').href='assets/resume.pdf'; document.getElementById('resumeDownloadBtn').classList.remove('disabled'); document.getElementById('resumeStatus').textContent='仓库中 · 可下载'; }}).catch(()=>{});
+  if (saved) { updateResumeUI(saved); return; }
+  // Try server for cross-device sync
+  fetch('assets/resume.pdf?t=' + Date.now())
+    .then(r => { if (r.ok) return r.blob(); })
+    .then(blob => { if (blob) { const reader = new FileReader(); reader.onload = e => { localStorage.setItem(KEYS.resume, e.target.result); updateResumeUI(e.target.result); }; reader.readAsDataURL(blob); } else { document.getElementById('resumeDownloadBtn').href='assets/resume.pdf'; document.getElementById('resumeDownloadBtn').classList.remove('disabled'); document.getElementById('resumeStatus').textContent='仓库中 · 可下载'; } })
+    .catch(() => {});
 }
 function handleResumeUpload(file) {
   if (!file) return;
