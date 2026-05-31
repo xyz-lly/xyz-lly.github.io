@@ -23,7 +23,7 @@
   :root {
     --bg: #faf7fd;
     --bg-alt: #f5f0fa;
-    --bg-pattern: radial-gradient(ellipse 800px 500px at 20% 20%, rgba(124,58,237,0.04), transparent 70%), radial-gradient(ellipse 600px 400px at 80% 80%, rgba(168,85,247,0.03), transparent 60%);
+    --bg-pattern: radial-gradient(ellipse 600px 400px at 15% 30%, rgba(124,58,237,0.08), transparent 60%), radial-gradient(ellipse 500px 300px at 85% 70%, rgba(168,85,247,0.06), transparent 55%), radial-gradient(ellipse 300px 200px at 50% 50%, rgba(192,132,252,0.04), transparent 50%);
     --card: rgba(255,255,255,0.65);
     --text: #1a0a2e;
     --text-secondary: #6b5b7b;
@@ -50,7 +50,7 @@
   .dark {
     --bg: #0d081a;
     --bg-alt: #140e24;
-    --bg-pattern: radial-gradient(ellipse 800px 500px at 20% 20%, rgba(124,58,237,0.06), transparent 70%), radial-gradient(ellipse 600px 400px at 80% 80%, rgba(168,85,247,0.04), transparent 60%);
+    --bg-pattern: radial-gradient(ellipse 600px 400px at 15% 30%, rgba(124,58,237,0.12), transparent 60%), radial-gradient(ellipse 500px 300px at 85% 70%, rgba(168,85,247,0.09), transparent 55%), radial-gradient(ellipse 300px 200px at 50% 50%, rgba(192,132,252,0.06), transparent 50%);
     --card: rgba(26,16,46,0.65);
     --text: #e4dcf0;
     --text-secondary: #a898c0;
@@ -317,6 +317,12 @@
     font-size:14px; color:var(--text); transition:all .3s; box-shadow:var(--shadow);
   }
   .contact a:hover { border-color:var(--accent); color:var(--accent); box-shadow:0 8px 32px var(--accent-glow); transform:translateY(-3px) scale(1.02); text-decoration:none; }
+  .contact .contact-item {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:10px 20px; border-radius:var(--radius);
+    border:1px solid var(--border); background:var(--card);
+    font-size:14px; color:var(--text-secondary); box-shadow:var(--shadow);
+  }
 
   .admin-bar {
     position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:90;
@@ -889,11 +895,18 @@ function renderContent(data) {
     ctn.innerHTML = '<p style="color:var(--text-muted);font-size:14px;">暂无联系方式</p>';
   } else {
     ctn.innerHTML = data.contacts.map(c => {
-      let href = c.value;
-      if (c.type === 'email') href = 'mailto:' + c.value;
-      else if (c.type === 'url' && !c.value.startsWith('http')) href = 'https://' + c.value;
-      else if (c.type === 'url' && c.value === '#') href = '#';
-      return `<a href="${escHtml(href)}">${c.icon || '🔗'} ${escHtml(c.label)}</a>`;
+      let label = escHtml(c.label);
+      let icon = c.icon || '🔗';
+      if (c.type === 'email') {
+        return `<a href="mailto:${escHtml(c.value)}">${icon} ${label}</a>`;
+      } else if (c.type === 'url') {
+        let href = c.value;
+        if (!href.startsWith('http')) href = 'https://' + href;
+        return `<a href="${escHtml(href)}">${icon} ${label}</a>`;
+      } else {
+        // text type: show as non-clickable badge
+        return `<span class="contact-item">${icon} ${label}</span>`;
+      }
     }).join('');
   }
   // Observe newly rendered reveal elements
