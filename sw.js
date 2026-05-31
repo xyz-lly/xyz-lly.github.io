@@ -1,10 +1,13 @@
-const CACHE = 'homepage-v1';
+const VERSION = 'v11.9';
+const CACHE = 'homepage-' + VERSION;
 const PRECACHE = [
   '/',
   '/index.html',
   '/manifest.json',
   '/assets/icons/icon-192.png',
-  '/assets/icons/icon-512.png'
+  '/assets/icons/icon-512.png',
+  '/assets/icons/avatar-192.png',
+  '/assets/icons/avatar-512.png'
 ];
 
 // Install: precache static files
@@ -31,10 +34,16 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
-  // Static assets: cache first
+  // Index.html: network first (always serve latest)
+  if (url.pathname === '/' || url.pathname === '/index.html') {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+  // Other static assets: cache first
   event.respondWith(
     caches.match(event.request).then(r => r || fetch(event.request).then(res => {
-      // Cache fetched files for future offline use
       if (res.ok && res.type === 'basic') {
         const clone = res.clone();
         caches.open(CACHE).then(cache => cache.put(event.request, clone));
