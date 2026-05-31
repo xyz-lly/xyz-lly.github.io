@@ -199,8 +199,32 @@
       radial-gradient(circle at 85% 75%, var(--accent-light) 0, transparent 35%);
     opacity:0.3;
   }
-  .hero-lineart {
+  .hero-pattern {
     position:absolute; inset:0; pointer-events:none; z-index:0; overflow:hidden;
+  }
+  .hero-pattern {
+    background-image:
+      /* Dot grid pattern */
+      radial-gradient(circle at 25% 25%, var(--accent) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, var(--accent) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.08;
+  }
+  .hero-pattern::before {
+    content:''; position:absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    opacity: 0.08;
+  }
+  .hero-pattern::after {
+    content:''; position:absolute;
+    bottom: -40px; left: -40px;
+    width: 150px; height: 150px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    opacity: 0.06;
   }
   #hero .container { position:relative; z-index:1; }
 
@@ -625,45 +649,7 @@
 <!-- ===== Hero ===== -->
 <section id="hero">
         <div class="hero-lineart" aria-hidden="true">
-      <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;opacity:0.5;">
-        <!-- Back mountain: smooth cubic bezier curves -->
-        <path d="M0,420 C30,370 60,340 100,310 C140,280 170,300 210,260 C250,220 280,240 320,210 C360,180 390,200 430,170 C470,140 500,160 540,135 C580,110 610,130 650,110 C690,90 720,110 760,95 C790,85 800,70 800,70 L800,500 L0,500 Z" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.3"/>
-        
-        <!-- Front mountain: smooth cubic bezier, lower -->
-        <path d="M0,450 C40,390 90,360 140,330 C190,300 220,320 270,280 C320,240 350,265 400,230 C450,195 480,220 530,190 C580,160 610,185 660,160 C710,135 740,155 790,130 C800,125 800,120 800,120 L800,500 L0,500 Z" fill="none" stroke="#7c3aed" stroke-width="2" opacity="0.35"/>
-        
-        <!-- Pine tree 1 -->
-        <path d="M85,430 C90,410 88,395 92,380 C96,365 90,355 97,345 C104,335 109,345 106,358 C103,371 108,390 105,408 C103,420 105,430 105,430" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.4"/>
-        <path d="M95,430 L95,458" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.4"/>
-        
-        <!-- Pine tree 2 -->
-        <path d="M215,435 C219,418 217,404 220,392 C223,380 219,372 224,364 C229,356 233,364 230,374 C227,384 231,398 229,410 C228,420 229,435 229,435" fill="none" stroke="#7c3aed" stroke-width="1.2" opacity="0.4"/>
-        <path d="M222,435 L222,452" fill="none" stroke="#7c3aed" stroke-width="1" opacity="0.4"/>
-        
-        <!-- Pine tree 3 - foreground -->
-        <path d="M670,445 C676,420 673,398 678,380 C683,362 676,350 684,340 C692,330 698,342 694,358 C690,374 696,395 693,418 C691,432 692,445 692,445" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.45"/>
-        <path d="M681,445 L681,470" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.45"/>
-        <path d="M678,376 C670,370 674,365 678,368" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.35"/>
-        <path d="M690,382 C698,376 694,370 690,374" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.35"/>
-        
-        <!-- Ground grass clusters -->
-        <path d="M40,455 C42,448 44,444 46,448 C48,444 50,448 52,455" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.25"/>
-        <path d="M150,452 C152,445 154,441 156,445 C158,441 160,445 162,452" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.25"/>
-        <path d="M310,458 C312,451 314,447 316,451 C318,447 320,451 322,458" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.25"/>
-        <path d="M450,455 C452,448 454,444 456,448 C458,444 460,448 462,455" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.25"/>
-        <path d="M560,458 C562,451 564,447 566,451 C568,447 570,451 572,458" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.25"/>
-        <path d="M740,455 C742,448 744,444 746,448 C748,444 750,448 752,455" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.25"/>
-        
-        <!-- Flying birds -->
-        <path d="M580,45 C585,37 590,39 596,45 C602,39 607,37 612,45" fill="none" stroke="#7c3aed" stroke-width="1" opacity="0.4"/>
-        <path d="M545,70 C550,63 554,65 559,70 C564,65 568,63 573,70" fill="none" stroke="#7c3aed" stroke-width="0.9" opacity="0.3"/>
-        <path d="M615,80 C618,74 621,76 624,80 C627,76 630,74 633,80" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.25"/>
-        <path d="M275,35 C279,28 283,30 287,35 C291,30 295,28 299,35" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.25"/>
-        
-        <!-- Mist lines -->
-        <path d="M0,375 C100,368 200,380 300,372 C400,364 500,376 600,368 C700,360 750,372 800,366" fill="none" stroke="#7c3aed" stroke-width="0.5" opacity="0.12"/>
-        <path d="M0,398 C120,392 240,404 360,396 C480,388 600,400 720,392 C760,388 780,394 800,390" fill="none" stroke="#7c3aed" stroke-width="0.5" opacity="0.1"/>
-      </svg>
+      
     </div>
 
   <div class="section-inner">
