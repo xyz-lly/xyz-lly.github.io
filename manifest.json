@@ -1,0 +1,22 @@
+{
+  "name": "林小虾 — 个人主页",
+  "short_name": "林小虾",
+  "description": "机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf7fd",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "/assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
