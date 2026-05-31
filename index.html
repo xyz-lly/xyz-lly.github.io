@@ -928,7 +928,7 @@ function showContactCard(jsonStr) {
       <h3 style="margin-bottom:4px;">${escHtml(c.label)}</h3>
       <p style="font-size:15px;color:var(--accent);word-break:break-all;margin:12px 0 24px;padding:0 4px;">${escHtml(c.value)}</p>
       <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${escHtml(c.value)}').then(()=>{showToast('✅ 已复制');closeContactCard()})">📋 复制</button>
-      ${c.image ? `<div style="margin-top:24px;text-align:center;"><img src="${escHtml(c.image)}" style="max-width:200px;max-height:300px;border-radius:12px;border:1px solid var(--border);"></div>` : ''}
+      ${c.image ? `<div style="margin-top:24px;"><img src="${escHtml(c.image)}" style="display:block;max-width:200px;max-height:300px;border-radius:12px;border:1px solid var(--border);margin:0 auto;"></div>` : ''}
       <div style="margin-top:24px;"><button class="btn btn-outline btn-sm" onclick="closeContactCard()">关闭</button></div>
     </div>
   </div>`;
