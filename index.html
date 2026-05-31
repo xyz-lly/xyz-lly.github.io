@@ -23,7 +23,8 @@
   :root {
     --bg: #faf7fd;
     --bg-alt: #f5f0fa;
-    --card: rgba(255,255,255,0.75);
+    --bg-pattern: radial-gradient(ellipse 800px 500px at 20% 20%, rgba(124,58,237,0.04), transparent 70%), radial-gradient(ellipse 600px 400px at 80% 80%, rgba(168,85,247,0.03), transparent 60%);
+    --card: rgba(255,255,255,0.65);
     --text: #1a0a2e;
     --text-secondary: #6b5b7b;
     --text-muted: #9a8aaa;
@@ -49,7 +50,8 @@
   .dark {
     --bg: #0d081a;
     --bg-alt: #140e24;
-    --card: rgba(26,16,46,0.8);
+    --bg-pattern: radial-gradient(ellipse 800px 500px at 20% 20%, rgba(124,58,237,0.06), transparent 70%), radial-gradient(ellipse 600px 400px at 80% 80%, rgba(168,85,247,0.04), transparent 60%);
+    --card: rgba(26,16,46,0.65);
     --text: #e4dcf0;
     --text-secondary: #a898c0;
     --text-muted: #7a6a92;
@@ -146,10 +148,6 @@
   .reveal { transition:opacity .6s ease, transform .6s ease; }
   .reveal.hidden { opacity:0; transform:translateY(24px); }
   .reveal.visible { opacity:1; transform:translateY(0); }
-  .reveal-delay-1 { transition-delay:.1s; }
-  .reveal-delay-2 { transition-delay:.2s; }
-  .reveal-delay-3 { transition-delay:.3s; }
-  .reveal-delay-4 { transition-delay:.4s; }
 
   /* ===== Progress Bar ===== */
   .progress-bar {
@@ -158,8 +156,8 @@
     width:0; transition:width .1s linear;
   }
 
-  section { padding:80px 0; scroll-margin-top:16px; }
-  section:nth-child(even) { background:var(--bg-alt); }
+  section { padding:80px 0; scroll-margin-top:16px; background-image:var(--bg-pattern); }
+  section:nth-child(even) { background:var(--bg-alt); background-image:var(--bg-pattern); }
   section h2 {
     font-size:20px; margin-bottom:24px; padding-bottom:10px;
     border-bottom:2px solid var(--border);
@@ -229,10 +227,10 @@
   .skill-tag {
     padding:6px 18px; border-radius:20px; font-size:14px;
     background:var(--tag-bg); color:var(--tag-text);
-    transition:transform .25s,box-shadow .25s,border-color .25s; cursor:default;
+    transition:transform .3s,box-shadow .3s,border-color .3s; cursor:default;
     border:1px solid transparent;
   }
-  .skill-tag:hover { transform:translateY(-3px); box-shadow:0 6px 20px var(--accent-glow); border-color:var(--accent-light); }
+  .skill-tag:hover { transform:translateY(-4px); box-shadow:0 8px 28px var(--accent-glow); border-color:var(--accent); }
 
   @supports (backdrop-filter: blur(12px)) {
     .project-card, .resume-box, .contact a, .skill-tag {
@@ -245,9 +243,9 @@
     background:var(--card); border:1px solid var(--border);
     border-radius:var(--radius); padding:22px 26px;
     margin-bottom:16px; box-shadow:var(--shadow);
-    transition:transform .25s ease, box-shadow .25s ease, border-color .25s;
+    transition:transform .3s ease, box-shadow .3s ease, border-color .3s;
   }
-  .project-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--accent-light); }
+  .project-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-lg); border-color:var(--accent); }
   .project-card h3 { font-size:17px; margin-bottom:6px; }
   .project-card .meta { color:var(--text-muted); font-size:13px; margin-bottom:8px; }
   .project-card p { font-size:14px; color:var(--text-secondary); margin-bottom:12px; line-height:1.7; }
@@ -300,7 +298,7 @@
     box-shadow:var(--shadow); display:flex; align-items:center; gap:28px; flex-wrap:wrap;
     transition:transform .25s ease, box-shadow .25s ease, border-color .25s;
   }
-  .resume-box:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); border-color:var(--accent-light); }
+  .resume-box:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--accent); }
   .resume-info { flex:1; min-width:200px; }
   .resume-info h3 { font-size:17px; margin-bottom:4px; }
   .resume-info p { font-size:14px; color:var(--text-secondary); }
@@ -316,9 +314,9 @@
     display:flex; align-items:center; gap:6px;
     padding:10px 20px; border-radius:var(--radius);
     border:1px solid var(--border); background:var(--card);
-    font-size:14px; color:var(--text); transition:all .25s; box-shadow:var(--shadow);
+    font-size:14px; color:var(--text); transition:all .3s; box-shadow:var(--shadow);
   }
-  .contact a:hover { border-color:var(--accent); color:var(--accent); box-shadow:0 6px 24px var(--accent-glow); transform:translateY(-2px); text-decoration:none; }
+  .contact a:hover { border-color:var(--accent); color:var(--accent); box-shadow:0 8px 32px var(--accent-glow); transform:translateY(-3px) scale(1.02); text-decoration:none; }
 
   .admin-bar {
     position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:90;
@@ -593,7 +591,7 @@
 </section>
 
 <!-- ===== 关于 ===== -->
-<section id="about" class="reveal reveal-delay-1">
+<section id="about" class="reveal">
   <div class="section-inner">
     <h2>👤 关于我</h2>
     <p class="about-text" id="aboutText">机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。</p>
@@ -601,7 +599,7 @@
 </section>
 
 <!-- ===== 技能 ===== -->
-<section id="skills" class="reveal reveal-delay-1">
+<section id="skills" class="reveal">
   <div class="section-inner">
     <h2>🛠️ 技能</h2>
     <div class="skills" id="skillsContainer"></div>
@@ -609,7 +607,7 @@
 </section>
 
 <!-- ===== 项目 ===== -->
-<section id="projects" class="reveal reveal-delay-2">
+<section id="projects" class="reveal">
   <div class="section-inner">
     <h2>📦 项目</h2>
     <div id="projectsContainer"></div>
@@ -617,7 +615,7 @@
 </section>
 
 <!-- ===== 简历 ===== -->
-<section id="resume" class="reveal reveal-delay-2">
+<section id="resume" class="reveal">
   <div class="section-inner">
     <h2>📄 简历</h2>
     <div class="resume-box">
@@ -638,7 +636,7 @@
 </section>
 
 <!-- ===== 经历 ===== -->
-<section id="experience" class="reveal reveal-delay-3">
+<section id="experience" class="reveal">
   <div class="section-inner">
     <h2>📋 经历</h2>
     <div class="timeline" id="timelineContainer"></div>
@@ -646,7 +644,7 @@
 </section>
 
 <!-- ===== 联系 ===== -->
-<section id="contact" class="reveal reveal-delay-3">
+<section id="contact" class="reveal">
   <div class="section-inner">
     <h2>📬 联系</h2>
     <div class="contact" id="contactContainer"></div>
@@ -867,7 +865,7 @@ function renderContent(data) {
     const hasImg = p.image && p.image.startsWith('data:');
     const hasUrl = p.url && p.url.trim();
     return `
-    <div class="project-card reveal reveal-delay-${Math.min(i,3)}">
+    <div class="project-card reveal">
       ${hasImg ? `<div class="project-card-img"><img src="${p.image}" alt="${escHtml(p.title)}截图" onclick="event.stopPropagation();showImageLightbox('${p.image}')" loading="lazy"></div>` : ''}
       <h3>${escHtml(p.title)}</h3>
       <div class="meta">${escHtml(p.date)}</div>
@@ -878,7 +876,7 @@ function renderContent(data) {
   `}).join('');
   // Experiences
   document.getElementById('timelineContainer').innerHTML = data.experiences.map((e, i) => `
-    <div class="timeline-item reveal reveal-delay-${Math.min(i,3)}">
+    <div class="timeline-item reveal">
       <div class="date">${escHtml(e.date)}</div>
       <h4>${escHtml(e.title)}</h4>
       <p class="desc">${escHtml(e.desc)}</p>
@@ -1498,30 +1496,6 @@ function handleAvatarUpload(file) {
 }
 document.getElementById('avatarWrapper').addEventListener('click', () => document.getElementById('avatarInput').click());
 document.getElementById('avatarInput').addEventListener('change', e => { if (e.target.files[0]) { handleAvatarUpload(e.target.files[0]); e.target.value = ''; } });
-
-// Avatar 3D hover effect
-(function initAvatar3D() {
-  const wrapper = document.getElementById('avatarWrapper');
-  const ring = wrapper.querySelector('.avatar-ring');
-  let ticking = false;
-  wrapper.addEventListener('mousemove', e => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        const rect = wrapper.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        wrapper.style.transform = `perspective(300px) rotateY(${x*15}deg) rotateX(${-y*15}deg)`;
-        if (ring) ring.style.transform = `rotateY(${x*30}deg) rotateX(${-y*30}deg)`;
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-  wrapper.addEventListener('mouseleave', () => {
-    wrapper.style.transform = 'perspective(300px) rotateY(0deg) rotateX(0deg)';
-    if (ring) ring.style.transform = '';
-  });
-})();
 
 // ====================================================================
 //  简历
