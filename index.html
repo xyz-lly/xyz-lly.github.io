@@ -936,6 +936,7 @@ function showContactCard(jsonStr) {
 }
 
 function closeContactCard() {
+  if (window._cropCleanup) { window._cropCleanup(); window._cropCleanup = null; }
   document.getElementById('contactCardOverlay').classList.remove('show');
 }
 
@@ -1565,7 +1566,7 @@ function showAvatarCrop(img) {
   overlay.innerHTML = `<div class="modal" style="text-align:center;" onclick="event.stopPropagation()">
     <h3>裁剪头像</h3>
     <p style="color:var(--text-muted);font-size:13px;">拖动图片调整位置</p>
-    <div id="cropArea" style="position:relative;width:${size}px;height:${size}px;margin:16px auto;border-radius:50%;overflow:hidden;border:3px solid var(--accent);box-shadow:0 0 0 2px var(--bg);background:var(--bg-alt);cursor:grab;">
+    <div id="cropArea" style="position:relative;width:${size}px;height:${size}px;margin:16px auto;border-radius:50%;overflow:hidden;border:3px solid var(--accent);box-shadow:0 0 0 2px var(--bg);background:var(--bg-alt);cursor:grab;touch-action:none;">
       <img id="cropImg" src="${img.src}" style="position:absolute;cursor:grab;user-select:none;-webkit-user-drag:none;max-width:none;max-height:none;">
       <div style="position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(0,0,0,0.1);pointer-events:none;"></div>
     </div>
@@ -1604,20 +1605,33 @@ function showAvatarCrop(img) {
     document.getElementById('cropArea').style.cursor = 'grab';
   }
 
-  cropImg.addEventListener('mousedown', e => { startDrag(e.clientX, e.clientY); });
-  document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
-  document.addEventListener('mouseup', endDrag);
+  const onMouseMove = e => moveDrag(e.clientX, e.clientY);
+  const onMouseUp = endDrag;
+  const onTouchMove = e => { e.preventDefault(); const t = e.touches[0]; moveDrag(t.clientX, t.clientY); };
+  const onTouchEnd = endDrag;
 
+  cropImg.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
   cropImg.addEventListener('touchstart', e => { const t = e.touches[0]; startDrag(t.clientX, t.clientY); }, {passive:true});
-  document.addEventListener('touchmove', e => { const t = e.touches[0]; moveDrag(t.clientX, t.clientY); }, {passive:true});
-  document.addEventListener('touchend', endDrag, {passive:true});
+  document.addEventListener('touchmove', onTouchMove, {passive:false});
+  document.addEventListener('touchend', onTouchEnd);
+
+  function cleanupCrop() {
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    document.removeEventListener('touchmove', onTouchMove);
+    document.removeEventListener('touchend', onTouchEnd);
+  }
+
+  // Override closeContactCard to clean up
+  window._cropCleanup = cleanupCrop;
 
   window.confirmAvatarCrop = function () {
     const canvas = document.createElement('canvas');
     const outSize = 300;
     canvas.width = outSize; canvas.height = outSize;
     const ctx = canvas.getContext('2d');
-    // Calculate the visible region in original image coordinates
     const visLeft = -offX / scale;
     const visTop = -offY / scale;
     const visSize = size / scale;
@@ -1626,12 +1640,8 @@ function showAvatarCrop(img) {
     localStorage.setItem(KEYS.avatar, dataUrl);
     renderAvatar(dataUrl);
     markDirty('avatar');
+    cleanupCrop();
     closeContactCard();
-    // Clean up event listeners
-    document.removeEventListener('mousemove', moveDrag);
-    document.removeEventListener('mouseup', endDrag);
-    document.removeEventListener('touchmove', moveDrag);
-    document.removeEventListener('touchend', endDrag);
     showToast('头像已更新 ✓');
   };
 }
