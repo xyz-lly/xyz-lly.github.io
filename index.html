@@ -186,8 +186,8 @@
     position:absolute; inset:-4px; border-radius:50%;
     background:linear-gradient(135deg,var(--avatar-bg-1),var(--avatar-bg-2),var(--avatar-bg-1));
     animation:spin 6s linear infinite;
-    mask:radial-gradient(farthest-side,transparent calc(100%-3px),#000 calc(100%-2px));
-    -webkit-mask:radial-gradient(farthest-side,transparent calc(100%-3px),#000 calc(100%-2px));
+    mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));
+    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));
   }
   @keyframes spin { to { transform:rotate(360deg); } }
   #hero .avatar {
@@ -877,7 +877,7 @@ function renderContent(data) {
     const hasUrl = p.url && p.url.trim();
     return `
     <div class="project-card reveal">
-      ${hasImg ? `<div class="project-card-img"><img src="${p.image}" alt="${escHtml(p.title)}截图" onclick="event.stopPropagation();showImageLightbox('${p.image}')" loading="lazy"></div>` : ''}
+      ${hasImg ? `<div class="project-card-img"><img src="${p.image}" alt="${escHtml(p.title)}截图" data-src="${p.image}" onclick="event.stopPropagation();showImageLightbox(this)" loading="lazy"></div>` : ''}
       <h3>${escHtml(p.title)}</h3>
       <div class="meta">${escHtml(p.date)}</div>
       <p>${escHtml(p.desc)}</p>
@@ -1208,7 +1208,7 @@ function renderEditorProjects() {
       <div class="editor-field"><label>截图</label>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
           <button class="btn btn-outline btn-sm" type="button" onclick="editorProjectImage(${i})">📷 上传截图</button>
-          ${p.image ? `<img src="${escHtml(p.image)}" style="max-width:120px;max-height:80px;border-radius:6px;border:1px solid var(--border);cursor:pointer;" onclick="showImageLightbox('${escHtml(p.image)}')" title="点击放大"><button class="btn btn-outline btn-sm" type="button" onclick="editorData.projects[${i}].image='';renderEditorProjects();showToast('截图已移除')">✕ 移除</button>` : ''}
+          ${p.image ? `<img src="${escHtml(p.image)}" style="max-width:120px;max-height:80px;border-radius:6px;border:1px solid var(--border);cursor:pointer;" data-src="${escHtml(p.image)}" onclick="showImageLightbox(this)" title="点击放大"><button class="btn btn-outline btn-sm" type="button" onclick="editorData.projects[${i}].image='';renderEditorProjects();showToast('截图已移除')">✕ 移除</button>` : ''}
         </div>
       </div>
     </div>
@@ -1286,19 +1286,19 @@ function renderEditorContacts() {
         </span>
         <button class="item-remove" onclick="removeEditorContact(${i})">🗑️</button>
       </div>
-      <div class="editor-field"><label>图标（emoji）</label><input value="${c.icon||''}" onchange="editorData.contacts[${i}].icon=this.value"></div>
-      <div class="editor-field"><label>标签</label><input value="${escHtml(c.label)}" onchange="editorData.contacts[${i}].label=this.value"></div>
-      <div class="editor-field"><label>值（邮箱/链接/文本）</label><input value="${escHtml(c.value)}" onchange="editorData.contacts[${i}].value=this.value"></div>
+      <div class="editor-field"><label>图标（emoji）</label><input value="${c.icon||''}" onchange="editorData.contacts[${i}].icon=this.value;triggerAutoSave()"></div>
+      <div class="editor-field"><label>标签</label><input value="${escHtml(c.label)}" onchange="editorData.contacts[${i}].label=this.value;triggerAutoSave()"></div>
+      <div class="editor-field"><label>值（邮箱/链接/文本）</label><input value="${escHtml(c.value)}" onchange="editorData.contacts[${i}].value=this.value;triggerAutoSave()"></div>
       <div class="editor-field">
         <label>类型</label>
-        <select onchange="editorData.contacts[${i}].type=this.value" style="width:100%;padding:9px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;">
+        <select onchange="editorData.contacts[${i}].type=this.value;triggerAutoSave()" style="width:100%;padding:9px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;">
           ${['text','email','url'].map(t => `<option value="${t}"${c.type===t?' selected':''}>${t==='text'?'文本':t==='email'?'邮箱':'链接'}</option>`).join('')}
         </select>
       </div>
       <div class="editor-field">
         <label>二维码（可选）</label>
-        ${c.image ? `<div style="display:flex;align-items:center;gap:10px;"><img src="${escHtml(c.image)}" style="max-width:100%;height:auto;border-radius:8px;border:1px solid var(--border);cursor:pointer;max-height:200px;" onclick="showImageLightbox('${escHtml(c.image)}')" title="点击放大">
-          <button class="btn btn-sm btn-outline" onclick="editorData.contacts[${i}].image='';renderEditorContacts();triggerAutoSave()">删除</button></div>`
+        ${c.image ? `<div style="display:flex;align-items:center;gap:10px;"><img src="${escHtml(c.image)}" style="max-width:100%;height:auto;border-radius:8px;border:1px solid var(--border);cursor:pointer;max-height:200px;" data-src="${escHtml(c.image)}" onclick="showImageLightbox(this)" title="点击放大">
+          <button class="btn btn-sm btn-outline" onclick="editorData.contacts[${i}].image='';renderEditorContacts()">删除</button></div>`
           : `<button class="btn btn-sm btn-outline" onclick="editorUploadContactImage(${i})">上传二维码</button>`}
       </div>
     </div>
@@ -1334,7 +1334,6 @@ function editorUploadContactImage(idx) {
         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
         editorData.contacts[idx].image = canvas.toDataURL('image/webp', 0.8);
         renderEditorContacts();
-        triggerAutoSave();
         showToast('二维码已添加 ✓');
       };
       img.src = ev.target.result;
@@ -1344,9 +1343,9 @@ function editorUploadContactImage(idx) {
   input.click();
 }
 
-function showImageLightbox(src) {
+function showImageLightbox(el) {
   const lb = document.getElementById('imgLightbox');
-  lb.innerHTML = '<img src="' + src + '" alt="项目截图">';
+  lb.innerHTML = '<img src="' + el.dataset.src + '" alt="项目截图">';
   lb.classList.add('show');
 }
 
