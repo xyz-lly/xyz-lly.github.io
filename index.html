@@ -1612,7 +1612,11 @@ function showAvatarCrop(img) {
   }, 0);
 
   // Wheel zoom (continuous)
+  let zoomThrottle = 0;
   window._cropZoom = function (delta) {
+    const now = Date.now();
+    if (now - zoomThrottle < 16) return; // throttle to ~60fps
+    zoomThrottle = now;
     const oldScale = scale;
     scale = Math.max(minScale, Math.min(minScale * 5, scale + delta));
     const cx = size / 2, cy = size / 2;
@@ -1621,7 +1625,6 @@ function showAvatarCrop(img) {
     offX = cx - imgCx * ratio;
     offY = cy - imgCy * ratio;
     applyTransform();
-    // Sync slider
     const slider = document.getElementById('zoomSlider');
     if (slider) slider.value = Math.round((scale - minScale) / (minScale * 4) * 100);
   };
