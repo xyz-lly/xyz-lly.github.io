@@ -1,4 +1,5 @@
-const CACHE = 'homepage-v1';
+const VERSION = 'v10.2';
+const CACHE = 'homepage-' + VERSION;
 const PRECACHE = [
   '/',
   '/index.html',
