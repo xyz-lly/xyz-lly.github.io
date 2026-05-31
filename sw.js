@@ -34,10 +34,16 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
-  // Static assets: cache first
+  // Index.html: network first (always serve latest)
+  if (url.pathname === '/' || url.pathname === '/index.html') {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+  // Other static assets: cache first
   event.respondWith(
     caches.match(event.request).then(r => r || fetch(event.request).then(res => {
-      // Cache fetched files for future offline use
       if (res.ok && res.type === 'basic') {
         const clone = res.clone();
         caches.open(CACHE).then(cache => cache.put(event.request, clone));
