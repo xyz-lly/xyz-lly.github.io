@@ -10,7 +10,7 @@
     {
       "src": "/assets/avatar.jpg",
       "sizes": "300x300",
-      "type": "image/webp",
+      "type": "image/jpeg",
       "purpose": "any"
     },
     {
