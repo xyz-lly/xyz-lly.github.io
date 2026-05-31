@@ -783,6 +783,7 @@
 <input type="file" id="resumeInput" accept=".pdf,application/pdf" style="display:none">
 <div class="toast" id="toast"></div>
 <div class="img-lightbox" id="imgLightbox" onclick="this.classList.remove('show')"></div>
+<div class="modal-overlay" id="contactCardOverlay" onclick="if(event.target===this)closeContactCard()"></div>
 
 <script>
 // ====================================================================
@@ -894,18 +895,16 @@ function renderContent(data) {
   if (data.contacts.length === 0) {
     ctn.innerHTML = '<p style="color:var(--text-muted);font-size:14px;">暂无联系方式</p>';
   } else {
-    ctn.innerHTML = data.contacts.map(c => {
+    ctn.innerHTML = data.contacts.map((c, idx) => {
       let label = escHtml(c.label);
       let icon = c.icon || '🔗';
-      if (c.type === 'email') {
-        return `<a href="mailto:${escHtml(c.value)}">${icon} ${label}</a>`;
-      } else if (c.type === 'url') {
+      let contactData = encodeURIComponent(JSON.stringify({icon:c.icon||'🔗',label:c.label,value:c.value,image:c.image||''}));
+      if (c.type === 'url') {
         let href = c.value;
         if (!href.startsWith('http')) href = 'https://' + href;
         return `<a href="${escHtml(href)}">${icon} ${label}</a>`;
       } else {
-        // text type: show as non-clickable badge
-        return `<span class="contact-item">${icon} ${label}</span>`;
+        return `<a href="#" onclick="showContactCard(decodeURIComponent('${contactData}'));return false">${icon} ${label}</a>`;
       }
     }).join('');
   }
@@ -917,6 +916,27 @@ function escHtml(s) {
   const d = document.createElement('div');
   d.textContent = s;
   return d.innerHTML;
+}
+
+function showContactCard(jsonStr) {
+  const c = JSON.parse(jsonStr);
+  if (!c.label && !c.value) { closeContactCard(); return; }
+  const overlay = document.getElementById('contactCardOverlay');
+  overlay.innerHTML = `<div class="modal contact-card" onclick="event.stopPropagation()">
+    <div style="text-align:center;padding:8px 0;">
+      <div style="font-size:36px;margin-bottom:10px;">${c.icon}</div>
+      <h3 style="margin-bottom:4px;">${escHtml(c.label)}</h3>
+      <p style="font-size:15px;color:var(--accent);word-break:break-all;margin:12px 0 24px;padding:0 4px;">${escHtml(c.value)}</p>
+      <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${escHtml(c.value)}').then(()=>{showToast('✅ 已复制');closeContactCard()})">📋 复制</button>
+      ${c.image ? `<div style="margin-top:24px;border-radius:12px;overflow:hidden;max-width:200px;margin-left:auto;margin-right:auto;border:1px solid var(--border);"><img src="${escHtml(c.image)}" style="width:100%;display:block;"></div>` : ''}
+      <div style="margin-top:24px;"><button class="btn btn-outline btn-sm" onclick="closeContactCard()">关闭</button></div>
+    </div>
+  </div>`;
+  overlay.classList.add('show');
+}
+
+function closeContactCard() {
+  document.getElementById('contactCardOverlay').classList.remove('show');
 }
 
 // ====================================================================
@@ -1270,6 +1290,12 @@ function renderEditorContacts() {
           ${['text','email','url'].map(t => `<option value="${t}"${c.type===t?' selected':''}>${t==='text'?'文本':t==='email'?'邮箱':'链接'}</option>`).join('')}
         </select>
       </div>
+      <div class="editor-field">
+        <label>二维码（可选）</label>
+        ${c.image ? `<div style="display:flex;align-items:center;gap:10px;"><img src="${escHtml(c.image)}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--border);">
+          <button class="btn btn-sm btn-outline" onclick="editorData.contacts[${i}].image='';renderEditorContacts();triggerAutoSave()">删除</button></div>`
+          : `<button class="btn btn-sm btn-outline" onclick="editorUploadContactImage(${i})">上传二维码</button>`}
+      </div>
     </div>
   `).join('');
 }
@@ -1282,6 +1308,35 @@ function addEditorContact() {
 function removeEditorContact(i) {
   editorData.contacts.splice(i, 1);
   renderEditorContacts();
+}
+
+function editorUploadContactImage(idx) {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = 'image/*';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 2*1024*1024) { showToast('图片太大，请压缩到 2MB 以内'); return; }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxSize = 400;
+        let w = img.width, h = img.height;
+        if (w > h) { if (w > maxSize) { h = h*maxSize/w; w = maxSize; } } else { if (h > maxSize) { w = w*maxSize/h; h = maxSize; } }
+        canvas.width = Math.round(w); canvas.height = Math.round(h);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        editorData.contacts[idx].image = canvas.toDataURL('image/webp', 0.8);
+        renderEditorContacts();
+        triggerAutoSave();
+        showToast('二维码已添加 ✓');
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
 }
 
 function showImageLightbox(src) {
