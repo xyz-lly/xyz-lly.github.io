@@ -1,11 +1,13 @@
-const VERSION = 'v10.2';
+const VERSION = 'v11.9';
 const CACHE = 'homepage-' + VERSION;
 const PRECACHE = [
   '/',
   '/index.html',
   '/manifest.json',
   '/assets/icons/icon-192.png',
-  '/assets/icons/icon-512.png'
+  '/assets/icons/icon-512.png',
+  '/assets/icons/avatar-192.png',
+  '/assets/icons/avatar-512.png'
 ];
 
 // Install: precache static files
