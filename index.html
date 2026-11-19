@@ -11,24 +11,24 @@
   "name": "林小虾",
   "alternateName": "林",
   "jobTitle": "机械设计工程师",
-  "description": "机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。",
+  "description": "机械设计工程师，专注制动系统与结构设计、结构化知识管理。",
   "url": "https://xyz-lly.github.io",
   "image": "https://xyz-lly.github.io/assets/avatar.jpg",
-  "knowsAbout": ["EMB制动系统", "花键传动", "机械设计", "专利分析", "AI工具应用", "知识管理"],
+  "knowsAbout": ["制动系统", "结构设计", "机械设计", "AI工具应用", "知识管理"],
   "sameAs": [
     "https://github.com/xyz-lly"
   ]
 }
 </script>
-<meta name="description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。">
+<meta name="description" content="机械设计工程师，专注制动系统与结构设计、结构化知识管理。">
 <meta property="og:title" content="林小虾 — 个人主页">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://xyz-lly.github.io">
-<meta property="og:description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。">
+<meta property="og:description" content="机械设计工程师，专注制动系统与结构设计、结构化知识管理。">
 <meta property="og:image" content="https://xyz-lly.github.io/assets/avatar.jpg" id="ogImage">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="林小虾 — 个人主页">
-<meta name="twitter:description" content="机械设计工程师，专注 EMB 制动系统、花键传动、结构化知识管理。">
+<meta name="twitter:description" content="机械设计工程师，专注制动系统与结构设计、结构化知识管理。">
 <meta name="twitter:image" content="https://xyz-lly.github.io/assets/avatar.jpg" id="twImage">
 <meta name="theme-color" content="#7c3aed">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -659,7 +659,9 @@
     </div>
     <p class="hero-tagline" id="heroTagline">机械工程师 · 业余 AI 捣鼓者</p>
     <h1 id="heroName">林小虾</h1>
-    <p class="hero-desc" id="heroDesc">设计过 EMB 卡钳，搭过 VLM 服务，写过专利交底书。相信好工具能让工程师少加班，好知识能让人少走弯路。</p>
+    <p class="hero-desc" id="heroDesc"><!-- <generated:heroDesc> -->
+做过机械结构的设计与验证，搭过 VLM 服务。相信好工具能让工程师少加班，好知识能让人少走弯路。
+<!-- </generated:heroDesc> --></p>
     <div class="hero-actions">
       <a href="#resume" class="btn btn-primary" id="heroResumeBtn">📄 下载简历</a>
       <a href="#contact" class="btn btn-outline">联系我</a>
@@ -672,7 +674,9 @@
 <section id="about" class="reveal">
   <div class="section-inner">
     <h2>关于我</h2>
-    <p class="about-text" id="aboutText">机械设计背景，熟悉 EMB 制动卡钳结构设计、专利分析、图纸标准化。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。</p>
+    <p class="about-text" id="aboutText"><!-- <generated:aboutText> -->
+机械设计背景，熟悉结构设计、专利分析。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。
+<!-- </generated:aboutText> --></p>
   </div>
 </section>
 
@@ -868,23 +872,90 @@ const KEYS = { avatar:'hp_avatar', resume:'hp_resume', content:'hp_content', tok
 // ====================================================================
 //  默认内容
 // ====================================================================
-const DEFAULT_CONTENT = {
-  name: "林",
-  tagline: "机械工程师 · 业余 AI 捣鼓者",
-  heroDesc: "做过机械结构的设计与验证，搭过 VLM 服务。相信好工具能让工程师少加班，好知识能让人少走弯路。",
-  about: "机械设计背景，熟悉结构设计与验证。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。",
-  skills: ["机械结构设计", "结构设计与验证", "3D 建模", "图纸标准化", "工装设计", "AI 工具集成", "Obsidian 知识管理"],
-  projects: [
-    { title: "本地 VLM 图像识别服务", date: "2026 · 自部署", desc: "基于 Qwen2-VL-2B + 4-bit 量化，在 RTX 3050（4.3GB VRAM）上本地运行。HTTP 服务形式，POST 图片 base64 返回识别结果。", tags: ["Python","transformers","VLM","量化部署"] },
-    { title: "结构化知识库体系搭建", date: "2026 · 持续迭代", desc: "基于 Obsidian Vault 构建三层知识索引体系（inbox → wiki → projects），引入语义搜索引擎实现本地 RAG。", tags: ["Obsidian","知识管理","语义搜索","自动化"] }
-  ],
-  experiences: [],
-  contacts: [
-    { icon:"??", label:"邮箱", value:"18522365126@163.com", type:"email" },
-    { icon:"??", label:"微信", value:"18522365126", type:"text" },
-    { icon:"??", label:"GitHub", value:"https://github.com/xyz-lly", type:"url" }
-  ]
-};
+// <generated:DEFAULT_CONTENT>
+const DEFAULT_CONTENT =   {
+    "name": "林",
+    "tagline": "机械工程师 · 业余 AI 捣鼓者",
+    "heroDesc": "做过机械结构的设计与验证，搭过 VLM 服务。相信好工具能让工程师少加班，好知识能让人少走弯路。",
+    "about": "机械设计背景，熟悉结构设计、专利分析。同时在探索 AI 工具在工程中的应用，搭建了本地知识库体系和 VLM 识别服务。",
+    "skills": [
+      "机械结构设计",
+      "结构设计与验证",
+      "3D 建模",
+      "图纸标准化",
+      "工装设计",
+      "AI 工具集成",
+      "专利检索与分析",
+      "Obsidian 知识管理"
+    ],
+    "projects": [
+      {
+        "title": "本地 VLM 图像识别服务",
+        "date": "2026 · 自部署",
+        "desc": "基于 Qwen2-VL-2B + 4-bit 量化，在 RTX 3050（4.3GB VRAM）上本地运行。HTTP 服务形式，POST 图片 base64 返回识别结果。",
+        "url": "https://github.com/xyz-lly/vlm-vision-server",
+        "tags": [
+          "Python",
+          "transformers",
+          "VLM",
+          "量化部署"
+        ]
+      },
+      {
+        "title": "结构化知识库体系搭建",
+        "date": "2026 · 持续迭代",
+        "desc": "基于 Obsidian Vault 构建三层知识索引体系（inbox → wiki → projects），引入语义搜索引擎实现本地 RAG。",
+        "url": "https://github.com/xyz-lly/knowledge-vault-toolkit",
+        "tags": [
+          "Obsidian",
+          "知识管理",
+          "语义搜索",
+          "自动化"
+        ]
+      }
+    ],
+    "experiences": [
+      {
+        "date": "2025",
+        "title": "本地 AI 工具链搭建",
+        "desc": "从零搭建搜索引擎、VLM 服务、自动化工作流，形成稳定的个人 AI 工作站",
+        "detail": "部署 QMD 语义搜索引擎，实现本地知识库 RAG 检索\n搭建 Qwen2-VL-2B 四比特量化 VLM 识别服务\n建立 cron 驱动的自动化工作流（每日索引、归档、inbox 整理）\n配置 GitHub Pages 个人主页并持续迭代"
+      },
+      {
+        "date": "2025 - 2026",
+        "title": "机械设计 · 产品开发与工装",
+        "desc": "参与多个机械产品的结构设计与工艺优化",
+        "detail": "负责产品结构评审与图纸发布\n参与方案设计与供应商技术对接\n制定设计规范与标准化流程\n设计专用工装优化装配效率"
+      },
+      {
+        "date": "2026",
+        "title": "知识产权 · 技术方案撰写",
+        "desc": "完成多轮专利查新，参与技术方案撰写与答辩",
+        "detail": "完成多轮专利查新与现有技术分析\n参与技术方案撰写并通过内部答辩\n参与答辩与方案修改"
+      }
+    ],
+    "contacts": [
+      {
+        "icon": "✉️",
+        "label": "邮箱",
+        "value": "18522365126@163.com",
+        "type": "email"
+      },
+      {
+        "icon": "💬",
+        "label": "微信",
+        "value": "18522365126",
+        "type": "text"
+      },
+      {
+        "icon": "🐙",
+        "label": "GitHub",
+        "value": "https://github.com/xyz-lly",
+        "type": "url"
+      }
+    ]
+  };
+// </generated:DEFAULT_CONTENT>
 
 // ====================================================================
 //  内容数据管理
