@@ -1,1 +1,6 @@
 .env
+_debug*
+_dump*
+_fix_*
+_v[0-9]*.py
+*.bak-*
